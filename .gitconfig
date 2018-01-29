@@ -1,0 +1,14 @@
+[user]
+	email = 33759728+oza6ut0ne@users.noreply.github.com
+	name = oza6ut0ne
+[diff]
+	tool = vimdiff
+	compactionHeuristic = true
+[difftool]
+	prompt = false
+[merge]
+	tool = vimdiff
+[mergetool]
+	prompt = false
+[ghq]
+    root = ~/ghq
