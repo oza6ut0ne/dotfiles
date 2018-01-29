@@ -5,7 +5,6 @@
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init - --no-rehash)"
-#alias activate="source $PYENV_ROOT/versions/anaconda3-4.4.0/bin/activate"
 
 # If not running interactively, don't do anything
 case $- in
