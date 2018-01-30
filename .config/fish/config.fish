@@ -7,7 +7,11 @@ set -e fish_color_command
 
 set -x EDITOR nvim
 set -x PATH "$HOME/bin" $PATH
-balias ll 'ls -alF'
+
+alias ll='ls -alF'
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -i'
 balias vi nvim
 
 # anyenv
