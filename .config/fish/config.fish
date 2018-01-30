@@ -5,6 +5,7 @@ set -x fish_color_autosuggestion white
 set -x fish_color_param '0FC' brcyan
 set -e fish_color_command
 
+set -x EDITOR nvim
 set -x PATH "$HOME/bin" $PATH
 balias ll 'ls -alF'
 balias vi nvim
@@ -26,5 +27,5 @@ set -x GOPATH "$HOME/go"
 set -x PATH "$GOPATH/bin" $PATH 
 
 # direnv
-# eval (direnv hook fish)
+eval (direnv hook fish)
 

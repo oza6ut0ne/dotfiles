@@ -2,6 +2,8 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+export EDITOR nvim
+
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init - --no-rehash)"
@@ -140,4 +142,5 @@ export DISPLAY=localhost:0.0
 
 funniki () { echo -en "\e[1;32m";for ((i=0;i<$COLUMNS/2;i++));do _rand=$(($RANDOM & 3)); if [ $_rand == 0 ];then echo -n "  ";else echo -n $(( $_rand & 1))" ";fi;done;echo -e "\e[m";}
 
+eval $(direnv hook bash)
 eval $(thefuck --alias)
