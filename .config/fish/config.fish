@@ -33,3 +33,6 @@ set -x PATH "$GOPATH/bin" $PATH
 # direnv
 eval (direnv hook fish)
 
+# thefuck
+set -x THEFUCK_OVERRIDDEN_ALIASES 'vi'
+
