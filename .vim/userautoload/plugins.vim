@@ -83,13 +83,14 @@ let g:ale_lint_on_text_changed = 1
 " 有効にするlinter
 let g:ale_linters = {
 \   'python': ['pylint', 'flake8'],
+\   'go': ['golint'],
 \}
 let g:ale_python_pylint_options = '--extension-pkg-whitelist=cv2'
 
 
 "--------------------------------
-" deoplete-jedi
+" deoplete
 "--------------------------------
 autocmd FileType python setlocal completeopt-=preview
-
+autocmd FileType go setlocal completeopt-=preview
 
