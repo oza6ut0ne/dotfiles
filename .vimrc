@@ -6,6 +6,8 @@ if &shell =~# 'fish$'
   set shell=bash
 endif
 
+filetype off
+
 let g:python_host_prog=$PYENV_ROOT.'/versions/neovim-2/bin/python'
 let g:python3_host_prog=$PYENV_ROOT.'/versions/neovim-3/bin/python'
 runtime! userautoload/*.vim
@@ -24,4 +26,6 @@ nnoremap : ;
 :set autoindent
 :set smartindent
 :set laststatus=1
+
+filetype plugin indent on
 
