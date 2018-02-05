@@ -140,7 +140,8 @@ alias vi='nvim'
 export PATH=$PATH:$HOME/bin
 export DISPLAY=localhost:0.0
 
-funniki () { echo -en "\e[1;32m";for ((i=0;i<$COLUMNS/2;i++));do _rand=$(($RANDOM & 3)); if [ $_rand == 0 ];then echo -n "  ";else echo -n $(( $_rand & 1))" ";fi;done;echo -e "\e[m";}
+# usage: "while :;do funniki;done"
+funniki(){ echo -en "\e[1;32m";for((i=0;i<$COLUMNS/2;i++));do r=$(($RANDOM&3));test $r == 0&&echo -n "  "||echo -n $(($r&1))" ";done;echo -e "\e[m";}
 
 eval $(direnv hook bash)
 eval $(thefuck --alias)
