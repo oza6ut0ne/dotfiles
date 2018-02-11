@@ -21,6 +21,7 @@ balias vi nvim
 # pyenv
 set -x PYENV_ROOT "$HOME/.pyenv"
 set -x PATH "$PYENV_ROOT/bin" $PATH
+status --is-interactive; and source (pyenv init -|psub)
 
 # goenv
 set -x GOENV_ROOT "$HOME/.anyenv/envs/goenv"
