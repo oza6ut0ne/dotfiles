@@ -6,6 +6,7 @@ set -x fish_color_param '0FC' brcyan
 set -e fish_color_command
 
 set -x EDITOR nvim
+set -x DISPLAY localhost:10.0
 set -x PATH "$HOME/bin" $PATH
 
 alias ll='ls -alF'
