@@ -138,7 +138,7 @@ alias rm='rm -i'
 alias vi='nvim'
 
 export PATH=$PATH:$HOME/bin
-export DISPLAY=localhost:0.0
+export DISPLAY=localhost:10.0
 
 # usage: "while :;do funniki;done"
 funniki(){ echo -en "\e[1;32m";for((i=0;i<$COLUMNS/2;i++));do r=$(($RANDOM&3));test $r == 0&&echo -n "  "||echo -n $(($r&1))" ";done;echo -e "\e[m";}
