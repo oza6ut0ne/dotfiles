@@ -13,6 +13,7 @@ alias ll='ls -alF'
 alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
+alias crontab='crontab -i'
 balias vi nvim
 
 # anyenv

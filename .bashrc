@@ -135,6 +135,7 @@ fi
 alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
+alias crontab='crontab -i'
 alias vi='nvim'
 
 export PATH=$PATH:$HOME/bin
