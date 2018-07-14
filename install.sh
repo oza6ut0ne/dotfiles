@@ -10,16 +10,22 @@ function is_ubuntu() {
     return $?
 }
 
+if exists "sudo"; then
+    SUDO="sudo"
+else
+    SUDO=""
+fi
+
 if is_ubuntu; then
-    sudo apt install -y software-properties-common
+    ${SUDO} apt install -y software-properties-common
 fi
 if exists "apt"; then
-    sudo apt update
+    ${SUDO} apt update
 fi
 
 if ! exists "git"; then
     if exists "apt"; then
-        sudo apt install -y git
+        ${SUDO} apt install -y git
     fi
 fi
 
@@ -32,7 +38,7 @@ cd ~/dotfiles
 
 if ! exists "direnv"; then
     if exists "apt"; then
-        sudo apt install -y direnv
+        ${SUDO} apt install -y direnv
     fi
 fi
 
@@ -43,21 +49,21 @@ fi
 
 if ! exists "nvim"; then
     if is_ubuntu; then
-        sudo apt-add-repository ppa:neovim-ppa/stable
-        sudo apt update
+        ${SUDO} apt-add-repository ppa:neovim-ppa/stable -y
+        ${SUDO} apt update
     fi
     if exists "apt"; then
-        sudo apt install -y neovim
+        ${SUDO} apt install -y neovim
     fi
 fi
 
 if [ ! -d ~/.pyenv ]; then
     if exists "apt"; then
-        sudo apt install -y make build-essential llvm clang gcc
-        sudo apt install -y zlib1g-dev libbz2-dev 
-        sudo apt install -y libssl-dev libffi-dev openssl
-        sudo apt install -y ibreadline-dev libsqlite3-dev
-        sudo apt install -y libncurses5-dev libncursesw5-dev xz-utils tk-dev
+        ${SUDO} apt install -y make build-essential llvm clang gcc
+        ${SUDO} apt install -y zlib1g-dev libbz2-dev 
+        ${SUDO} apt install -y libssl-dev libffi-dev openssl
+        ${SUDO} apt install -y ibreadline-dev libsqlite3-dev
+        ${SUDO} apt install -y libncurses5-dev libncursesw5-dev xz-utils tk-dev
     fi
 
     git clone https://github.com/yyuu/pyenv.git ~/.pyenv
@@ -105,11 +111,11 @@ fi
 
 if ! exists "fish"; then
     if is_ubuntu; then
-        sudo apt-add-repository ppa:fish-shell/release-2
-        sudo apt update
+        ${SUDO} apt-add-repository ppa:fish-shell/release-2 -y
+        ${SUDO} apt update
     fi
     if exists "apt"; then
-        sudo apt install -y fish
+        ${SUDO} apt install -y fish
     fi
     curl -L http://get.oh-my.fish | fish
     curl -Lo ~/.config/fish/functions/fisher.fish --create-dirs https://git.io/fisher
