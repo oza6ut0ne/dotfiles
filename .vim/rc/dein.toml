@@ -10,3 +10,6 @@ repo = 'w0rp/ale'
 #[[plugins]]
 #repo = 'nathanaelkane/vim-indent-guides'
 
+[[plugins]]
+repo = 'Shougo/vinarise.vim'
+
