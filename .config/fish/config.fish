@@ -21,20 +21,26 @@ balias vi nvim
 # eval (anyenv init - fish)
 
 # pyenv
-set -x PYENV_ROOT "$HOME/.pyenv"
-set -x PATH "$PYENV_ROOT/bin" $PATH
-status --is-interactive; and source (pyenv init -|psub)
+if which pyenv >/dev/null 2>&1
+    set -x PYENV_ROOT "$HOME/.pyenv"
+    set -x PATH "$PYENV_ROOT/bin" $PATH
+    status --is-interactive; and source (pyenv init -|psub)
+end
 
 # goenv
-set -x GOENV_ROOT "$HOME/.anyenv/envs/goenv"
-set -x PATH "$HOME/.anyenv/envs/goenv/bin" $PATH 
-set -x PATH "$HOME/.anyenv/envs/goenv/shims" $PATH 
-command goenv rehash 2>/dev/null
+if which goenv >/dev/null 2>&1
+    set -x GOENV_ROOT "$HOME/.anyenv/envs/goenv"
+    set -x PATH "$HOME/.anyenv/envs/goenv/bin" $PATH 
+    set -x PATH "$HOME/.anyenv/envs/goenv/shims" $PATH 
+    command goenv rehash 2>/dev/null
+end
 set -x GOPATH "$HOME/go"
 set -x PATH "$GOPATH/bin" $PATH 
 
 # direnv
-eval (direnv hook fish)
+if which direnv >/dev/null 2>&1
+    eval (direnv hook fish)
+end
 
 # thefuck
 set -x THEFUCK_OVERRIDDEN_ALIASES 'vi'
