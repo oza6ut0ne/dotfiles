@@ -35,10 +35,10 @@ hi label		guifg=gold2
 hi operator		guifg=orange
 hi clear Visual
 hi Visual		term=reverse cterm=reverse gui=reverse
-hi DiffChange   guibg=darkgreen
-hi DiffText		guibg=olivedrab
-hi DiffAdd		guibg=slateblue
-hi DiffDelete   guibg=coral
+hi DiffAdd    	cterm=bold ctermbg=23
+hi DiffDelete 	cterm=bold ctermbg=52
+hi DiffChange 	cterm=bold ctermbg=18
+hi DiffText   	cterm=bold ctermbg=red
 hi Folded		guibg=gray30
 hi FoldColumn	guibg=gray30 guifg=white
 hi cIf0			guifg=gray
