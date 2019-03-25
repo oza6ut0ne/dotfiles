@@ -4,9 +4,8 @@
 
 export EDITOR nvim
 
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init - --no-rehash)"
+export PATH="$HOME/.anyenv/bin:$PATH"
+eval "$(anyenv init - | grep -v '..env rehash')"
 
 # If not running interactively, don't do anything
 case $- in
@@ -139,6 +138,7 @@ alias crontab='crontab -i'
 alias vi='nvim'
 
 export PATH=$PATH:$HOME/bin
+export PATH=$PATH:$HOME/go/bin
 export DISPLAY=localhost:10.0
 
 # usage: "while :;do funniki;done"

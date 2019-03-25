@@ -17,25 +17,10 @@ alias crontab='crontab -i'
 balias vi nvim
 
 # anyenv
-# set -x PATH  "$HOME/.anyenv/bin" $PATH
-# eval (anyenv init - fish)
+set -x PATH  "$HOME/.anyenv/bin" $PATH
+anyenv init - | grep -v '..env rehash' | source
 
-# pyenv
-if which pyenv >/dev/null 2>&1
-    set -x PYENV_ROOT "$HOME/.pyenv"
-    set -x PATH "$PYENV_ROOT/bin" $PATH
-    status --is-interactive; and source (pyenv init -|psub)
-end
-
-# goenv
-if which goenv >/dev/null 2>&1
-    set -x GOENV_ROOT "$HOME/.anyenv/envs/goenv"
-    set -x PATH "$HOME/.anyenv/envs/goenv/bin" $PATH 
-    set -x PATH "$HOME/.anyenv/envs/goenv/shims" $PATH 
-    command goenv rehash 2>/dev/null
-end
-set -x GOPATH "$HOME/go"
-set -x PATH "$GOPATH/bin" $PATH 
+set -x PATH "$HOME/go/bin" $PATH
 
 # direnv
 if which direnv >/dev/null 2>&1
