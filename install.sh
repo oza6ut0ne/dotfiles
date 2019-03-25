@@ -57,7 +57,35 @@ if ! exists "nvim"; then
     fi
 fi
 
-if [ ! -d ~/.pyenv ]; then
+if [ ! -d ~/.anyenv ]; then
+    git clone https://github.com/riywo/anyenv ~/.anyenv
+    source ~/.bashrc
+    yes | anyenv install --init
+    mkdir -p $(anyenv root)/plugins
+    git clone https://github.com/znz/anyenv-update.git $(anyenv root)/plugins/anyenv-update
+fi
+
+if ! anyenv envs | grep goenv >/dev/null 2>&1; then
+    ${SUDO} apt install -y golang
+    if [ ! -d ~/go ]; then
+        mkdir ~/go
+    fi
+    if [ ! -d ~/go/bin ]; then
+        mkdir ~/go/bin
+    fi
+    anyenv install goenv
+    source ~/.bashrc
+    go get github.com/motemen/ghq
+    go get -u github.com/github/hub
+    go get -u github.com/kyoshidajp/ghkw
+    go get -u github.com/jingweno/ccat
+
+    goenv rehash
+    GO_NEWEST="$(goenv install -l | grep --color=never -E '^ *[0-9]+\.[0-9]+\.[0-9]+$' | tail -n 1)"
+    goenv install ${GO_NEWEST}
+fi
+
+if ! anyenv envs | grep pyenv >/dev/null 2>&1; then
     if exists "apt"; then
         ${SUDO} apt install -y make build-essential llvm clang gcc
         ${SUDO} apt install -y zlib1g-dev libbz2-dev 
@@ -66,9 +94,9 @@ if [ ! -d ~/.pyenv ]; then
         ${SUDO} apt install -y libncurses5-dev libncursesw5-dev xz-utils tk-dev
     fi
 
-    git clone https://github.com/yyuu/pyenv.git ~/.pyenv
-    git clone git://github.com/yyuu/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv
+    anyenv install pyenv
     source ~/.bashrc
+    git clone git://github.com/yyuu/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
 fi
 
 if ! pyenv versions | grep neovim-3 >/dev/null 2>&1; then
@@ -89,24 +117,6 @@ if ! pyenv versions | grep neovim-2 >/dev/null 2>&1; then
     pyenv shell neovim-2
     pip install neovim
     pyenv shell --unset
-fi
-
-if [ ! -d ~/.anyenv ]; then
-    git clone https://github.com/riywo/anyenv ~/.anyenv
-    # source ~/.bashrc
-    eval "$(~/.anyenv/bin/anyenv init -)"
-fi
-
-if ! ~/.anyenv/bin/anyenv envs | grep goenv >/dev/null 2>&1; then
-    ~/.anyenv/bin/anyenv install goenv
-    if [ ! -d ~/go ]; then
-        mkdir ~/go
-    fi
-    if [ ! -d ~/go/bin ]; then
-        mkdir ~/go/bin
-    fi
-    # source ~/.bashrc
-    ~/.anyenv/envs/goenv rehash
 fi
 
 if ! exists "fish"; then
