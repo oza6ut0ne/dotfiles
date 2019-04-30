@@ -97,6 +97,7 @@ if ! anyenv envs | grep pyenv >/dev/null 2>&1; then
     anyenv install pyenv
     source ~/.bashrc
     git clone git://github.com/yyuu/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
+    git clone git://github.com/pyenv/pyenv-which-ext.git $(pyenv root)/plugins/pyenv-which-ext
 fi
 
 if ! pyenv versions | grep neovim-3 >/dev/null 2>&1; then
