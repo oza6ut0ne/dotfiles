@@ -18,7 +18,7 @@ balias vi nvim
 
 # anyenv
 set -x PATH  "$HOME/.anyenv/bin" $PATH
-anyenv init - | grep -v '..env rehash' | source
+anyenv init - fish | grep -v '..env rehash' | source
 
 set -x PATH "$HOME/go/bin" $PATH
 

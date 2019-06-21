@@ -5,7 +5,7 @@
 export EDITOR nvim
 
 export PATH="$HOME/.anyenv/bin:$PATH"
-eval "$(anyenv init - | grep -v '..env rehash')"
+eval "$(anyenv init - bash | grep -v '..env rehash')"
 
 # If not running interactively, don't do anything
 case $- in
