@@ -90,7 +90,7 @@ if ! anyenv envs | grep pyenv >/dev/null 2>&1; then
         ${SUDO} apt install -y make build-essential llvm clang gcc
         ${SUDO} apt install -y zlib1g-dev libbz2-dev 
         ${SUDO} apt install -y libssl-dev libffi-dev openssl
-        ${SUDO} apt install -y ibreadline-dev libsqlite3-dev
+        ${SUDO} apt install -y libreadline-dev libsqlite3-dev
         ${SUDO} apt install -y libncurses5-dev libncursesw5-dev xz-utils tk-dev
     fi
 
