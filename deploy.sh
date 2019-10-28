@@ -2,6 +2,7 @@
 
 set -u
 DOT_ROOT="${HOME}/dotfiles"
+CONFIG_ROOT="${HOME}/.config"
 FISH_FUNCTIONS="${HOME}/.config/fish/functions"
 
 cd ${DOT_ROOT}
@@ -13,6 +14,11 @@ for f in .??*; do
     [ "$f" = ".config" ] && continue
     ln -snfv ${DOT_ROOT}/${f} ${HOME}/${f}
 done
+
+# create ~/.config    
+if [ ! -e ${CONFIG_ROOT} ]; then
+    mkdir -p ${CONFIG_ROOT}    
+fi    
 
 # neovim
 ln -snfv ${DOT_ROOT}/.vim ${HOME}/.config/nvim
