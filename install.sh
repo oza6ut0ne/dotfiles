@@ -106,7 +106,7 @@ if ! pyenv versions | grep neovim-3 >/dev/null 2>&1; then
     pyenv rehash
     pyenv virtualenv ${PY3_NEWEST} neovim-3
     pyenv shell neovim-3
-    pip install neovim
+    pip install pynvim
     pyenv shell --unset
 fi
 
@@ -116,7 +116,7 @@ if ! pyenv versions | grep neovim-2 >/dev/null 2>&1; then
     pyenv rehash
     pyenv virtualenv ${PY2_NEWEST} neovim-2
     pyenv shell neovim-2
-    pip install neovim
+    pip install pynvim
     pyenv shell --unset
 fi
 
