@@ -122,7 +122,7 @@ fi
 
 if ! exists "fish"; then
     if is_ubuntu; then
-        ${SUDO} apt-add-repository ppa:fish-shell/release-2 -y
+        ${SUDO} apt-add-repository ppa:fish-shell/release-3 -y
         ${SUDO} apt update
     fi
     if exists "apt"; then
