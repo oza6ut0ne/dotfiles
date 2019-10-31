@@ -11,5 +11,11 @@ repo = 'w0rp/ale'
 #repo = 'nathanaelkane/vim-indent-guides'
 
 [[plugins]]
+repo = "airblade/vim-gitgutter"
+
+[[plugins]]
+repo = "tpope/vim-fugitive"
+
+[[plugins]]
 repo = 'Shougo/vinarise.vim'
 
