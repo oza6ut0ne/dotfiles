@@ -1,7 +1,10 @@
 :set clipboard=unnamedplus
 :set number
 :set relativenumber
-:set laststatus=1
+:set laststatus=2
+:set statusline=%F%m%r%h%w%=[ENC=%{&fileencoding}][ROW=%l/%L]
+:set list
+:set listchars=tab:>-,trail:-,extends:>,precedes:<,nbsp:%
 :set whichwrap=b,s,h,l,<,>,[,],~
 :set mouse=a
 
