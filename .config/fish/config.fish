@@ -3,7 +3,7 @@ set -x fish_greeting
 
 set -x fish_color_autosuggestion white
 set -x fish_color_param '0FC' brcyan
-set -e fish_color_command
+set -x fish_color_command normal
 
 set -x EDITOR nvim
 set -x PATH "$HOME/bin" $PATH
@@ -29,3 +29,7 @@ end
 # thefuck
 set -x THEFUCK_OVERRIDDEN_ALIASES 'vi'
 
+# snap
+if test -f /etc/profile.d/apps-bin-path.sh
+    bass source /etc/profile.d/apps-bin-path.sh
+end
