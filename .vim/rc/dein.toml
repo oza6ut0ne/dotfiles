@@ -1,6 +1,12 @@
 [[plugins]]
 repo = 'Shougo/dein.vim'
 
+[[plugins]]
+repo = 'Shougo/denite.nvim'
+
+[[plugins]]
+repo = 'nixprime/cpsm'
+
 #[[plugins]]
 #repo = 'scrooloose/syntastic'
 
@@ -18,4 +24,3 @@ repo = "tpope/vim-fugitive"
 
 [[plugins]]
 repo = 'Shougo/vinarise.vim'
-

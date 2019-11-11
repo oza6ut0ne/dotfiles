@@ -39,7 +39,6 @@ endif
 let g:syntastic_python_checkers = ['flake8']
 
 
-
 " original http://stackoverflow.com/questions/12374200/using-uncrustify-with-vim/15513829#15513829
 function! Preserve(command)
     " Save the last search.
@@ -94,3 +93,44 @@ let g:ale_python_pylint_options = '--extension-pkg-whitelist=cv2'
 autocmd FileType python setlocal completeopt-=preview
 autocmd FileType go setlocal completeopt-=preview
 
+
+"--------------------------------
+" denite
+"--------------------------------
+" Define mappings
+autocmd FileType denite call s:denite_my_settings()
+function! s:denite_my_settings() abort
+  nnoremap <silent><buffer><expr> <CR> denite#do_map('do_action')
+  nnoremap <silent><buffer><expr> d denite#do_map('do_action', 'delete')
+  nnoremap <silent><buffer><expr> p denite#do_map('do_action', 'preview')
+  nnoremap <silent><buffer><expr> q denite#do_map('quit')
+  nnoremap <silent><buffer><expr> i denite#do_map('open_filter_buffer')
+  nnoremap <silent><buffer><expr> <Space> denite#do_map('toggle_select').'j'
+endfunction
+
+autocmd FileType denite-filter call s:denite_filter_my_settings()
+function! s:denite_filter_my_settings() abort
+  imap <silent><buffer> <C-o> <Plug>(denite_filter_quit)
+endfunction
+
+if has('nivm')
+  " Change matchers.
+  call denite#custom#source('file/rec', 'matchers', ['matcher/cpsm'])
+  
+  " Ag command on grep source
+  call denite#custom#var('grep', 'command', ['ag'])
+  call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep'])
+  call denite#custom#var('grep', 'recursive_opts', [])
+  call denite#custom#var('grep', 'pattern_opt', [])
+  call denite#custom#var('grep', 'separator', ['--'])
+  call denite#custom#var('grep', 'final_opts', [])
+  
+  " Define alias
+  call denite#custom#alias('source', 'file/rec/git', 'file/rec')
+  call denite#custom#var('file/rec/git', 'command',
+      \ ['git', 'ls-files', '-co', '--exclude-standard'])
+  
+  call denite#custom#alias('source', 'file/rec/py', 'file/rec')
+  call denite#custom#var('file/rec/py', 'command',
+      \ ['scantree.py', '--path', ':directory'])
+endif
