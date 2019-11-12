@@ -1,4 +1,4 @@
-set -x TERM xterm-256color
+set -x TERM screen-256color-s
 set -x fish_greeting
 
 set -x fish_color_autosuggestion white
