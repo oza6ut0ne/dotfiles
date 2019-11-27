@@ -10,5 +10,7 @@
 	tool = vimdiff
 [mergetool]
 	prompt = false
+[alias]
+	undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
 [ghq]
     root = ~/ghq
