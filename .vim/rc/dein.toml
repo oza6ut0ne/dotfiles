@@ -5,6 +5,9 @@ repo = 'Shougo/dein.vim'
 repo = 'Shougo/denite.nvim'
 
 [[plugins]]
+repo = 'scrooloose/nerdtree'
+
+[[plugins]]
 repo = 'nixprime/cpsm'
 
 #[[plugins]]

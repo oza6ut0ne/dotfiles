@@ -7,6 +7,7 @@
 :set listchars=tab:>-,trail:-,extends:>,precedes:<,nbsp:%
 :set whichwrap=b,s,h,l,<,>,[,],~
 :set mouse=a
+:set hidden
 
 :set shiftwidth=4
 :set expandtab
