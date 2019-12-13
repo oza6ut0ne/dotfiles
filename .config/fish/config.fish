@@ -13,7 +13,7 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
 alias crontab='crontab -i'
-balias vi nvim
+alias vi nvim
 
 # anyenv
 set -x PATH  "$HOME/.anyenv/bin" $PATH
