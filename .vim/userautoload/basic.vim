@@ -2,7 +2,8 @@
 :set number
 :set relativenumber
 :set laststatus=2
-:set statusline=%F%m%r%h%w%=[ENC=%{&fileencoding}][ROW=%l/%L]
+:set fileencodings=ucs-bom,utf-8,cp932,default,latin1
+:set statusline=%F%m%r%h%w%=[FF=%{&ff}][ENC=%{&fenc}][ROW=%l/%L]
 :set list
 :set listchars=tab:>-,trail:-,extends:>,precedes:<,nbsp:%
 :set whichwrap=b,s,h,l,<,>,[,],~
