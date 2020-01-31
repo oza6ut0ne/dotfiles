@@ -1,5 +1,7 @@
 nnoremap ; :
 nnoremap : ;
+vnoremap ; :
+vnoremap : ;
 
 inoremap jj <Esc>
 
