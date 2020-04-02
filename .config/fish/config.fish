@@ -6,6 +6,7 @@ set -x fish_color_param '0FC' brcyan
 set -x fish_color_command normal
 
 set -x EDITOR nvim
+set -x SUDO_EDITOR 'nvim -R'
 set -x PATH "$HOME/bin" $PATH
 
 alias ll='ls -alF'

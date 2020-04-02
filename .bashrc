@@ -2,7 +2,8 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
-export EDITOR nvim
+export EDITOR=nvim
+export SUDO_EDITOR='nvim -R'
 
 export PATH="$HOME/.anyenv/bin:$PATH"
 eval "$(anyenv init - bash | grep -v '..env rehash')"
