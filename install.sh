@@ -49,7 +49,7 @@ fi
 
 if ! exists "nvim"; then
     if is_ubuntu; then
-        ${SUDO} apt-add-repository ppa:neovim-ppa/stable -y
+        ${SUDO} apt-add-repository ppa:neovim-ppa/unstable -y
         ${SUDO} apt update
     fi
     if exists "apt"; then
