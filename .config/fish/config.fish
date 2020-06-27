@@ -14,6 +14,9 @@ set -x fish_greeting
 set -x fish_color_autosuggestion white
 set -x fish_color_param '0FC' brcyan
 set -x fish_color_command normal
+set -x fish_color_quote yellow
+set -x fish_color_operator bryellow
+set -x fish_color_redirection 00afff
 
 set -x EDITOR nvim
 set -x SUDO_EDITOR 'nvim -R'
