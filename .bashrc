@@ -2,12 +2,6 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
-export EDITOR=nvim
-export SUDO_EDITOR='nvim -R'
-
-export PATH="$HOME/.anyenv/bin:$PATH"
-eval "$(anyenv init - bash | grep -v '..env rehash')"
-
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
@@ -138,11 +132,15 @@ alias rm='rm -i'
 alias crontab='crontab -i'
 alias vi='nvim'
 
-export PATH=$PATH:$HOME/bin
-export PATH=$PATH:$HOME/go/bin
+export EDITOR=nvim
+export SUDO_EDITOR='nvim -R'
 
-# usage: "while :;do funniki;done"
-funniki(){ echo -en "\e[1;32m";for((i=0;i<$COLUMNS/2;i++));do r=$(($RANDOM&3));test $r == 0&&echo -n "  "||echo -n $(($r&1))" ";done;echo -e "\e[m";}
+export PATH=$PATH:$HOME/go/bin
+export PATH="$HOME/.anyenv/bin:$PATH"
+eval "$(anyenv init - bash | grep -v '..env rehash')"
 
 eval "$(direnv hook bash)"
 eval "$(thefuck --alias)"
+
+# usage: "while :;do funniki;done"
+funniki(){ echo -en "\e[1;32m";for((i=0;i<$COLUMNS/2;i++));do r=$(($RANDOM&3));test $r == 0&&echo -n "  "||echo -n $(($r&1))" ";done;echo -e "\e[m";}
