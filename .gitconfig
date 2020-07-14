@@ -1,16 +1,15 @@
-[user]
-	email = 33759728+oza6ut0ne@users.noreply.github.com
-	name = oza6ut0ne
+[include]
+    path = ~/.gitconfig.local
 [diff]
-	tool = vimdiff
-	compactionHeuristic = true
+    tool = vimdiff
+    compactionHeuristic = true
 [difftool]
-	prompt = false
+    prompt = false
 [merge]
-	tool = vimdiff
+    tool = vimdiff
 [mergetool]
-	prompt = false
+    prompt = false
 [alias]
-	undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
+    undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
 [ghq]
     root = ~/ghq
