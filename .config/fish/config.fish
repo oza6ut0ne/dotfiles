@@ -34,6 +34,10 @@ set -x PATH "$HOME/go/bin" $PATH
 set -x PATH  "$HOME/.anyenv/bin" $PATH
 anyenv init - fish | grep -v '..env rehash' | source
 
+if which adb-peco >/dev/null 2>&1
+    balias adb adb-peco
+end
+
 # direnv
 if which direnv >/dev/null 2>&1
     eval (direnv hook fish)
