@@ -15,6 +15,11 @@ nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
 nnoremap Q  <Nop>
 
+nnoremap <expr> j v:count == 0 ? 'gj' : 'j'
+xnoremap <expr> j (v:count == 0 && mode() ==# 'v') ? 'gj' : 'j'
+nnoremap <expr> k v:count == 0 ? 'gk' : 'k'
+xnoremap <expr> k (v:count == 0 && mode() ==# 'v') ? 'gk' : 'k'
+
 cnoremap <C-a> <Home>
 cnoremap <C-b> <Left>
 cnoremap <C-d> <Del>
