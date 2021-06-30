@@ -5,25 +5,43 @@ repo = 'Shougo/dein.vim'
 repo = 'Shougo/denite.nvim'
 
 [[plugins]]
-repo = 'scrooloose/nerdtree'
+repo = 'roxma/nvim-yarp'
+on_if = '!has("nvim")'
+
+[[plugins]]
+repo = 'roxma/vim-hug-neovim-rpc'
+on_if = '!has("nvim")'
 
 [[plugins]]
 repo = 'nixprime/cpsm'
 
-#[[plugins]]
-#repo = 'scrooloose/syntastic'
+[[plugins]]
+repo = 'neoclide/coc.nvim'
 
 [[plugins]]
 repo = 'w0rp/ale'
-
-#[[plugins]]
-#repo = 'nathanaelkane/vim-indent-guides'
-
-[[plugins]]
-repo = "airblade/vim-gitgutter"
-
-[[plugins]]
-repo = "tpope/vim-fugitive"
+hook_add = '''
+    let g:ale_enabled = 1
+    let g:ale_completion_enabled = 0
+    let g:ale_disable_lsp = 1
+    let g:ale_sign_column_always = 1
+'''
 
 [[plugins]]
-repo = 'Shougo/vinarise.vim'
+repo = 'cespare/vim-toml'
+
+[[plugins]]
+repo = 'Shougo/context_filetype.vim'
+
+[[plugins]]
+repo = 'osyo-manga/vim-precious'
+
+[[plugins]]
+repo = 'airblade/vim-gitgutter'
+
+[[plugins]]
+repo = 'tpope/vim-fugitive'
+
+[[plugins]]
+repo = 'dracula/vim'
+name = 'dracula'

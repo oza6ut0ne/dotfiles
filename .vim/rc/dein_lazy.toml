@@ -1,27 +1,19 @@
 [[plugins]]
-repo = 'Shougo/deoplete.nvim'
-hook_add = 'let g:deoplete#enable_at_startup = 1'
-on_i = 1
-
-[[plugins]]
-repo = 'deoplete-plugins/deoplete-jedi'
-on_source = 'deoplete.nvim'
-on_ft = 'python'
-
-[[plugins]]
 repo = 'cohama/lexima.vim'
 on_i = 1
 
-#[[plugins]]
-#repo = 'Vimjas/vim-python-pep8-indent'
-#on_ft = ['python']
-# on_i = 1
+[[plugins]]
+repo = 'scrooloose/nerdtree'
+on_cmd = ['NERDTree', 'NERDTreeToggle', 'NERDTreeFind', 'NERDTreeFocus']
 
 [[plugins]]
-repo = 'deoplete-plugins/deoplete-go'
-build = 'make'
-on_ft = 'go'
+repo = 'nathanaelkane/vim-indent-guides'
+on_cmd = ['IndentGuidesEnable', 'IndentGuidesToggle']
 
 [[plugins]]
-repo = 'fatih/vim-go'
-on_ft = 'go'
+repo = 'Shougo/vinarise.vim'
+on_cmd = 'Vinarise'
+
+[[plugins]]
+repo = 'Vimjas/vim-python-pep8-indent'
+on_ft = 'python'
