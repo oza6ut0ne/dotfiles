@@ -26,6 +26,8 @@ cnoremap <C-d> <Del>
 cnoremap <C-e> <End>
 cnoremap <C-f> <Right>
 cnoremap <C-y> <C-r>*
+cnoremap <C-p> <Up>
+cnoremap <C-n> <Down>
 
 let mapleader = "\<Space>\<Space>"
 
@@ -44,6 +46,7 @@ nnoremap <silent> [denite]f :<C-u>Denite file/rec<CR>
 nnoremap <silent> [denite]F :<C-u>Denite file/rec/git<CR>
 nnoremap <silent> [denite]G :<C-u>Denite file/rec/git/untracked<CR>
 nnoremap <silent> [denite]b :<C-u>Denite buffer<CR>
+nnoremap <silent> [denite]B :<C-u>Denite buffer/all<CR>
 nnoremap <silent> [denite]o :<C-u>Denite file/old<CR>
 nnoremap <silent> [denite]c :<C-u>Denite command<CR>
 nnoremap <silent> [denite]h :<C-u>Denite command_history<CR>

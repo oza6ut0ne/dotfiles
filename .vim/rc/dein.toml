@@ -25,6 +25,11 @@ hook_add = '''
     let g:ale_completion_enabled = 0
     let g:ale_disable_lsp = 1
     let g:ale_sign_column_always = 1
+
+    augroup ale
+        autocmd!
+        autocmd BufEnter * let b:ale_enabled = &modifiable
+    augroup END
 '''
 
 [[plugins]]
