@@ -35,6 +35,7 @@ let mapleader = "\<Space>\<Space>"
 " NERDTree
 "--------------------------------
 nnoremap <silent> <Space>n :<C-u>NERDTreeToggle<CR>
+nnoremap <silent> <Space>N :<C-u>NERDTreeFind<CR>
 
 "--------------------------------
 " denite
