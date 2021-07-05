@@ -5,7 +5,10 @@
     indentHeuristic = true
 [difftool]
     prompt = false
+[pull]
+    ff = only
 [merge]
+    ff = false
     tool = vimdiff
 [mergetool]
     prompt = false
