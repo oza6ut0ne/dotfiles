@@ -2,7 +2,7 @@
     path = ~/.gitconfig.local
 [diff]
     tool = vimdiff
-    compactionHeuristic = true
+    indentHeuristic = true
 [difftool]
     prompt = false
 [merge]
