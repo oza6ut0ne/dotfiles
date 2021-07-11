@@ -1,5 +1,5 @@
 function fish_prompt
-	set -l last_command_status $status
+  set -l last_command_statuses $pipestatus
   set -l cwd
 
   if test "$theme_short_path" = 'yes'
@@ -30,13 +30,17 @@ function fish_prompt
 #  set -l repository_color (set_color $fish_color_cwd ^/dev/null; or set_color green)
   set -l repository_color (set_color bryellow)
 
-  if test $last_command_status -eq 0
-#    echo -n -s $success_color $fish $normal_color
-    echo -n -s $success_color $last_command_status $normal_color "|" 
-  else
-#    echo -n -s $error_color $fish $normal_color
-    echo -n -s $error_color $last_command_status $normal_color "|" 
+  set -l status_color $success_color
+  for command_status in $last_command_statuses
+    if test $command_status -ne 0
+      set status_color $error_color
+      break
+    end
   end
+# echo -n -s $error_color $fish $normal_color
+  echo -n -s $status_color
+  echo -n $last_command_statuses
+  echo -n -s $normal_color "|"
 
   echo -n -s (whoami) "@" (cat /etc/hostname)
 
