@@ -169,8 +169,13 @@ export PATH=$PATH:$HOME/go/bin
 export PATH="$HOME/.anyenv/bin:$PATH"
 eval "$(anyenv init - bash | grep -v '..env rehash')"
 
-eval "$(direnv hook bash)"
-eval "$(thefuck --alias)"
+if exists "direnv"; then
+    eval "$(direnv hook bash)"
+fi
+
+if exists "thefuck"; then
+    eval "$(thefuck --alias)"
+fi
 
 # usage: "while :;do funniki;done"
 funniki(){ echo -en "\e[1;32m";for((i=0;i<$COLUMNS/2;i++));do r=$(($RANDOM&3));test $r == 0&&echo -n "  "||echo -n $(($r&1))" ";done;echo -e "\e[m";}
