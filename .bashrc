@@ -27,6 +27,34 @@ shopt -s checkwinsize
 # match all files and zero or more directories and subdirectories.
 #shopt -s globstar
 
+function exists() {
+    which "$1" >/dev/null 2>&1
+    return $?
+}
+
+function is_git_repo() {
+    [ -d .git ] && return 0
+    exists "git" || return 1
+    git rev-parse --git-dir >/dev/null 2>&1
+    return $?
+}
+
+function git_branch_name() {
+    is_git_repo || return
+    exists "git" || return
+    branch_name=$(git symbolic-ref --short HEAD 2>/dev/null) && echo "[$branch_name]" && return
+    echo "[$(git show-ref --head -s --abbrev | head -n 1 2>/dev/null)]"
+}
+
+function colored_pipestatus() {
+    last_status=${PIPESTATUS[@]}
+    color='\033[01;93m'
+    [[ "${last_status[@]}" =~ ^0( 0)*$ ]] || color='\033[01;91m'
+    echo -en "\001${color}\002"
+    echo -en "${last_status[@]}"
+    echo -e "\001\033[00m\002"
+}
+
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
@@ -59,7 +87,7 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='\[\033[01;33m\]${PIPESTATUS[@]}${debian_chroot:+($debian_chroot)}\[\033[01;32m\]|\u@\h\[\033[00m\]:\[\033[01;36m\]\W\[\033[00m\]\$ '
+    PS1='$(colored_pipestatus)${debian_chroot:+($debian_chroot)}\[\033[01;32m\]|\u@\h\[\033[00m\]:\[\033[01;36m\]\W\[\033[00m\]\[\033[01;93m\]$(git_branch_name)\[\033[00m\]\$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
