@@ -169,6 +169,10 @@ export PATH=$PATH:$HOME/go/bin
 export PATH="$HOME/.anyenv/bin:$PATH"
 eval "$(anyenv init - bash | grep -v '..env rehash')"
 
+if exists "zoxide"; then
+    eval "$(zoxide init bash)"
+fi
+
 if exists "direnv"; then
     eval "$(direnv hook bash)"
 fi

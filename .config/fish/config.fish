@@ -59,6 +59,11 @@ set -x PATH "$HOME/go/bin" $PATH
 set -x PATH  "$HOME/.anyenv/bin" $PATH
 anyenv init - fish | grep -v '..env rehash' | source
 
+# zoxide
+if which zoxide >/dev/null 2>&1
+    zoxide init fish | source
+end
+
 # direnv
 if which direnv >/dev/null 2>&1
     eval (direnv hook fish)

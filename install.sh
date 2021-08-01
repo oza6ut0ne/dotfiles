@@ -130,7 +130,7 @@ if ! exists "fish"; then
     fi
     curl -L http://get.oh-my.fish | fish
     curl -Lo ~/.config/fish/functions/fisher.fish --create-dirs https://git.io/fisher
-    fish -c 'fisher add jethrokuan/z jethrokuan/fzf jorgebucaran/fish-spin edc/bass oh-my-fish/plugin-balias oh-my-fish/plugin-extract'
+    fish -c 'fisher add jethrokuan/fzf jorgebucaran/fish-spin edc/bass oh-my-fish/plugin-balias oh-my-fish/plugin-extract'
     chsh -s "$(which fish)"
 fi
 
