@@ -33,6 +33,10 @@ bind "set show-all-if-ambiguous on"
 bind "set menu-complete-display-prefix on"
 bind "set colored-stats on"
 bind "set colored-completion-prefix on"
+bind '"\e[A":history-search-backward'
+bind '"\e[B":history-search-forward'
+bind "Control-p":history-search-backward
+bind "Control-n":history-search-forward
 
 function exists() {
     which "$1" >/dev/null 2>&1
