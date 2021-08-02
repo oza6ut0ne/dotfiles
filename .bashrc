@@ -27,6 +27,13 @@ shopt -s checkwinsize
 # match all files and zero or more directories and subdirectories.
 #shopt -s globstar
 
+bind "TAB":menu-complete
+bind '"\e[Z":menu-complete-backward'
+bind "set show-all-if-ambiguous on"
+bind "set menu-complete-display-prefix on"
+bind "set colored-stats on"
+bind "set colored-completion-prefix on"
+
 function exists() {
     which "$1" >/dev/null 2>&1
     return $?
