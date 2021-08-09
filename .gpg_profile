@@ -1,0 +1,12 @@
+#!/bin/sh
+
+if [ -x "$(which gpg-agent)" ] ; then
+    # Make sure pinentry works properly
+    export GPG_TTY=$(tty)
+    gpg-connect-agent UPDATESTARTUPTTY /bye >/dev/null
+
+    if [ -z "$SSH_AUTH_SOCK" ] ; then
+        export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+    fi
+fi
+
