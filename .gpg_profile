@@ -3,7 +3,7 @@
 if [ -x "$(which gpg-agent)" ]; then
     # Make sure pinentry works properly
     export GPG_TTY=$(tty)
-    gpg-connect-agent UPDATESTARTUPTTY /bye >/dev/null
+    gpg-connect-agent UPDATESTARTUPTTY /bye >/dev/null 2>&1
 
     if [ -z "$SSH_AUTH_SOCK" ] && \
           [ -n "$(gpgconf --list-options gpg-agent | \
