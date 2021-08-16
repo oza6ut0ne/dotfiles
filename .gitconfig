@@ -1,7 +1,12 @@
 [include]
     path = ~/.gitconfig.local
+[pager]
+    log = which diff-highlight >/dev/null && diff-highlight | less || less
+    show = which diff-highlight >/dev/null && diff-highlight | less || less
+    diff = which diff-highlight >/dev/null && diff-highlight | less || less
 [diff]
     tool = vimdiff
+    algorithm = histogram
     indentHeuristic = true
 [difftool]
     prompt = false
