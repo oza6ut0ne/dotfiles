@@ -47,10 +47,10 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
 alias crontab='crontab -i'
-alias vi nvim
+balias vi nvim
 
 if which adb-peco >/dev/null 2>&1
-    balias adb adb-peco
+    alias adb adb-peco
 end
 
 set -x PATH "$HOME/go/bin" $PATH
