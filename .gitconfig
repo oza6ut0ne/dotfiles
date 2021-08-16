@@ -1,22 +1,24 @@
 [include]
     path = ~/.gitconfig.local
-[pager]
-    log = which diff-highlight >/dev/null && diff-highlight | less || less
-    show = which diff-highlight >/dev/null && diff-highlight | less || less
-    diff = which diff-highlight >/dev/null && diff-highlight | less || less
 [diff]
     tool = vimdiff
     algorithm = histogram
     indentHeuristic = true
+    colorMoved = dimmed-zebra
+    colorMovedWS = allow-indentation-change
 [difftool]
     prompt = false
-[pull]
-    ff = only
 [merge]
     ff = false
     tool = vimdiff
 [mergetool]
     prompt = false
+[pull]
+    ff = only
+[pager]
+    log = which diff-highlight >/dev/null && diff-highlight | less || less
+    show = which diff-highlight >/dev/null && diff-highlight | less || less
+    diff = which diff-highlight >/dev/null && diff-highlight | less || less
 [alias]
     logg = log --graph --all --pretty=format:'%C(yellow)%h %G?%C(auto)%d %s %C(magenta)(%cd) %C(bold blue)<%an>' --date=relative
     logga = "!f() { git logg $(git rev-list --reflog) $@; }; f"
