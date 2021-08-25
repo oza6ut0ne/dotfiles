@@ -26,6 +26,10 @@
 :set ignorecase
 :set smartcase
 
+if exists('+diffopt')
+  :set diffopt+=algorithm:histogram,indent-heuristic
+endif
+
 if has('nvim')
   :set inccommand=nosplit
 endif
