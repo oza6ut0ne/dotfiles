@@ -11,8 +11,10 @@
 [merge]
     ff = false
     tool = vimdiff
+    conflictStyle = diff3
 [mergetool]
     prompt = false
+    keepBackup = false
 [pull]
     ff = only
 [pager]
