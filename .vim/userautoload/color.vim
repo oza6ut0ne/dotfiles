@@ -1,4 +1,4 @@
-:syntax enable
+syntax enable
 
 function! s:override_color_settings() abort
   hi NonText ctermfg=12 guifg=#729fcf

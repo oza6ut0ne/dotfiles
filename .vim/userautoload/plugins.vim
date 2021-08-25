@@ -1,5 +1,5 @@
 if exists('g:vscode')
-    finish
+  finish
 endif
 
 " Directory for dein.vim.
