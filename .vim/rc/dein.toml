@@ -21,15 +21,21 @@ repo = 'neoclide/coc.nvim'
 [[plugins]]
 repo = 'w0rp/ale'
 hook_add = '''
-    let g:ale_enabled = 1
-    let g:ale_completion_enabled = 0
-    let g:ale_disable_lsp = 1
-    let g:ale_sign_column_always = 1
+  let g:ale_enabled = 1
+  let g:ale_completion_enabled = 0
+  let g:ale_disable_lsp = 1
+  let g:ale_sign_column_always = 1
 
-    augroup ale
-        autocmd!
-        autocmd BufEnter * let b:ale_enabled = &modifiable
-    augroup END
+  augroup ale
+    autocmd!
+    autocmd BufEnter * let b:ale_enabled = &modifiable
+  augroup END
+'''
+
+[[plugins]]
+repo = 'tpope/vim-surround'
+hook_add = '''
+  let g:surround_no_mappings = 1
 '''
 
 [[plugins]]
