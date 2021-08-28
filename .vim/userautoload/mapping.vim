@@ -71,3 +71,8 @@ nnoremap <silent> [denite]h :<C-u>Denite command_history<CR>
 nnoremap <silent> [denite]r :<C-u>Denite register<CR>
 nnoremap <silent> [denite]g :<C-u>Denite grep<CR>
 nnoremap <silent> [denite]H :<C-u>Denite help<CR>
+
+if exists('g:vscode')
+  nnoremap <silent> u     :<C-u>call VSCodeNotify('undo')<CR>
+  nnoremap <silent> <C-r> :<C-u>call VSCodeNotify('redo')<CR>
+endif

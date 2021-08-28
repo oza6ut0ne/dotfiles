@@ -1,7 +1,3 @@
-if exists('g:vscode')
-  finish
-endif
-
 " Directory for dein.vim.
 let s:dein_dir = expand('~/.cache/dein')
 " Directory for dein.vim repository.
@@ -33,6 +29,10 @@ endif
 " Install plugins if not installed.
 if dein#check_install()
   call dein#install()
+endif
+
+if exists('g:vscode')
+  finish
 endif
 
 runtime! userautoload/plugins/*.vim

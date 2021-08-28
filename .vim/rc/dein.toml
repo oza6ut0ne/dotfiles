@@ -3,23 +3,27 @@ repo = 'Shougo/dein.vim'
 
 [[plugins]]
 repo = 'Shougo/denite.nvim'
+on_if = '!exists("g:vscode")'
 
 [[plugins]]
 repo = 'roxma/nvim-yarp'
-on_if = '!has("nvim")'
+on_if = '!has("nvim") && !exists("g:vscode")'
 
 [[plugins]]
 repo = 'roxma/vim-hug-neovim-rpc'
-on_if = '!has("nvim")'
+on_if = '!has("nvim") && !exists("g:vscode")'
 
 [[plugins]]
 repo = 'nixprime/cpsm'
+on_if = '!exists("g:vscode")'
 
 [[plugins]]
 repo = 'neoclide/coc.nvim'
+on_if = '!exists("g:vscode")'
 
 [[plugins]]
 repo = 'w0rp/ale'
+on_if = '!exists("g:vscode")'
 hook_add = '''
   let g:ale_enabled = 1
   let g:ale_completion_enabled = 0
@@ -40,19 +44,25 @@ hook_add = '''
 
 [[plugins]]
 repo = 'cespare/vim-toml'
+on_if = '!exists("g:vscode")'
 
 [[plugins]]
 repo = 'Shougo/context_filetype.vim'
+on_if = '!exists("g:vscode")'
 
 [[plugins]]
 repo = 'osyo-manga/vim-precious'
+on_if = '!exists("g:vscode")'
 
 [[plugins]]
 repo = 'airblade/vim-gitgutter'
+on_if = '!exists("g:vscode")'
 
 [[plugins]]
 repo = 'tpope/vim-fugitive'
+on_if = '!exists("g:vscode")'
 
 [[plugins]]
 repo = 'dracula/vim'
 name = 'dracula'
+on_if = '!exists("g:vscode")'
