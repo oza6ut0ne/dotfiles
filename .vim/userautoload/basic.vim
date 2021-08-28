@@ -3,17 +3,17 @@ set number
 set relativenumber
 set laststatus=2
 set fileencodings=ucs-bom,utf-8,cp932,default,latin1
-set statusline=%F%m%r%h%w%=[%l/%L][%2.v][%P]%y[%{&ff}][%{&fenc}]
+set statusline=%F%m%r%h%w%=[%l/%L][%2.v][%P]%y[%{&ts}][%{&ff}][%{&fenc}]
 set list
 set listchars=tab:>-,trail:-,extends:>,precedes:<,nbsp:%
 set whichwrap=b,s,h,l,<,>,[,],~
 set mouse=a
 set hidden
 
-set shiftwidth=4
 set expandtab
 set tabstop=4
-set softtabstop=4
+set shiftwidth=0
+set softtabstop=-1
 set scrolloff=3
 set autoindent
 set smartindent
