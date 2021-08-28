@@ -1,0 +1,9 @@
+set surround
+let g:surround_no_mappings = 1
+nmap ds     <Plug>DSurround
+nmap cs     <Plug>CSurround
+nmap ys     <Plug>YSurround
+xmap ys     <Plug>VSurround
+
+source .vim/userautoload/basic.vim
+source .vim/userautoload/mapping.vim
