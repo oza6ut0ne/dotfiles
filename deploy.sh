@@ -4,6 +4,8 @@ set -u
 DOT_ROOT="${HOME}/dotfiles"
 CONFIG_ROOT="${HOME}/.config"
 FISH_FUNCTIONS="${HOME}/.config/fish/functions"
+VIMSPECTOR_ROOT="${HOME}/.config/vimspector"
+VIMSPECTOR_CONFIG_ROOT="${VIMSPECTOR_ROOT}/configurations"
 
 cd ${DOT_ROOT}
 
@@ -32,3 +34,11 @@ for f in `ls ${DOT_ROOT}/.config/fish/functions`; do
     ln -snfv ${DOT_ROOT}/.config/fish/functions/${f} ${FISH_FUNCTIONS}/${f}
 done
 
+# vimspector
+if [ ! -e ${VIMSPECTOR_ROOT} ]; then
+    mkdir -p ${VIMSPECTOR_ROOT}
+fi
+if [ ! -L ${VIMSPECTOR_CONFIG_ROOT} ] && [ -e ${VIMSPECTOR_CONFIG_ROOT} ]; then
+    rm -rf ${VIMSPECTOR_CONFIG_ROOT}
+    ln -snfv ${DOT_ROOT}/.config/vimspector/configurations ${VIMSPECTOR_CONFIG_ROOT}
+fi
