@@ -18,6 +18,10 @@ repo = 'nixprime/cpsm'
 on_if = '!exists("g:vscode")'
 
 [[plugins]]
+repo = 'editorconfig/editorconfig-vim'
+on_if = '!exists("g:vscode")'
+
+[[plugins]]
 repo = 'neoclide/coc.nvim'
 on_if = '!exists("g:vscode")'
 
