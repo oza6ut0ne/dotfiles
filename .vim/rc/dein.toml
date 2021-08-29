@@ -60,6 +60,20 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'puremourning/vimspector'
+on_if = '!exists("g:vscode")'
+hook_add = '''
+  let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
+  let g:vimspector_sign_priority = {
+  \    'vimspectorBP':         999,
+  \    'vimspectorBPCond':     999,
+  \    'vimspectorBPDisabled': 999,
+  \ }
+  nmap <C-q> <Plug>VimspectorBalloonEval
+  xmap <C-q> <Plug>VimspectorBalloonEval
+'''
+
+[[plugins]]
 repo = 'cespare/vim-toml'
 on_if = '!exists("g:vscode")'
 

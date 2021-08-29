@@ -43,3 +43,6 @@ hi Folded		guibg=gray30
 hi FoldColumn	guibg=gray30 guifg=white
 hi cIf0			guifg=gray
 hi diffOnly	guifg=red gui=bold
+
+hi Constant ctermfg=208 guifg=#ff8700
+hi Pmenu		ctermfg=159 ctermbg=60 guifg=#00ffff guibg=#5e5aa0
