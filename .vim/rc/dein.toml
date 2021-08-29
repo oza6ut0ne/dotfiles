@@ -20,6 +20,10 @@ on_if = '!exists("g:vscode")'
 [[plugins]]
 repo = 'editorconfig/editorconfig-vim'
 on_if = '!exists("g:vscode")'
+hook_add = '''
+  let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+  autocmd FileType gitcommit let b:EditorConfig_disable = 1
+'''
 
 [[plugins]]
 repo = 'neoclide/coc.nvim'
