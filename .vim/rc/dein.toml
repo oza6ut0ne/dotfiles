@@ -70,8 +70,11 @@ hook_add = '''
   \    'vimspectorBPCond':     999,
   \    'vimspectorBPDisabled': 999,
   \ }
-  nmap <C-q> <Plug>VimspectorBalloonEval
-  xmap <C-q> <Plug>VimspectorBalloonEval
+  nmap <C-q>   <Plug>VimspectorBalloonEval
+  xmap <C-q>   <Plug>VimspectorBalloonEval
+  nmap <C-F9>  <Plug>VimspectorToggleConditionalBreakpoint
+  nmap <F8>    <Plug>VimspectorRunToCursor
+  nnoremap <silent> <C-F5>  :<C-u>VimspectorReset<CR>
 '''
 
 [[plugins]]
