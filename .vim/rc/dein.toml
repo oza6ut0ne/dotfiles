@@ -63,6 +63,7 @@ hook_add = '''
 repo = 'puremourning/vimspector'
 on_if = '!exists("g:vscode")'
 hook_add = '''
+  let g:vimspector_base_dir = expand('~/.config/vimspector')
   let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
   let g:vimspector_sign_priority = {
   \    'vimspectorBP':         999,
