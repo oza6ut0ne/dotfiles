@@ -29,6 +29,8 @@ cnoremap <C-y> <C-r>*
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
 
+tnoremap <Esc> <C-\><C-n>
+
 let mapleader = "\<Space>\<Space>"
 
 "--------------------------------

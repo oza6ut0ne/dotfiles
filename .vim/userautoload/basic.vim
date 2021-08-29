@@ -26,6 +26,9 @@ set incsearch
 set ignorecase
 set smartcase
 
+set splitbelow
+set splitright
+
 if exists('+diffopt')
   set diffopt+=algorithm:histogram,indent-heuristic
 endif
