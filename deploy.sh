@@ -40,5 +40,5 @@ if [ ! -e ${VIMSPECTOR_ROOT} ]; then
 fi
 if [ ! -L ${VIMSPECTOR_CONFIG_ROOT} ] && [ -e ${VIMSPECTOR_CONFIG_ROOT} ]; then
     rm -rf ${VIMSPECTOR_CONFIG_ROOT}
-    ln -snfv ${DOT_ROOT}/.config/vimspector/configurations ${VIMSPECTOR_CONFIG_ROOT}
 fi
+ln -snfv ${DOT_ROOT}/.config/vimspector/configurations ${VIMSPECTOR_CONFIG_ROOT}
