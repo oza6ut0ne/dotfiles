@@ -24,6 +24,8 @@
 [alias]
     logg = log --graph --all --pretty=format:'%C(yellow)%h %G?%C(auto)%d %s %C(magenta)(%cd) %C(bold blue)<%an>' --date=relative
     logga = "!f() { git logg $(git rev-list --reflog) $@; }; f"
+    showtool = "!f() { rev=$(git rev-parse \"${*:-HEAD}\"); git difftool $rev~1 $rev; }; f"
+    recommit = commit --edit --file=.git/COMMIT_EDITMSG
     undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
 [ghq]
     root = ~/ghq
