@@ -59,6 +59,11 @@ set -x PATH "$HOME/go/bin" $PATH
 set -x PATH  "$HOME/.anyenv/bin" $PATH
 anyenv init - fish | grep -v '..env rehash' | source
 
+# Git templates
+if test -d ~/.gittemplates
+    set -x GIT_TEMPLATE_DIR "$HOME/.gittemplates"
+end
+
 # zoxide
 if which zoxide >/dev/null 2>&1
     zoxide init fish | source

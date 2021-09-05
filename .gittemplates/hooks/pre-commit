@@ -1,0 +1,6 @@
+#!/bin/sh
+
+if [ -d .git-crypt ] && ! git crypt status >/dev/null; then
+    git crypt status -e | grep -v -P '^(?=.*encrypted:)(?!.*\*\*\* WARNING: .*\*\*\*).*$'
+    exit 1
+fi

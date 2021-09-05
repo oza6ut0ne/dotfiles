@@ -180,6 +180,10 @@ export PATH=$PATH:$HOME/go/bin
 export PATH="$HOME/.anyenv/bin:$PATH"
 eval "$(anyenv init - bash | grep -v '..env rehash')"
 
+if [ -d ~/.gittemplates ]; then
+    export GIT_TEMPLATE_DIR="$HOME/.gittemplates"
+fi
+
 if exists "zoxide"; then
     eval "$(zoxide init bash)"
 fi
