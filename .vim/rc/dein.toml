@@ -26,6 +26,10 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'jamessan/vim-gnupg'
+on_if = '!exists("g:vscode")'
+
+[[plugins]]
 repo = 'neoclide/coc.nvim'
 on_if = '!exists("g:vscode")'
 
