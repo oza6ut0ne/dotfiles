@@ -1,11 +1,9 @@
 function fish_prompt
   set -l last_command_statuses $pipestatus
-  set -l cwd
 
+  set -l cwd (prompt_pwd)
   if test "$theme_short_path" = 'yes'
-    set cwd (basename (prompt_pwd))
-  else
-    set cwd (prompt_pwd)
+    set cwd (basename $cwd)
   end
 
   if test (id -u) -eq 0
@@ -22,12 +20,9 @@ function fish_prompt
   set -l none     "◦"
 
   set -l normal_color     (set_color normal)
-#  set -l success_color    (set_color $fish_pager_color_progress 2>/dev/null; or set_color cyan)
   set -l success_color    (set_color bryellow)
   set -l error_color      (set_color $fish_color_error 2>/dev/null; or set_color red --bold)
-#  set -l directory_color  (set_color $fish_color_quote 2>/dev/null; or set_color brown)
   set -l directory_color  (set_color brcyan)
-#  set -l repository_color (set_color $fish_color_cwd 2>/dev/null; or set_color green)
   set -l repository_color (set_color bryellow)
 
   set -l status_color $success_color
@@ -37,32 +32,28 @@ function fish_prompt
       break
     end
   end
-# echo -n -s $error_color $fish $normal_color
   echo -n -s $status_color
   echo -n $last_command_statuses
   echo -n -s $normal_color "|"
 
-  echo -n -s (whoami) "@" (cat /etc/hostname)
+  echo -n -s (whoami) "@" (prompt_hostname)
 
   if git_is_repo
-    if test "$theme_short_path" = 'yes'
+    if test "$theme_short_path" = 'yes' -a "$theme_git_path" = 'yes'
       set root_folder (command git rev-parse --show-toplevel 2>/dev/null)
       set parent_root_folder (dirname $root_folder)
       set cwd (echo $PWD | sed -e "s|$parent_root_folder/||")
     end
 
-#    echo -n -s " " $directory_color $cwd $normal_color
-#    echo -n -s " on " $repository_color (git_branch_name) $normal_color " "
-    echo -n -s ":" $directory_color (basename (prompt_pwd)) $normal_color
-    echo -n -s $repository_color "[" (git_branch_name) "]" $normal_color 
+    echo -n -s ":" $directory_color $cwd $normal_color
+    echo -n -s $repository_color "[" (git_branch_name) "]" $normal_color
     if git_is_touched
       echo -n -s $dirty
     else
       echo -n -s (git_ahead $ahead $behind $diverged $none)
     end
   else
-#    echo -n -s " " $directory_color $cwd $normal_color
-    echo -n -s ":" $directory_color (basename (prompt_pwd)) $normal_color 
+    echo -n -s ":" $directory_color $cwd $normal_color
   end
 
   echo -n -s $prompt_character " "

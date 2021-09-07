@@ -10,14 +10,15 @@ end
 
 # appearance
 set -x TERM screen-256color
-set -x fish_greeting
+set -g fish_greeting
+set -g theme_short_path yes
 
-set -x fish_color_autosuggestion white
-set -x fish_color_param '0FC' brcyan
-set -x fish_color_command normal
-set -x fish_color_quote yellow
-set -x fish_color_operator bryellow
-set -x fish_color_redirection 00afff
+set -g fish_color_autosuggestion white
+set -g fish_color_param '0FC' brcyan
+set -g fish_color_command normal
+set -g fish_color_quote yellow
+set -g fish_color_operator bryellow
+set -g fish_color_redirection 00afff
 
 alias ls='ls --color=auto'
 alias dir='dir --color=auto'
