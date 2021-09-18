@@ -18,6 +18,14 @@ repo = 'nixprime/cpsm'
 on_if = '!exists("g:vscode")'
 
 [[plugins]]
+repo = 'tyru/nextfile.vim'
+on_if = '!exists("g:vscode")'
+hook_add = '''
+  let g:nf_include_dotfiles = 1
+  let g:nf_loop_files = 1
+'''
+
+[[plugins]]
 repo = 'editorconfig/editorconfig-vim'
 on_if = '!exists("g:vscode")'
 hook_add = '''
