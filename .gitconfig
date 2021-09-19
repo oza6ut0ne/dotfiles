@@ -26,6 +26,7 @@
     logga = "!f() { git logg $(git rev-list --reflog) $@; }; f"
     showtool = "!f() { rev=$(git rev-parse \"${*:-HEAD}\"); git difftool $rev~1 $rev; }; f"
     recommit = commit --edit --file=.git/COMMIT_EDITMSG
+    root = rev-parse --show-toplevel
     undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
 [ghq]
     root = ~/ghq
