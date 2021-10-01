@@ -51,6 +51,7 @@ nnoremap <silent> [denite]G :<C-u>Denite file/rec/git/untracked<CR>
 nnoremap <silent> [denite]b :<C-u>Denite buffer<CR>
 nnoremap <silent> [denite]B :<C-u>Denite buffer/all<CR>
 nnoremap <silent> [denite]o :<C-u>Denite file/old<CR>
+nnoremap <silent> [denite]O :<C-u>Denite outline<CR>
 nnoremap <silent> [denite]c :<C-u>Denite command<CR>
 nnoremap <silent> [denite]h :<C-u>Denite command_history<CR>
 nnoremap <silent> [denite]r :<C-u>Denite register<CR>
