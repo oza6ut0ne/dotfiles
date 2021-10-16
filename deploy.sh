@@ -6,6 +6,7 @@ CONFIG_ROOT="${HOME}/.config"
 FISH_FUNCTIONS="${HOME}/.config/fish/functions"
 VIMSPECTOR_ROOT="${HOME}/.config/vimspector"
 VIMSPECTOR_CONFIG_ROOT="${VIMSPECTOR_ROOT}/configurations"
+LIBSKK_RULES="${HOME}/.config/libskk/rules"
 
 cd ${DOT_ROOT}
 
@@ -42,3 +43,11 @@ if [ ! -L ${VIMSPECTOR_CONFIG_ROOT} ] && [ -e ${VIMSPECTOR_CONFIG_ROOT} ]; then
     rm -rf ${VIMSPECTOR_CONFIG_ROOT}
 fi
 ln -snfv ${DOT_ROOT}/.config/vimspector/configurations ${VIMSPECTOR_CONFIG_ROOT}
+
+# libskk
+if [ ! -e ${LIBSKK_RULES} ]; then
+    mkdir -p ${LIBSKK_RULES}
+fi
+for f in `ls ${DOT_ROOT}/.config/libskk/rules`; do
+    ln -snfv ${DOT_ROOT}/.config/libskk/rules/${f} ${LIBSKK_RULES}/${f}
+done

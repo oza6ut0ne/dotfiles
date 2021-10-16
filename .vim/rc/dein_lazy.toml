@@ -4,6 +4,29 @@ on_event = 'InsertEnter'
 on_if = '!exists("g:vscode")'
 
 [[plugins]]
+repo = 'vim-skk/eskk.vim'
+on_event = ['InsertEnter', 'CmdlineEnter']
+on_if = '!exists("g:vscode")'
+hook_add = '''
+  let g:eskk#directory = expand('~/.config/eskk')
+  let g:eskk#dictionary = {
+  \    'path': expand('~/.config/eskk/user.dict'),
+  \    'sorted': 1,
+  \    'encoding': 'utf-8',
+  \ }
+  let g:eskk#large_dictionary = {
+  \    'path': expand('~/.config/skk/SKK-JISYO.L'),
+  \    'sorted': 1,
+  \    'encoding': 'euc-jp',
+  \ }
+  let g:eskk#egg_like_newline = 1
+  let g:eskk#show_annotation = 1
+  let g:eskk#dont_map_default_if_already_mapped = 0
+  imap jk <Plug>(eskk:toggle)
+  cmap jk <Plug>(eskk:toggle)
+'''
+
+[[plugins]]
 repo = 'scrooloose/nerdtree'
 on_cmd = ['NERDTree', 'NERDTreeToggle', 'NERDTreeFind', 'NERDTreeFocus']
 

@@ -2,8 +2,7 @@ set clipboard=unnamedplus
 set number
 set relativenumber
 set laststatus=2
-set fileencodings=ucs-bom,utf-8,cp932,default,latin1
-set statusline=%F%m%r%h%w%=[%l/%L][%2.v][%P]%y[%{&ts}][%{&ff}][%{&fenc}]
+set fileencodings=ucs-bom,utf-8,cp932,euc-jp,default,latin1
 set list
 set listchars=tab:>-,trail:-,extends:>,precedes:<,nbsp:%
 set whichwrap=b,s,h,l,<,>,[,],~
@@ -28,6 +27,13 @@ set smartcase
 
 set splitbelow
 set splitright
+
+function! SkkStatus() abort
+  return exists('*eskk#statusline') ? eskk#statusline() : ''
+endfunction
+
+set statusline=%F%m%r%h%w%=
+  \%{SkkStatus()}[%l/%L][%2.v][%P]%y[%{&ts}][%{&ff}][%{&fenc}]
 
 if exists('+diffopt')
   set diffopt+=algorithm:histogram,indent-heuristic
