@@ -15,9 +15,9 @@ hook_add = '''
   \    'encoding': 'utf-8',
   \ }
   let g:eskk#large_dictionary = {
-  \    'path': expand('~/.config/skk/SKK-JISYO.L'),
+  \    'path': expand('~/.config/skk/SKK-JISYO.merged.utf8'),
   \    'sorted': 1,
-  \    'encoding': 'euc-jp',
+  \    'encoding': 'utf-8',
   \ }
   let g:eskk#egg_like_newline = 1
   let g:eskk#show_annotation = 1
