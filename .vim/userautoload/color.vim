@@ -7,13 +7,21 @@ function! s:override_color_settings() abort
   hi PmenuSel ctermfg=242 ctermbg=0 guifg=#6c6c6c guibg=#2e3436
 endfunction
 
-if has('nvim')
+if has('termguicolors')
   set termguicolors
+endif
+
+if has('nvim')
   set pumblend=10
   set winblend=10
 
   autocmd ColorScheme * call s:override_color_settings()
   colorscheme default
 else
+  if &term !~ 'xterm'
+    let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
+    let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
+  endif
+
   colorscheme ronkai
 endif
