@@ -9,7 +9,6 @@ if test -f /etc/profile.d/apps-bin-path.sh
 end
 
 # appearance
-set -x TERM screen-256color
 set -g fish_greeting
 set -g theme_short_path yes
 
