@@ -23,7 +23,9 @@
     diff = which diff-highlight >/dev/null && diff-highlight | less || less
 [alias]
     logg = log --graph --all --pretty=format:'%C(yellow)%h %G?%C(auto)%d %s %C(magenta)(%cd) %C(bold blue)<%an>' --date=relative
+    logd = log --graph --all --pretty=format:'%C(yellow)%h %G?%C(auto)%d %s %C(magenta)(%cd) %C(bold blue)<%an>' --date=iso-local
     logga = "!f() { git logg $(git rev-list --reflog) $@; }; f"
+    logda = "!f() { git logd $(git rev-list --reflog) $@; }; f"
     showtool = "!f() { rev=$(git rev-parse \"${*:-HEAD}\"); git difftool $rev~1 $rev; }; f"
     recommit = commit --edit --file=.git/COMMIT_EDITMSG
     root = rev-parse --show-toplevel
