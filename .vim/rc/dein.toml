@@ -76,6 +76,26 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'unblevable/quick-scope'
+hook_add = '''
+  function! s:qs_add_underline() abort
+    exec 'hi QuickScopePrimary gui=underline' .
+    \    ' guifg=' . synIDattr(synIDtrans(hlID('Function')), 'fg', 'gui') .
+    \    ' ctermfg=' . synIDattr(synIDtrans(hlID('Function')), 'fg', 'cui')
+    exec 'hi QuickScopeSecondary gui=underline' .
+    \    ' guifg=' . synIDattr(synIDtrans(hlID('Define')), 'fg', 'gui') .
+    \    ' ctermfg=' . synIDattr(synIDtrans(hlID('Define')), 'fg', 'cui')
+  endfunction
+
+  augroup qs_colors
+    autocmd!
+    autocmd ColorScheme * call s:qs_add_underline()
+  augroup END
+
+  call s:qs_add_underline()
+'''
+
+[[plugins]]
 repo = 'puremourning/vimspector'
 on_if = '!exists("g:vscode")'
 hook_add = '''
