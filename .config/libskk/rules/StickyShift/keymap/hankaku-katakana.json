@@ -1,0 +1,10 @@
+{
+    "include": [
+        "default/hankaku-katakana"
+    ],
+    "define": {
+        "keymap": {
+            ";": "start-preedit-no-delete"
+        }
+    }
+}

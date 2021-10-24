@@ -1,0 +1,12 @@
+{
+    "include": [
+        "azik/hankaku-katakana"
+    ],
+    "define": {
+        "keymap": {
+            ";": "start-preedit-no-delete",
+            ":": null,
+            "Q": "set-input-mode-hiragana"
+        }
+    }
+}
