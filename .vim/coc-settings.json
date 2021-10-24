@@ -3,6 +3,7 @@
     "signature.preferShownAbove": true,
     "suggest.maxCompleteItemCount": 5000,
     "suggest.defaultSortMethod": "alphabetical",
+    "session.directory": "~/.cache/vim-sessions",
     "tabnine.priority": 50,
     "python.linting.flake8Enabled": true,
     "python.linting.pylintArgs": ["--extension-pkg-whitelist=cv2"],
