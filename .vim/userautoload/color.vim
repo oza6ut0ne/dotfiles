@@ -16,6 +16,7 @@ if has('nvim')
   set winblend=10
 
   autocmd ColorScheme * call s:override_color_settings()
+  autocmd ColorScheme default hi Normal ctermfg=10 guifg=#94f13a
   colorscheme default
 else
   if &term !~ 'xterm'

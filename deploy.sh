@@ -7,6 +7,7 @@ FISH_FUNCTIONS="${HOME}/.config/fish/functions"
 VIMSPECTOR_ROOT="${HOME}/.config/vimspector"
 VIMSPECTOR_CONFIG_ROOT="${VIMSPECTOR_ROOT}/configurations"
 LIBSKK_RULES="${HOME}/.config/libskk/rules"
+ALACRITTY_CONFIG="${HOME}/.config/alacritty"
 
 cd ${DOT_ROOT}
 
@@ -18,10 +19,10 @@ for f in .??*; do
     ln -snfv ${DOT_ROOT}/${f} ${HOME}/${f}
 done
 
-# create ~/.config    
+# create ~/.config
 if [ ! -e ${CONFIG_ROOT} ]; then
-    mkdir -p ${CONFIG_ROOT}    
-fi    
+    mkdir -p ${CONFIG_ROOT}
+fi
 
 # neovim
 ln -snfv ${DOT_ROOT}/.vim ${HOME}/.config/nvim
@@ -50,4 +51,12 @@ if [ ! -e ${LIBSKK_RULES} ]; then
 fi
 for f in `ls ${DOT_ROOT}/.config/libskk/rules`; do
     ln -snfv ${DOT_ROOT}/.config/libskk/rules/${f} ${LIBSKK_RULES}/${f}
+done
+
+# alacritty
+if [ ! -e ${ALACRITTY_CONFIG} ]; then
+    mkdir -p ${ALACRITTY_CONFIG}
+fi
+for f in `ls ${DOT_ROOT}/.config/alacritty`; do
+    ln -snfv ${DOT_ROOT}/.config/alacritty/${f} ${ALACRITTY_CONFIG}/${f}
 done
