@@ -57,6 +57,9 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'tpope/vim-commentary'
+
+[[plugins]]
 repo = 'tpope/vim-surround'
 hook_add = '''
   let g:surround_no_mappings = 1
@@ -79,10 +82,10 @@ hook_add = '''
 repo = 'unblevable/quick-scope'
 hook_add = '''
   function! s:qs_add_underline() abort
-    exec 'hi QuickScopePrimary gui=underline' .
+    exec 'hi QuickScopePrimary gui=underline cterm=underline' .
     \    ' guifg=' . synIDattr(synIDtrans(hlID('Function')), 'fg', 'gui') .
     \    ' ctermfg=' . synIDattr(synIDtrans(hlID('Function')), 'fg', 'cui')
-    exec 'hi QuickScopeSecondary gui=underline' .
+    exec 'hi QuickScopeSecondary gui=underline cterm=underline' .
     \    ' guifg=' . synIDattr(synIDtrans(hlID('Define')), 'fg', 'gui') .
     \    ' ctermfg=' . synIDattr(synIDtrans(hlID('Define')), 'fg', 'cui')
   endfunction
