@@ -12,7 +12,9 @@ endif
 let g:colors_name = "ronkai"
 
 if has("gui_running")
-  hi Normal		guifg=green guibg=black
+  hi Normal		guifg=#94f13a guibg=black
+else
+  hi Normal ctermfg=10 guifg=#94f13a
 endif
 
 hi SignColumn ctermfg=14 ctermbg=242 guifg=cyan guibg=#6c6c6c
