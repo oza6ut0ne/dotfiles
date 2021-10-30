@@ -5,6 +5,10 @@ xnoremap : ;
 
 inoremap jj <Esc>
 nnoremap x  "_x
+nnoremap /  /\v
+xnoremap /  /\v
+nnoremap ?  ?\v
+xnoremap ?  ?\v
 nnoremap s  :%s//g<Left><Left>
 nnoremap S  :%s///g<Left><Left>
 xnoremap s  :s//g<Left><Left>
@@ -19,6 +23,10 @@ nnoremap <expr> j v:count == 0 ? 'gj' : 'j'
 xnoremap <expr> j (v:count == 0 && mode() ==# 'v') ? 'gj' : 'j'
 nnoremap <expr> k v:count == 0 ? 'gk' : 'k'
 xnoremap <expr> k (v:count == 0 && mode() ==# 'v') ? 'gk' : 'k'
+nnoremap gj j
+xnoremap gj j
+nnoremap gk k
+xnoremap gk k
 
 cnoremap <C-a> <Home>
 cnoremap <C-b> <Left>
