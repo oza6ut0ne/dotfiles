@@ -2,6 +2,10 @@ if exists('g:vscode')
   finish
 endif
 
+augroup filetypes
+  autocmd! BufRead,BufNewFile *.ers  setfiletype rust
+augroup END
+
 augroup misc
   autocmd!
   autocmd QuickFixCmdPost *grep* cwindow
