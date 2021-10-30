@@ -41,13 +41,13 @@ endfunction
 
 function! EskkAzikInputJJ() abort
   let l:mode = eskk#get_mode()
-  if l:mode == 'ascii' || l:mode == 'zenei'
+  if l:mode ==# 'ascii' || l:mode ==# 'zenei'
     return "\<Esc>"
-  elseif l:mode == 'hira'
+  elseif l:mode ==# 'hira'
     return 'じゅん'
-  elseif l:mode == 'kata'
+  elseif l:mode ==# 'kata'
     return 'ジュン'
-  elseif l:mode == 'hankata'
+  elseif l:mode ==# 'hankata'
     return 'ｼﾞｭﾝ'
   else
     return 'jj'
@@ -56,13 +56,13 @@ endfunction
 
 function! EskkAzikInputJK() abort
   let l:mode = eskk#get_mode()
-  if l:mode == 'ascii' || l:mode == 'zenei'
+  if l:mode ==# 'ascii' || l:mode ==# 'zenei'
     return "\<Plug>(eskk:toggle)"
-  elseif l:mode == 'hira'
+  elseif l:mode ==# 'hira'
     return 'じん'
-  elseif l:mode == 'kata'
+  elseif l:mode ==# 'kata'
     return 'ジン'
-  elseif l:mode == 'hankata'
+  elseif l:mode ==# 'hankata'
     return 'ｼﾞﾝ'
   else
     return 'jk'
@@ -559,6 +559,8 @@ function! s:eskk_initial_pre() abort
     call t.add_map('zyw', 'じぇい')
     call t.add_map('zyz', 'じゃん')
     call t.add_map('zz', 'ざん')
+    call t.add_map('z{', '【')
+    call t.add_map('z}', '】')
   call eskk#register_mode_table('hira', t)
 
   let t = eskk#table#new('rom_to_kata*', 'rom_to_kata')
@@ -1050,6 +1052,8 @@ function! s:eskk_initial_pre() abort
     call t.add_map('zyw', 'ジェイ')
     call t.add_map('zyz', 'ジャン')
     call t.add_map('zz', 'ザン')
+    call t.add_map('z{', '【')
+    call t.add_map('z}', '】')
   call eskk#register_mode_table('kata', t)
 
   let t = eskk#table#new('rom_to_hankata*', 'rom_to_hankata')
@@ -1541,5 +1545,7 @@ function! s:eskk_initial_pre() abort
     call t.add_map('zyw', 'ｼﾞｪｲ')
     call t.add_map('zyz', 'ｼﾞｬﾝ')
     call t.add_map('zz', 'ｻﾞﾝ')
+    call t.add_map('z{', '【')
+    call t.add_map('z}', '】')
   call eskk#register_mode_table('hankata', t)
 endfunction
