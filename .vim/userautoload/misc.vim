@@ -3,6 +3,8 @@ if exists('g:vscode')
 endif
 
 augroup filetypes
+  autocmd! BufRead,BufNewFile .gitconfig.local  setfiletype gitconfig
+  autocmd! BufRead,BufNewFile .tmux.conf.local  setfiletype tmux
   autocmd! BufRead,BufNewFile *.ers  setfiletype rust
 augroup END
 
