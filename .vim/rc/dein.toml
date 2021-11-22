@@ -164,3 +164,6 @@ hook_add = '''
 repo = 'dracula/vim'
 name = 'dracula'
 on_if = '!exists("g:vscode")'
+hook_add = '''
+  let g:dracula_colorterm = 0
+'''
