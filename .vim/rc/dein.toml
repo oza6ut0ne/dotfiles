@@ -161,6 +161,41 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'doums/darcula'
+on_if = '!exists("g:vscode")'
+hook_add = '''
+  function! s:darcula_custom() abort
+    unlet g:darcula
+    hi Normal ctermbg=None guibg=None
+    hi LineNr ctermbg=None guibg=None
+    hi SignColumn ctermbg=None guibg=None
+    hi GitAddStripe ctermbg=None guibg=None
+    hi GitChangeStripe ctermbg=None guibg=None
+    hi GitDeleteStripe ctermbg=None guibg=None
+    hi ErrorSign ctermbg=None guibg=None
+    hi WarningSign ctermbg=None guibg=None
+    hi InfoSign ctermbg=None guibg=None
+
+    let g:gitgutter_sign_removed = '▶'
+    hi! link GitGutterAdd GitAddStripe
+    hi! link GitGutterChange GitChangeStripe
+    hi! link GitGutterDelete GitDeleteStripe
+
+    hi! link ALEError Error
+    hi! link ALEWarning CodeWarning
+    hi! link ALEInfo CodeInfo
+    hi! link ALEErrorSign ErrorSign
+    hi! link ALEWarningSign WarningSign
+    hi! link ALEInfoSign InfoSign
+  endfunction
+
+  augroup DarculaCustom
+    autocmd!
+    autocmd ColorScheme darcula call s:darcula_custom()
+  augroup END
+'''
+
+[[plugins]]
 repo = 'dracula/vim'
 name = 'dracula'
 on_if = '!exists("g:vscode")'

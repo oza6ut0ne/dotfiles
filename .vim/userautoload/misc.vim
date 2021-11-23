@@ -14,4 +14,6 @@ augroup misc
   autocmd FileType vim  setl tabstop=2
   autocmd FileType toml setl tabstop=2
   autocmd FileType yaml setl tabstop=2
+  autocmd FileType html setl tabstop=2
+  autocmd FileType css  setl tabstop=2
 augroup END
