@@ -1,0 +1,64 @@
+window:
+  dimensions:
+    columns: 0
+    lines: 0
+  position:
+    x: 110
+    y: 110
+  padding:
+    x: 0
+    y: 0
+  dynamic_padding: false
+  startup_mode: Maximized
+  title: Alacritty
+  dynamic_title: true
+  class:
+    instance: Alacritty
+    general: Alacritty
+  gtk_theme_variant: None
+
+scrolling:
+  history: 50000
+  multiplier: 3
+
+cursor:
+  style:
+    shape: Block
+    blinking: On
+  vi_mode_style: None
+  blink_interval: 750
+  unfocused_hollow: true
+  thickness: 0.15
+
+font:
+  size: 11.0
+  # Default:
+  #   - (macOS) Menlo
+  #   - (Linux/BSD) monospace
+  #   - (Windows) Consolas
+  normal:
+    family: monospace
+    # family: JetBrains Mono
+    # style: Regular
+  #bold:
+    #family: monospace
+    #style: Bold
+  #italic:
+    #family: monospace
+    #style: Italic
+  #bold_italic:
+    #family: monospace
+    #style: Bold Italic
+  offset:
+    x: 0
+    y: -1
+  glyph_offset:
+    x: 0
+    y: 0
+  use_thin_strokes: true
+
+background_opacity: 0.9
+draw_bold_text_with_bright_colors: true
+
+import:
+  - ~/.config/alacritty/colors/ubuntu_dark.yml
