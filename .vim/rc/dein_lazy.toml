@@ -32,6 +32,13 @@ repo = 'scrooloose/nerdtree'
 on_cmd = ['NERDTree', 'NERDTreeToggle', 'NERDTreeFind', 'NERDTreeFocus']
 
 [[plugins]]
+repo = 'APZelos/blamer.nvim'
+on_cmd = ['BlamerHide', 'BlamerShow', 'BlamerToggle']
+hook_add = '''
+  let g:blamer_delay = 100
+'''
+
+[[plugins]]
 repo = 'nathanaelkane/vim-indent-guides'
 on_cmd = ['IndentGuidesEnable', 'IndentGuidesToggle']
 
