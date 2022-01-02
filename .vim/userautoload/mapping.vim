@@ -5,6 +5,7 @@ xnoremap : ;
 
 inoremap jj <Esc>
 nnoremap x  "_x
+xnoremap x  "_x
 nnoremap /  /\v
 xnoremap /  /\v
 nnoremap ?  ?\v
@@ -38,6 +39,7 @@ cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
 
 tnoremap <Esc> <C-\><C-n>
+tnoremap jj    <C-\><C-n>
 
 let mapleader = "\<Space>\<Space>"
 
