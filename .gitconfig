@@ -21,9 +21,21 @@
     diff = which diff-highlight >/dev/null && diff-highlight | less || less
 [alias]
     logg = log --graph --all --pretty=format:'%C(yellow)%h %G?%C(auto)%d %s %C(magenta)(%cd) %C(bold blue)<%an>' --date=relative
-    logd = log --graph --all --pretty=format:'%C(yellow)%h %G?%C(auto)%d %s %C(magenta)(%cd) %C(bold blue)<%an>' --date=iso-local
-    logga = "!f() { git logg $(git rev-list --reflog) $@; }; f"
+    loge = log --graph --all --pretty=format:'%C(yellow)%h %G?%C(auto)%d %s %C(magenta)(%cd) %C(bold blue)<%an> %C(cyan)[%ae]' --date=relative
+    logf = log --graph --all --pretty=format:'%C(yellow)%h %G?%C(auto)%d %s %C(magenta)(%ad) (%cd) %C(bold blue)<%an> <%cn>' --date=relative
+    logef = log --graph --all --pretty=format:'%C(yellow)%h %G?%C(auto)%d %s %C(magenta)(%ad) (%cd) %C(bold blue)<%an> <%cn> %C(cyan)[%ae] [%ce]' --date=relative
+    logd = logg --date=format-local:'%F %T'
+    logde = loge --date=format-local:'%F %T'
+    logdf = logf --date=format-local:'%F %T'
+    logdef = logef --date=format-local:'%F %T'
+    loga = "!f() { git logg $(git rev-list --reflog) $@; }; f"
+    logea = "!f() { git loge $(git rev-list --reflog) $@; }; f"
+    logfa = "!f() { git logf $(git rev-list --reflog) $@; }; f"
+    logefa = "!f() { git logef $(git rev-list --reflog) $@; }; f"
     logda = "!f() { git logd $(git rev-list --reflog) $@; }; f"
+    logdea = "!f() { git logde $(git rev-list --reflog) $@; }; f"
+    logdfa = "!f() { git logdf $(git rev-list --reflog) $@; }; f"
+    logdefa = "!f() { git logdef $(git rev-list --reflog) $@; }; f"
     showtool = "!f() { rev=$(git rev-parse \"${*:-HEAD}\"); git difftool $rev~1 $rev; }; f"
     recommit = commit --edit --file=.git/COMMIT_EDITMSG
     root = rev-parse --show-toplevel
