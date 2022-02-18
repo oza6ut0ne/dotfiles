@@ -37,9 +37,10 @@ set -x LESS_TERMCAP_se (printf '\e[0m')        # reset reverse video
 set -x LESS_TERMCAP_us (printf '\e[1;4;32m')   # begin underline
 set -x LESS_TERMCAP_ue (printf '\e[0m')        # reset underline
 
-# editor
-set -x EDITOR nvim
-set -x SUDO_EDITOR 'nvim -R'
+function exists
+    which $argv[1] >/dev/null 2>&1
+    return $status
+end
 
 # aliases
 alias ll='ls -alF'
@@ -47,30 +48,40 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
 alias crontab='crontab -i'
-balias vi nvim
 
-if which adb-peco >/dev/null 2>&1
-    alias adb adb-peco
+# asdf
+if test -d ~/.asdf
+    source ~/.asdf/asdf.fish
+else if test -d ~/.anyenv
+    set -x PATH  "$HOME/.anyenv/bin" $PATH
+    anyenv init - fish | grep -v '..env rehash' | source
 end
 
-set -x PATH "$HOME/go/bin" $PATH
-
-# anyenv
-set -x PATH  "$HOME/.anyenv/bin" $PATH
-anyenv init - fish | grep -v '..env rehash' | source
+# editor
+if exists nvim
+    balias vi nvim
+    set -x EDITOR nvim
+    set -x SUDO_EDITOR 'nvim -R'
+else if exists vim
+    balias vi vim
+    set -x EDITOR vim
+    set -x SUDO_EDITOR 'vim -R'
+end
 
 # Git templates
 if test -d ~/.gittemplates
     set -x GIT_TEMPLATE_DIR "$HOME/.gittemplates"
 end
 
-# zoxide
-if which zoxide >/dev/null 2>&1
+if exists adb-peco
+    alias adb adb-peco
+end
+
+if exists zoxide
     zoxide init fish | source
 end
 
-# direnv
-if which direnv >/dev/null 2>&1
+if exists direnv
     eval (direnv hook fish)
 end
 

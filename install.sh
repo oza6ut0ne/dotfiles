@@ -16,17 +16,20 @@ else
     SUDO=""
 fi
 
-if is_ubuntu; then
-    ${SUDO} apt install -y software-properties-common
-fi
 if exists "apt"; then
     ${SUDO} apt update
 fi
+if is_ubuntu; then
+    ${SUDO} apt install -y software-properties-common
+    ${SUDO} apt update
+fi
 
-if ! exists "git"; then
-    if exists "apt"; then
-        ${SUDO} apt install -y git
-    fi
+if ! exists "git" && exists "apt"; then
+    ${SUDO} apt install -y git
+fi
+
+if ! exists "curl" && exists "apt"; then
+    ${SUDO} apt install -y curl
 fi
 
 if [ ! -d ~/dotfiles ]; then
@@ -36,15 +39,13 @@ fi
 cd ~/dotfiles
 ./deploy.sh
 
-if ! exists "direnv"; then
-    if exists "apt"; then
-        ${SUDO} apt install -y direnv
-    fi
-fi
+if [ ! -d ~/.asdf ]; then
+    git clone https://github.com/asdf-vm/asdf.git ~/.asdf
+    . ~/.asdf/asdf.sh
+    asdf update
 
-if [ ! -d ~/.fzf ]; then
-    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-    ~/.fzf/install --bin
+    mkdir -p ~/.config/fish/completions
+    ln -s ~/.asdf/completions/asdf.fish ~/.config/fish/completions
 fi
 
 if ! exists "nvim"; then
@@ -57,67 +58,44 @@ if ! exists "nvim"; then
     fi
 fi
 
-if [ ! -d ~/.anyenv ]; then
-    git clone https://github.com/riywo/anyenv ~/.anyenv
-    source ~/.bashrc
-    yes | anyenv install --init
-    mkdir -p $(anyenv root)/plugins
-    git clone https://github.com/znz/anyenv-update.git $(anyenv root)/plugins/anyenv-update
+if ! exists "direnv"; then
+    asdf plugin-add direnv
+    asdf install direnv latest
+    asdf global direnv latest
 fi
 
-if ! anyenv envs | grep goenv >/dev/null 2>&1; then
-    ${SUDO} apt install -y golang
-    if [ ! -d ~/go ]; then
-        mkdir ~/go
-    fi
-    if [ ! -d ~/go/bin ]; then
-        mkdir ~/go/bin
-    fi
-    anyenv install goenv
-    source ~/.bashrc
-    go get github.com/motemen/ghq
-    go get -u github.com/github/hub
-    go get -u github.com/kyoshidajp/ghkw
-    go get -u github.com/jingweno/ccat
-
-    goenv rehash
-    GO_NEWEST="$(goenv install -l | grep --color=never -E '^ *[0-9]+\.[0-9]+\.[0-9]+$' | tail -n 1)"
-    goenv install ${GO_NEWEST}
+if ! exists "fzf"; then
+    asdf plugin-add fzf
+    asdf install fzf latest
+    asdf global fzf latest
 fi
 
-if ! anyenv envs | grep pyenv >/dev/null 2>&1; then
+if ! exists "zoxide"; then
+    asdf plugin-add zoxide
+    asdf install zoxide latest
+    asdf global zoxide latest
+fi
+if ! exists "hub" && exists "apt"; then
+    ${SUDO} apt install -y hub
+fi
+
+if is_ubuntu; then
+    ${SUDO} apt install -y python3 python3-pip
+    /usr/bin/python3 -m pip install --user pynvim
+fi
+
+if ! asdf list | grep -q python; then
     if exists "apt"; then
-        ${SUDO} apt install -y make build-essential llvm clang gcc
-        ${SUDO} apt install -y zlib1g-dev libbz2-dev 
-        ${SUDO} apt install -y libssl-dev libffi-dev openssl
+        ${SUDO} apt install -y make build-essential llvm curl wget
+        ${SUDO} apt install -y libssl-dev zlib1g-dev libbz2-dev
         ${SUDO} apt install -y libreadline-dev libsqlite3-dev
-        ${SUDO} apt install -y libncurses5-dev libncursesw5-dev xz-utils tk-dev
+        ${SUDO} apt install -y libncursesw5-dev xz-utils tk-dev libffi-dev
+        ${SUDO} apt install -y libxml2-dev libxmlsec1-dev liblzma-dev
     fi
 
-    anyenv install pyenv
-    source ~/.bashrc
-    git clone git://github.com/yyuu/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
-    git clone git://github.com/pyenv/pyenv-which-ext.git $(pyenv root)/plugins/pyenv-which-ext
-fi
-
-if ! pyenv versions | grep neovim-3 >/dev/null 2>&1; then
-    PY3_NEWEST="$(pyenv install -l | grep --color=never -E '^ *3\.[0-9]+\.[0-9]+$' | tail -n 1)"
-    pyenv install ${PY3_NEWEST}
-    pyenv rehash
-    pyenv virtualenv ${PY3_NEWEST} neovim-3
-    pyenv shell neovim-3
-    pip install pynvim
-    pyenv shell --unset
-fi
-
-if ! pyenv versions | grep neovim-2 >/dev/null 2>&1; then
-    PY2_NEWEST="$(pyenv install -l | grep --color=never -E '^ *2\.[0-9]+\.[0-9]+$' | tail -n 1)"
-    pyenv install ${PY2_NEWEST}
-    pyenv rehash
-    pyenv virtualenv ${PY2_NEWEST} neovim-2
-    pyenv shell neovim-2
-    pip install pynvim
-    pyenv shell --unset
+    asdf plugin-add python
+    asdf install python latest
+    asdf global python latest
 fi
 
 if ! exists "fish"; then
@@ -133,4 +111,3 @@ if ! exists "fish"; then
     fish -c 'fisher install jethrokuan/fzf jorgebucaran/fish-spin edc/bass oh-my-fish/plugin-balias oh-my-fish/plugin-extract'
     chsh -s "$(which fish)"
 fi
-

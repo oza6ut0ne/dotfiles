@@ -27,6 +27,7 @@ shopt -s checkwinsize
 # match all files and zero or more directories and subdirectories.
 #shopt -s globstar
 
+# readline
 bind "TAB":menu-complete
 bind '"\e[Z":menu-complete-backward'
 bind "set show-all-if-ambiguous on"
@@ -169,15 +170,28 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
 alias crontab='crontab -i'
-alias vi='nvim'
 
-export EDITOR=nvim
-export SUDO_EDITOR='nvim -R'
+# asdf
+if [ -d ~/.asdf ]; then
+    . ~/.asdf/asdf.sh
+    . ~/.asdf/completions/asdf.bash
+elif [ -d ~/.anyenv ]; then
+    export PATH="$HOME/.anyenv/bin:$PATH"
+    eval "$(anyenv init - bash | grep -v '..env rehash')"
+fi
 
-export PATH=$PATH:$HOME/go/bin
-export PATH="$HOME/.anyenv/bin:$PATH"
-eval "$(anyenv init - bash | grep -v '..env rehash')"
+# editor
+if exists "nvim"; then
+    alias vi='nvim'
+    export EDITOR=nvim
+    export SUDO_EDITOR='nvim -R'
+elif exists "vim"; then
+    alias vi='vim'
+    export EDITOR=vim
+    export SUDO_EDITOR='vim -R'
+fi
 
+# Git templates
 if [ -d ~/.gittemplates ]; then
     export GIT_TEMPLATE_DIR="$HOME/.gittemplates"
 fi
