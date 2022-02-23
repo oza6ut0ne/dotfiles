@@ -159,6 +159,7 @@ if ! shopt -oq posix; then
   fi
 fi
 
+alias sudo='sudo '
 alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
