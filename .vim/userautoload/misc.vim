@@ -2,10 +2,15 @@ if exists('g:vscode')
   finish
 endif
 
+function! s:ft_rust_script() abort
+  setfiletype rust
+  let b:quickrun_config = {'exec' : 'rust-script %o %s -- %a'}
+endfunction
+
 augroup filetypes
   autocmd! BufRead,BufNewFile .gitconfig.local  setfiletype gitconfig
   autocmd! BufRead,BufNewFile .tmux.conf.local  setfiletype tmux
-  autocmd! BufRead,BufNewFile *.ers  setfiletype rust
+  autocmd! BufRead,BufNewFile *.ers  call s:ft_rust_script()
 augroup END
 
 augroup misc

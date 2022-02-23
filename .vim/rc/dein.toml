@@ -40,6 +40,7 @@ on_if = '!exists("g:vscode")'
 [[plugins]]
 repo = 'neoclide/coc.nvim'
 on_if = '!exists("g:vscode")'
+build = 'yarn install --frozen-lockfile'
 
 [[plugins]]
 repo = 'w0rp/ale'
@@ -109,6 +110,10 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'thinca/vim-quickrun'
+on_if = '!exists("g:vscode")'
+
+[[plugins]]
 repo = 'puremourning/vimspector'
 on_if = '!exists("g:vscode")'
 hook_add = '''
@@ -144,6 +149,17 @@ on_if = '!exists("g:vscode")'
 
 [[plugins]]
 repo = 'tpope/vim-fugitive'
+on_if = '!exists("g:vscode")'
+
+[[plugins]]
+repo = 'luochen1990/rainbow'
+on_if = '!exists("g:vscode")'
+hook_add = '''
+  let g:rainbow_active = 1
+'''
+
+[[plugins]]
+repo = 'hylang/vim-hy'
 on_if = '!exists("g:vscode")'
 
 [[plugins]]

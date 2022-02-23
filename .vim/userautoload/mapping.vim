@@ -42,6 +42,12 @@ tnoremap <Esc> <C-\><C-n>
 tnoremap jj    <C-\><C-n>
 
 let mapleader = "\<Space>\<Space>"
+let maplocalleader = ","
+
+"--------------------------------
+" QuickRun
+"--------------------------------
+nnoremap <silent> <Space>r :<C-u>QuickRun<CR>
 
 "--------------------------------
 " NERDTree
