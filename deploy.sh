@@ -3,11 +3,12 @@
 set -u
 DOT_ROOT="${HOME}/dotfiles"
 CONFIG_ROOT="${HOME}/.config"
-FISH_FUNCTIONS="${HOME}/.config/fish/functions"
-VIMSPECTOR_ROOT="${HOME}/.config/vimspector"
+FISH_FUNCTIONS="${CONFIG_ROOT}/fish/functions"
+GIT_CONFIG="${CONFIG_ROOT}/git"
+VIMSPECTOR_ROOT="${CONFIG_ROOT}/vimspector"
 VIMSPECTOR_CONFIG_ROOT="${VIMSPECTOR_ROOT}/configurations"
-LIBSKK_RULES="${HOME}/.config/libskk/rules"
-ALACRITTY_CONFIG="${HOME}/.config/alacritty"
+LIBSKK_RULES="${CONFIG_ROOT}/libskk/rules"
+ALACRITTY_CONFIG="${CONFIG_ROOT}/alacritty"
 
 cd ${DOT_ROOT}
 
@@ -15,6 +16,7 @@ cd ${DOT_ROOT}
 for f in .??*; do
     # to ignore
     [ "$f" = ".git" ] && continue
+    [ "$f" = ".gitignore" ] && continue
     [ "$f" = ".config" ] && continue
     ln -snfv ${DOT_ROOT}/${f} ${HOME}/${f}
 done
@@ -34,6 +36,14 @@ fi
 ln -snfv ${DOT_ROOT}/.config/fish/config.fish ${HOME}/.config/fish/config.fish
 for f in `ls ${DOT_ROOT}/.config/fish/functions`; do
     ln -snfv ${DOT_ROOT}/.config/fish/functions/${f} ${FISH_FUNCTIONS}/${f}
+done
+
+# Git
+if [ ! -e ${GIT_CONFIG} ]; then
+    mkdir -p ${GIT_CONFIG}
+fi
+for f in `ls ${DOT_ROOT}/.config/git`; do
+    ln -snfv ${DOT_ROOT}/.config/git/${f} ${GIT_CONFIG}/${f}
 done
 
 # vimspector

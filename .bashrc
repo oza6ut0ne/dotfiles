@@ -186,8 +186,8 @@ elif exists "vim"; then
 fi
 
 # Git templates
-if [ -d ~/.gittemplates ]; then
-    export GIT_TEMPLATE_DIR="$HOME/.gittemplates"
+if [ -d ~/.config/git/templates ]; then
+    export GIT_TEMPLATE_DIR="$HOME/.config/git/templates"
 fi
 
 if exists "zoxide"; then

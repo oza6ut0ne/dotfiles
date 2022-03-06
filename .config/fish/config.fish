@@ -69,8 +69,8 @@ else if exists vim
 end
 
 # Git templates
-if test -d ~/.gittemplates
-    set -x GIT_TEMPLATE_DIR "$HOME/.gittemplates"
+if test -d ~/.config/git/templates
+    set -x GIT_TEMPLATE_DIR "$HOME/.config/git/templates"
 end
 
 if exists adb-peco

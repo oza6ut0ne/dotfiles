@@ -1,0 +1,5 @@
+.env
+.env.gpg
+.env.asc
+.env.sig
+.envrc
