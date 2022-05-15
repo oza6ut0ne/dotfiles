@@ -2,6 +2,7 @@
 
 set -u
 DOT_ROOT="${HOME}/dotfiles"
+BIN="${HOME}/bin"
 CONFIG_ROOT="${HOME}/.config"
 FISH_FUNCTIONS="${CONFIG_ROOT}/fish/functions"
 GIT_CONFIG="${CONFIG_ROOT}/git"
@@ -19,6 +20,14 @@ for f in .??*; do
     [ "$f" = ".gitignore" ] && continue
     [ "$f" = ".config" ] && continue
     ln -snfv ${DOT_ROOT}/${f} ${HOME}/${f}
+done
+
+# ~/bin
+if [ ! -e ${BIN} ]; then
+    mkdir -p ${BIN}
+fi
+for f in `ls ${DOT_ROOT}/bin`; do
+    ln -snfv ${DOT_ROOT}/bin/${f} ${BIN}/${f}
 done
 
 # create ~/.config

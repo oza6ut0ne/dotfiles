@@ -1,0 +1,96 @@
+#!/usr/bin/env python3
+
+import argparse
+import shutil
+import sys
+
+import cv2
+
+
+def print_img_superres(img, size=shutil.get_terminal_size(), rotate=False, protrude=False):
+    cols = int(size[0])
+    rows = int(size[1]) * 2 - 2
+
+    if rotate:
+        img = cv2.flip(img, 1).transpose(1, 0, 2)
+
+    height, width, _ = img.shape
+    h, w = height, width
+    if not protrude:
+        h = rows
+        w = width * rows // height
+
+    if cols < w:
+        h = h * cols // w
+        w = cols
+
+    img = cv2.resize(img, (w, h))
+
+    new_height, new_width, _ = img.shape
+    for y in range(0, new_height - 1, 2):
+        for x in range(new_width):
+            upper = img[y, x]
+            lower = img[y + 1, x]
+            print(f'\033[38;2;{upper[2]};{upper[1]};{upper[0]}m\033[48;2;{lower[2]};{lower[1]};{lower[0]}m▀', end='')
+        print('\033[0m')
+
+    print('\033[0m', end='')
+
+
+def print_img_flat(img, size=shutil.get_terminal_size(), rotate=False, protrude=False):
+    cols = int(size[0])
+    rows = int(size[1]) - 2
+
+    if rotate:
+        img = cv2.flip(img, 1).transpose(1, 0, 2)
+    if not protrude:
+        height, width, _ = img.shape
+        img = cv2.resize(img, (int(width * rows / height), rows))
+    height, width, _ = img.shape
+    if width > (cols / 2):
+        img = cv2.resize(img, (int(cols / 2), int(height * (cols / 2) / width)))
+
+    for line in img:
+        for pixel in line:
+            print(f'\033[48;2;{pixel[2]};{pixel[1]};{pixel[0]}m  ', end='')
+        print()
+
+    print('\033[0m')
+
+
+def main():
+    parser = argparse.ArgumentParser(description='Print an image in terminal.')
+    parser.add_argument('path')
+    parser.add_argument('-r', '--rotate', action='store_true')
+    parser.add_argument('-p', '--protrude', action='store_true')
+    parser.add_argument('-f', '--flat', action='store_true')
+    args = parser.parse_args()
+
+    print_img = print_img_flat if args.flat else print_img_superres
+
+    try:
+        try:
+            args.path = int(args.path)
+        except ValueError:
+            pass
+        cap = cv2.VideoCapture(args.path)
+        if not cap.isOpened():
+            sys.exit()
+
+        print('\033[2J', end='')
+        print('\033c', end='')
+        print('\033[?25l', end='')
+        while True:
+            ret, img = cap.read()
+            if ret is False:
+                break
+            print('\033[1;1H', end='')
+            print_img(img, rotate=args.rotate, protrude=args.protrude)
+    except KeyboardInterrupt:
+        sys.exit()
+    finally:
+        print('\033[?25h\033[0m', end='')
+
+
+if __name__ == '__main__':
+    main()
