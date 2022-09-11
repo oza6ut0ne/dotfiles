@@ -1,3 +1,45 @@
+function git_is_git_dir
+  test (git rev-parse --is-inside-git-dir) = "true"
+end
+
+function git_is_bare_repo
+  test (git rev-parse --is-bare-repository) = "true"
+end
+
+function git_is_untracked
+  git ls-files --others --exclude-standard --directory --no-empty-directory --error-unmatch -- ':/*' >/dev/null 2>&1
+end
+
+function git_is_dirty
+  not git_is_git_dir; and not git_is_bare_repo; and begin
+    not git diff --no-ext-diff --quiet 2>/dev/null
+  end
+end
+
+function git_is_indexed
+  not git diff --no-ext-diff --cached --quiet
+end
+
+function git_is_rebasing
+  set -l git_dir (git rev-parse --git-dir)
+  test -d "$git_dir/rebase-merge" -o -d "$git_dir/rebase-apply"
+end
+
+function git_is_merging
+  set -l git_dir (git rev-parse --git-dir)
+  test -f "$git_dir/MERGE_HEAD"
+end
+
+function git_is_bisecting
+  set -l git_dir (git rev-parse --git-dir)
+  test -f "$git_dir/BISECT_LOG"
+end
+
+function git_has_conflicts
+  set -l conflicts (git ls-files --unmerged 2>/dev/null)
+  test "$conflicts" != ""
+end
+
 function fish_prompt
   set -l last_command_statuses $pipestatus
 
@@ -12,12 +54,15 @@ function fish_prompt
     set prompt_character "\$"
   end
 
-  set -l fish     "⋊>"
-  set -l ahead    "↑"
-  set -l behind   "↓"
-  set -l diverged "⥄ "
-  set -l dirty    "⨯"
-  set -l none     "◦"
+  set -l fish      "⋊>"
+  set -l stashed   '$'
+  set -l untracked "?"
+  set -l dirty     "!"
+  set -l indexed   "+"
+  set -l ahead     ">"
+  set -l behind    "<"
+  set -l diverged  "><"
+  set -l none      ""
 
   set -l normal_color     (set_color normal)
   set -l success_color    (set_color bryellow)
@@ -46,15 +91,41 @@ function fish_prompt
     end
 
     echo -n -s ":" $directory_color $cwd $normal_color
-    echo -n -s $repository_color "[" (git_branch_name) "]" $normal_color
-    if git_is_touched
-      echo -n -s $dirty
-    else
-      echo -n -s (git_ahead $ahead $behind $diverged $none)
+    echo -n -s $repository_color "[" (git_branch_name) "]"
+    if git_is_bare_repo
+      echo -n -s b
+    else if git_is_git_dir
+      echo -n -s g
     end
+    if git_is_stashed
+      echo -n -s $stashed
+    end
+    if git_is_untracked
+      echo -n -s $untracked
+    end
+    if git_is_dirty
+      echo -n -s $dirty
+    end
+    if git_is_indexed
+      echo -n -s $indexed
+    end
+    if git_is_rebasing
+      echo -n -s R
+    end
+    if git_is_merging
+      echo -n -s M
+    end
+    if git_is_bisecting
+      echo -n -s B
+    end
+    if git_has_conflicts
+      echo -n -s C
+    end
+    echo -n -s (git_ahead $ahead $behind $diverged $none)
   else
     echo -n -s ":" $directory_color $cwd $normal_color
   end
 
+  echo -n -s $normal_color
   echo -n -s $prompt_character " "
 end
