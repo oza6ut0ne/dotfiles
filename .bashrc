@@ -51,6 +51,47 @@ function git_branch_name() {
     echo "[$(git show-ref --head -s --abbrev | head -n 1 2>/dev/null)]"
 }
 
+function git_status() {
+    is_git_repo || return
+    exists "git" || return
+
+    local is_git_dir=""
+    [ "$(git rev-parse --is-inside-git-dir)" = "true" ] && is_git_dir="g"
+    [ "$(git rev-parse --is-bare-repository)" = "true" ] && is_git_dir="b"
+
+    local stashed=""
+    local untracked=""
+    local dirty=""
+    local indexed=""
+    local rebase=""
+    local merge=""
+    local bisect=""
+    local conflict=""
+    local upstream=""
+    git rev-parse --verify --quiet refs/stash >/dev/null 2>&1 && stashed='$'
+    if [ -z "$is_git_dir" ]; then
+        git ls-files --others --exclude-standard --directory --no-empty-directory --error-unmatch -- ':/*' >/dev/null 2>&1 && untracked='?'
+        git diff --no-ext-diff --quiet 2>/dev/null || dirty="!"
+    fi
+    git diff --no-ext-diff --cached --quiet || indexed="+"
+
+    local lr=$(git rev-list --count --left-right "@{upstream}...HEAD" 2> /dev/null)
+    case "$lr" in
+        "" ) ;;
+        0$'\t'0 ) ;;
+        0$'\t'* ) upstream='>' ;;  # ahead
+        *$'\t'0 ) upstream='<' ;;  # behind
+        * ) upstream='><' ;;       # diverged
+    esac
+
+    local git_dir="$(git rev-parse --git-dir)"
+    [ -d "$git_dir/rebase-merge" -o -d "$git_dir/rebase-apply" ] && rebase="R"
+    [ -f "$git_dir/MERGE_HEAD" ] && merge="M"
+    [ -f "$git_dir/BISECT_LOG" ] && bisect="B"
+    [ "$(git ls-files --unmerged 2>/dev/null)" = "" ] || conflict="C"
+    echo "$is_git_dir$stashed$untracked$dirty$indexed$rebase$merge$bisect$conflict$upstream"
+}
+
 function colored_pipestatus() {
     last_status=${PIPESTATUS[@]}
     color='\033[01;93m'
@@ -90,7 +131,7 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='$(colored_pipestatus)${debian_chroot:+($debian_chroot)}\[\033[01;32m\]|\u@\h\[\033[00m\]:\[\033[01;36m\]\W\[\033[00m\]\[\033[01;93m\]$(git_branch_name)\[\033[00m\]\$ '
+    PS1='$(colored_pipestatus)${debian_chroot:+($debian_chroot)}\[\033[01;32m\]|\u@\h\[\033[00m\]:\[\033[01;36m\]\W\[\033[00m\]\[\033[01;93m\]$(git_branch_name)$(git_status)\[\033[00m\]\$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
