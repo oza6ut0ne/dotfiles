@@ -25,6 +25,8 @@ $if mode=vi
     "\C-n": history-search-forward
     "\e[A": history-search-backward
     "\e[B": history-search-forward
+    "\eOA": history-search-backward
+    "\eOB": history-search-forward
 $endif
 
 set editing-mode emacs
@@ -40,4 +42,6 @@ $if mode=emacs
     "\C-n": history-search-forward
     "\e[A": history-search-backward
     "\e[B": history-search-forward
+    "\eOA": history-search-backward
+    "\eOB": history-search-forward
 $endif
