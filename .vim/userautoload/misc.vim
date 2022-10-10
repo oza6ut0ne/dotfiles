@@ -13,6 +13,15 @@ augroup filetypes
   autocmd! BufRead,BufNewFile *.ers  call s:ft_rust_script()
 augroup END
 
+augroup binary
+  autocmd!
+  autocmd BufReadPost * if &binary | silent %!xxd -g 1
+  autocmd BufReadPost * set ft=xxd | endif
+  autocmd BufWritePre * if &binary | execute '%!xxd -r' | endif
+  autocmd BufWritePost * if &binary | silent %!xxd -g 1
+  autocmd BufWritePost * set nomod | endif
+augroup END
+
 augroup misc
   autocmd!
   autocmd QuickFixCmdPost *grep* cwindow

@@ -11,6 +11,7 @@ set hidden
 set wildmenu
 set guicursor=n-v-c-sm-i-ci:block,ve:ver25,r-cr-o:hor20
 
+set nofixeol
 set expandtab
 set tabstop=4
 set shiftwidth=0
@@ -35,7 +36,8 @@ function! SkkStatus() abort
 endfunction
 
 set statusline=%F%m%r%h%w%=
-  \%{SkkStatus()}[%l/%L][%2.v][%P]%y[%{&ts}][%{&ff}][%{&fenc}]
+  \%{SkkStatus()}[%l/%L][%2.v][%P]%y[%{&ts}]
+  \%{&bomb?'[bom]':''}%{&eol?'':'[noeol]'}[%{&ff}][%{&fenc}]
 
 if exists('+diffopt')
   set diffopt+=algorithm:histogram,indent-heuristic
