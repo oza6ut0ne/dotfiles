@@ -5,6 +5,8 @@ DOT_ROOT="${HOME}/dotfiles"
 BIN="${HOME}/bin"
 CONFIG_ROOT="${HOME}/.config"
 FISH_FUNCTIONS="${CONFIG_ROOT}/fish/functions"
+ZSH_CONFD="${CONFIG_ROOT}/zsh/conf.d"
+ZSH_FUNCTIONS="${CONFIG_ROOT}/zsh/functions"
 GIT_CONFIG="${CONFIG_ROOT}/git"
 VIMSPECTOR_ROOT="${CONFIG_ROOT}/vimspector"
 VIMSPECTOR_CONFIG_ROOT="${VIMSPECTOR_ROOT}/configurations"
@@ -45,6 +47,25 @@ fi
 ln -snfv ${DOT_ROOT}/.config/fish/config.fish ${HOME}/.config/fish/config.fish
 for f in `ls ${DOT_ROOT}/.config/fish/functions`; do
     ln -snfv ${DOT_ROOT}/.config/fish/functions/${f} ${FISH_FUNCTIONS}/${f}
+done
+
+# zsh
+if [ ! -e ${ZSH_CONFD} ]; then
+    mkdir -p ${ZSH_CONFD}
+fi
+if [ ! -e ${ZSH_FUNCTIONS} ]; then
+    mkdir -p ${ZSH_FUNCTIONS}
+fi
+cd ${DOT_ROOT}/.config/zsh
+for f in .??*; do
+    ln -snfv ${DOT_ROOT}/.config/zsh/${f} ${HOME}/.config/zsh/${f}
+done
+cd -
+for f in `ls ${DOT_ROOT}/.config/zsh/conf.d`; do
+    ln -snfv ${DOT_ROOT}/.config/zsh/conf.d/${f} ${ZSH_CONFD}/${f}
+done
+for f in `ls ${DOT_ROOT}/.config/zsh/functions`; do
+    ln -snfv ${DOT_ROOT}/.config/zsh/functions/${f} ${ZSH_FUNCTIONS}/${f}
 done
 
 # Git

@@ -3,6 +3,10 @@ if test -f $HOME/.profile
     bass source $HOME/.profile
 end
 
+if test -f $HOME/.gpg_profile
+    bass source $HOME/.gpg_profile
+end
+
 # snap
 if test -f /etc/profile.d/apps-bin-path.sh
     bass source /etc/profile.d/apps-bin-path.sh

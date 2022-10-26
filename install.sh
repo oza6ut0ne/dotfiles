@@ -98,6 +98,13 @@ if ! asdf list | grep -q python; then
     asdf global python latest
 fi
 
+if ! exists "zsh"; then
+    if exists "apt"; then
+        ${SUDO} apt install -y zsh
+    fi
+    chsh -s "$(which zsh)"
+fi
+
 if ! exists "fish"; then
     if is_ubuntu; then
         ${SUDO} apt-add-repository ppa:fish-shell/release-3 -y
@@ -109,5 +116,4 @@ if ! exists "fish"; then
     curl -L http://get.oh-my.fish | fish
     curl -Lo ~/.config/fish/functions/fisher.fish --create-dirs https://git.io/fisher
     fish -c 'fisher install jethrokuan/fzf jorgebucaran/fish-spin edc/bass oh-my-fish/plugin-balias oh-my-fish/plugin-extract'
-    chsh -s "$(which fish)"
 fi
