@@ -5,6 +5,7 @@ if [ -f ${HOME}/.gpg_profile ]; then
 fi
 
 bindkey -e
+bindkey \^U backward-kill-line
 
 HISTFILE=${HOME}/.local/share/zsh/.zsh_history
 HISTSIZE=20000
@@ -22,9 +23,12 @@ setopt SHARE_HISTORY
 setopt prompt_subst
 setopt AUTO_CD
 setopt AUTO_PUSHD
-setopt CD_SILENT
 setopt PUSHD_TO_HOME
 setopt PUSHD_IGNORE_DUPS
+
+autoload -Uz is-at-least && if is-at-least 5.8; then
+    setopt CD_SILENT
+fi
 
 setopt LONG_LIST_JOBS
 setopt NO_BG_NICE
@@ -146,6 +150,10 @@ alias mv='mv -i'
 alias rm='rm -i'
 alias crontab='crontab -i'
 
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^[e' edit-command-line
+
 if [[ -e /etc/zsh_command_not_found ]] then
   source /etc/zsh_command_not_found
 fi
@@ -185,6 +193,11 @@ if [ -d ~/.config/git/templates ]; then
     export GIT_TEMPLATE_DIR="$HOME/.config/git/templates"
 fi
 
+# additional configurations
+for f in `ls -v ${ZSH_DIR}/conf.d/*.zsh`; do
+    source ${f}
+done
+
 # Zim
 zstyle ':zim:input' double-dot-expand yes
 if [[ -e ${ZDOTDIR:-${HOME}}/.zimrc ]]; then
@@ -222,13 +235,9 @@ fi
 
 typeset -A ZSH_HIGHLIGHT_STYLES
 ZSH_AUTOSUGGEST_MANUAL_REBIND=1
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=white"
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#CCC"
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 ZSH_HIGHLIGHT_STYLES[arg0]='fg=#0FC'
-
-for f in `ls -v ${ZSH_DIR}/conf.d/*.zsh`; do
-    source ${f}
-done
 
 zmodload -F zsh/datetime +p:EPOCHREALTIME
 setopt nopromptbang prompt{cr,percent,sp,subst}
@@ -253,7 +262,7 @@ if exists "direnv"; then
 fi
 
 if exists "thefuck"; then
-    eval "$(thefuck --alias)"
+    alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
 fi
 
 if (which zprof > /dev/null 2>&1) ;then
