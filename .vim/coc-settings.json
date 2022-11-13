@@ -1,5 +1,7 @@
 {
     "diagnostic.displayByAle": true,
+    "diagnostic.virtualText": true,
+    "diagnostic.virtualTextCurrentLineOnly": false,
     "signature.preferShownAbove": true,
     "suggest.maxCompleteItemCount": 5000,
     "suggest.defaultSortMethod": "alphabetical",

@@ -5,6 +5,12 @@ function! s:override_color_settings() abort
   hi Pmenu ctermfg=0 ctermbg=13 guifg=#000000 guibg=#ad7fa8
   hi NormalFloat ctermfg=159 ctermbg=60 guifg=#00ffff guibg=#5e5aa0
   hi PmenuSel ctermfg=242 ctermbg=0 guifg=#6c6c6c guibg=#2e3436
+
+  hi! link ALEVirtualTextError DiagnosticVirtualTextError
+  hi! link ALEVirtualTextWarning DiagnosticVirtualTextWarn
+  hi! link ALEVirtualTextInfo DiagnosticVirtualTextInfo
+  hi! link ALEVirtualTextStyleError DiagnosticVirtualTextHint
+  hi! link ALEVirtualTextStyleWarning DiagnosticVirtualTextHint
 endfunction
 
 if has('termguicolors')
