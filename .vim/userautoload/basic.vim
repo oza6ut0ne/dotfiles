@@ -46,3 +46,7 @@ endif
 if has('nvim')
   set inccommand=nosplit
 endif
+
+if has('win32')
+  language message C
+endif
