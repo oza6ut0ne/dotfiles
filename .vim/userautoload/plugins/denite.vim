@@ -32,13 +32,15 @@ call denite#custom#option('default', {
 " Change matchers.
 call denite#custom#source('file/rec', 'matchers', ['matcher/cpsm'])
 
-" Ag command on grep source
-call denite#custom#var('grep', 'command', ['ag'])
-call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep'])
-call denite#custom#var('grep', 'recursive_opts', [])
-call denite#custom#var('grep', 'pattern_opt', [])
-call denite#custom#var('grep', 'separator', ['--'])
-call denite#custom#var('grep', 'final_opts', [])
+" Ripgrep command on grep source
+call denite#custom#var('grep', {
+    \ 'command': ['rg'],
+    \ 'default_opts': ['-i', '--vimgrep', '--no-heading', '--hidden', '--glob', '!.git'],
+    \ 'recursive_opts': [],
+    \ 'pattern_opt': ['--regexp'],
+    \ 'separator': ['--'],
+    \ 'final_opts': [],
+    \ })
 
 " Define alias
 call denite#custom#alias('source', 'buffer/all', 'buffer')
