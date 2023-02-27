@@ -177,8 +177,9 @@ fi
 
 # some more ls aliases
 alias ll='ls -alF'
+alias lh='ls -alFh'
 alias la='ls -A'
-alias l='ls -CF'
+alias l='ls -lF'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -233,6 +234,13 @@ fi
 # Git templates
 if [ -d ~/.config/git/templates ]; then
     export GIT_TEMPLATE_DIR="$HOME/.config/git/templates"
+fi
+
+if exists "exa"; then
+    alias el='exa --icons -aalFg'
+    alias eb='exa --icons -aalFgB'
+    alias ea='exa --icons -alFg'
+    alias e='exa --icons -lFg'
 fi
 
 if exists "zoxide"; then

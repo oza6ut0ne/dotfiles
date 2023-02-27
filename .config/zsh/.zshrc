@@ -143,8 +143,9 @@ fi
 
 alias sudo='sudo '
 alias ll='ls -alF'
+alias lh='ls -alFh'
 alias la='ls -A'
-alias l='ls -CF'
+alias l='ls -lF'
 alias cp='cp -i --reflink=auto'
 alias mv='mv -i'
 alias rm='rm -i'
@@ -251,6 +252,13 @@ if (( ${+functions[duration-info-preexec]} && \
   zstyle ':zim:duration-info' format ' %B%F{yellow}%d%f%b '
   add-zsh-hook preexec duration-info-preexec
   add-zsh-hook precmd duration-info-precmd
+fi
+
+if exists "exa"; then
+    alias el='exa --icons -aalFg'
+    alias eb='exa --icons -aalFgB'
+    alias ea='exa --icons -alFg'
+    alias e='exa --icons -lFg'
 fi
 
 if exists "zoxide"; then

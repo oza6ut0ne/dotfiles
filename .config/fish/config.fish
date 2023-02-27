@@ -48,6 +48,9 @@ end
 
 # aliases
 alias ll='ls -alF'
+alias lh='ls -alFh'
+alias la='ls -A'
+alias l='ls -lF'
 alias cp='cp -i --reflink=auto'
 alias mv='mv -i'
 alias rm='rm -i'
@@ -75,6 +78,13 @@ end
 # Git templates
 if test -d ~/.config/git/templates
     set -x GIT_TEMPLATE_DIR "$HOME/.config/git/templates"
+end
+
+if exists exa
+    alias el='exa --icons -aalFg'
+    alias eb='exa --icons -aalFgB'
+    alias ea='exa --icons -alFg'
+    alias e='exa --icons -lFg'
 end
 
 if exists adb-peco
