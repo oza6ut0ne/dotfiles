@@ -205,7 +205,7 @@ if ! shopt -oq posix; then
 fi
 
 alias sudo='sudo '
-alias cp='cp -i'
+alias cp='cp -i --reflink=auto'
 alias mv='mv -i'
 alias rm='rm -i'
 alias crontab='crontab -i'
