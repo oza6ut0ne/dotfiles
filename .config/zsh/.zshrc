@@ -254,6 +254,22 @@ if (( ${+functions[duration-info-preexec]} && \
   add-zsh-hook precmd duration-info-precmd
 fi
 
+# ghq
+fzf-ghq() {                                                                                                                              25ms 02:14:24
+    local repo=$(ghq list | fzf --preview "ghq list --full-path --exact {} | xargs exa -h --long --icons --classify -a -I .git --git --no-permissions --no-user --no-filesize --git-ignore --sort modified --reverse --tree --level 2")
+    if [ -n "$repo" ]; then
+        repo=$(ghq list --full-path --exact $repo)
+        BUFFER="cd ${repo}"
+        zle accept-line
+    fi
+    zle -R -c
+}
+
+if exists "ghq" && exists "exa"; then
+    zle -N fzf-ghq
+    bindkey '^]' fzf-ghq
+fi
+
 if exists "exa"; then
     alias el='exa --icons -aalFg'
     alias eb='exa --icons -aalFgB'
