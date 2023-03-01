@@ -169,6 +169,8 @@ if [ -d ${ZSH_DIR}/functions ]; then
     fpath=(${ZSH_DIR}/functions $fpath)
 fi
 
+zstyle ':completion:*:processes' command "ps aux"
+
 # asdf
 if [ -d ~/.asdf ]; then
     . ~/.asdf/asdf.sh
