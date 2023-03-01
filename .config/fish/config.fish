@@ -80,6 +80,8 @@ if test -d ~/.config/git/templates
     set -x GIT_TEMPLATE_DIR "$HOME/.config/git/templates"
 end
 
+complete -c sshg -w ssh
+
 if exists exa
     alias el='exa --icons -aalFg'
     alias eb='exa --icons -aalFgB'

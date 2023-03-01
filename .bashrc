@@ -205,6 +205,11 @@ if ! shopt -oq posix; then
   fi
 fi
 
+if [ -f /usr/share/bash-completion/completions/ssh ]; then
+    . /usr/share/bash-completion/completions/ssh
+    complete -F _ssh sshg
+fi
+
 alias sudo='sudo '
 alias cp='cp -i --reflink=auto'
 alias mv='mv -i'

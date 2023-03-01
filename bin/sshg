@@ -1,0 +1,6 @@
+#!/bin/bash
+
+SSH=${SSH:-ssh}
+REMOTE="$1"
+$SSH $REMOTE rm '$(gpgconf --list-dir agent-socket)'
+$SSH $REMOTE -R $($SSH $REMOTE gpgconf --list-dir agent-socket):$(gpgconf --list-dirs agent-extra-socket) "${@:2}"
