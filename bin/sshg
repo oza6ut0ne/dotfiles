@@ -13,5 +13,11 @@ if [ -z "$REMOTE_SOCKET" ]; then
     exit 1
 fi
 
+if [ -n "$RAW" ]; then
+    LOCAL_SOCKET=$(gpgconf --list-dirs agent-socket)
+else
+    LOCAL_SOCKET=$(gpgconf --list-dirs agent-extra-socket)
+fi
+
 $SSH $REMOTE rm $REMOTE_SOCKET
-$SSH $REMOTE -R $REMOTE_SOCKET:$(gpgconf --list-dirs agent-extra-socket) "${@:2}"
+$SSH $REMOTE -R $REMOTE_SOCKET:$LOCAL_SOCKET "${@:2}"
