@@ -2,5 +2,16 @@
 
 SSH=${SSH:-ssh}
 REMOTE="$1"
-$SSH $REMOTE rm '$(gpgconf --list-dir agent-socket)'
-$SSH $REMOTE -R $($SSH $REMOTE gpgconf --list-dir agent-socket):$(gpgconf --list-dirs agent-extra-socket) "${@:2}"
+
+if [ -z "$REMOTE" ]; then
+    exit 2
+fi
+
+REMOTE_SOCKET=$($SSH $REMOTE gpgconf --list-dir agent-socket)
+
+if [ -z "$REMOTE_SOCKET" ]; then
+    exit 1
+fi
+
+$SSH $REMOTE rm $REMOTE_SOCKET
+$SSH $REMOTE -R $REMOTE_SOCKET:$(gpgconf --list-dirs agent-extra-socket) "${@:2}"
