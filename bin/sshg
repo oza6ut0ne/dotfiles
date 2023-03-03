@@ -19,5 +19,5 @@ else
     LOCAL_SOCKET=$(gpgconf --list-dirs agent-extra-socket)
 fi
 
-$SSH $REMOTE rm $REMOTE_SOCKET
+$SSH $REMOTE rm -- $REMOTE_SOCKET
 $SSH $REMOTE -R $REMOTE_SOCKET:$LOCAL_SOCKET "${@:2}"
