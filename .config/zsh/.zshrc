@@ -275,6 +275,7 @@ if exists "ghq" && exists "exa"; then
 fi
 
 if exists "exa"; then
+    alias ee='exa --icons -aalFg'
     alias el='exa --icons -aalFg'
     alias eb='exa --icons -aalFgB'
     alias ea='exa --icons -alFg'

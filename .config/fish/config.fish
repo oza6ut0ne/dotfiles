@@ -83,6 +83,7 @@ end
 complete -c sshg -w ssh
 
 if exists exa
+    alias ee='exa --icons -aalFg'
     alias el='exa --icons -aalFg'
     alias eb='exa --icons -aalFgB'
     alias ea='exa --icons -alFg'
