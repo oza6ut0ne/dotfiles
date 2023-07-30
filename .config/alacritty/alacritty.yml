@@ -1,5 +1,4 @@
 live_config_reload: true
-alt_send_esc: true
 
 import:
   - ~/.config/alacritty/env.yml
