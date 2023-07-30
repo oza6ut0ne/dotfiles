@@ -1,0 +1,126 @@
+#!/usr/bin/env python3
+
+import argparse
+import binascii
+import ipaddress
+import platform
+import socket
+import struct
+import sys
+from logging import getLogger, INFO, NullHandler, StreamHandler
+
+BROADCAST_IP = '255.255.255.255'
+PORT = 2304
+
+SIOCGIFHWADDR = 0x8927
+BROADCAST_MAC = b'\xff' * 6
+ETHER_TYPE = b'\x08\x42'
+SYNC_STREAM = b'\xff' * 6
+
+
+_logger = getLogger(__name__)
+_logger.addHandler(NullHandler())
+
+
+def _construct_argparser():
+    parser = argparse.ArgumentParser(
+        description='Send Wake-on-LAN magic packet.')
+
+    parser.add_argument('mac')
+    parser.add_argument('-i', '--ip', default=BROADCAST_IP)
+    parser.add_argument('-p', '--port', type=int, default=PORT)
+
+    if platform.system() == 'Linux':
+        parser.add_argument('-e', '--ether', action='store_true')
+        parser.add_argument('-I', '--interface')
+        parser.add_argument('-s', '--src-mac')
+        parser.add_argument('-u', '--unicast', action='store_true')
+
+    parser.add_argument('-q', '--quiet', action='store_true')
+
+    return parser
+
+
+def _mac_str(mac_bytes):
+    return str(binascii.hexlify(mac_bytes, ':'))[2:-1]
+
+
+def _get_src_mac_address(interface):
+    import fcntl
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+        return fcntl.ioctl(
+            s.fileno(), SIOCGIFHWADDR, 
+            struct.pack('256s', bytes(interface[:15], 'utf-8')))[18:24]
+
+
+def send_magic_packet_ether(dst, interface, src=None, unicast=False, *, logger=_logger):
+    _logger.debug(
+        'send_magic_packet_ether(%s, %s, %s, %s)',
+        dst, src, interface, unicast)
+
+    dst_bytes = bytes.fromhex(dst.replace(':', '').replace('-', ''))
+
+    if src is None:
+        src_bytes = _get_src_mac_address(interface)
+    else:
+        src_bytes = bytes.fromhex(src.replace(':', '').replace('-', ''))
+
+    eather_dst = dst_bytes if unicast else BROADCAST_MAC
+
+    _logger.info(
+        'Sending magic packet to %s with %s via %s from %s',
+        _mac_str(eather_dst), _mac_str(dst_bytes), interface, _mac_str(src_bytes))
+
+    frame = b''
+    frame += eather_dst
+    frame += src_bytes
+    frame += ETHER_TYPE
+    frame += SYNC_STREAM
+    frame += dst_bytes * 16
+
+    with socket.socket(socket.AF_PACKET, socket.SOCK_RAW) as s:
+        s.bind((interface, 0))
+        s.send(frame)
+
+
+def send_magic_packet_udp(mac_addr, ip_addr=BROADCAST_IP, port=PORT, *, logger=_logger):
+    logger.debug('send_magic_packet_udp(%s, %s, %d)', mac_addr, ip_addr, port)
+
+    mac_bytes = bytes.fromhex(mac_addr.replace(':', '').replace('-', ''))
+    payload = SYNC_STREAM + mac_bytes * 16
+
+    logger.info(
+        'Sending magic packet to %s:%d with %s',
+        ip_addr, port, _mac_str(mac_bytes))
+
+    ip = ipaddress.ip_address(ip_addr)
+    if isinstance(ip, ipaddress.IPv4Address):
+        family = socket.AF_INET
+    else:
+        family = socket.AF_INET6
+
+    with socket.socket(family, socket.SOCK_DGRAM, socket.IPPROTO_UDP) as s:
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        s.sendto(payload, (ip_addr, port))
+
+
+def main(argv=None):
+    args = _construct_argparser().parse_args(argv)
+    if not args.quiet:
+        handler = StreamHandler(stream=sys.stdout)
+        handler.setLevel(INFO)
+        _logger.addHandler(handler)
+        _logger.setLevel(INFO)
+
+    if platform.system() == 'Linux' and args.ether:
+        if args.interface is None:
+            raise ValueError('interface must be specified')
+        send_magic_packet_ether(
+            args.mac, args.interface, args.src_mac, args.unicast)
+    else:
+        send_magic_packet_udp(
+            mac_addr=args.mac, ip_addr=args.ip, port=args.port)
+
+
+if __name__ == '__main__':
+    main(sys.argv[1:])
