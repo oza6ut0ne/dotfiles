@@ -1,6 +1,5 @@
 set clipboard=unnamedplus
 set number
-set relativenumber
 set laststatus=2
 set fileencodings=ucs-bom,utf-8,cp932,euc-jp,default,latin1
 set list
