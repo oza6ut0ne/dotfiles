@@ -64,6 +64,10 @@ else if test -d ~/.anyenv
     anyenv init - fish | grep -v '..env rehash' | source
 end
 
+if test -d "$HOME/.rye/shims"
+    set -x PATH "$HOME/.rye/shims" $PATH
+end
+
 # editor
 if exists nvim
     balias vi nvim

@@ -180,6 +180,10 @@ elif [ -d ~/.anyenv ]; then
     eval "$(anyenv init - zsh | grep -v '..env rehash')"
 fi
 
+if [ -d "$HOME/.rye/shims" ]; then
+    export PATH="$HOME/.rye/shims:$PATH"
+fi
+
 # editor
 if exists "nvim"; then
     alias vi='nvim'
