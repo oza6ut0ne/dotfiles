@@ -37,6 +37,10 @@ setopt CORRECT
 
 WORDCHARS=${WORDCHARS//[\/]}
 
+function zsh_update_completions() {
+    compinit -d ${HOME}/.cache/zsh/.zcompdump
+}
+
 function exists() {
     which "$1" >/dev/null 2>&1
     return $?
