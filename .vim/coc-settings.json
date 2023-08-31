@@ -13,5 +13,6 @@
     "python.linting.flake8Enabled": true,
     "python.linting.pylintArgs": ["--extension-pkg-whitelist=cv2"],
     "python.formatting.autopep8Args": ["--ignore=E501,E226,W6"],
+    "pyright.organizeimports.provider": "ruff",
     "rust-analyzer.checkOnSave.command": "clippy"
 }

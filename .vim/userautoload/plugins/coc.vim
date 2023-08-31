@@ -68,6 +68,10 @@ command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
 nnoremap <leader>O :<C-u>OR<CR>
 
+" Add `:FixAll` command for the current buffer.
+command! -nargs=0 FixAll   :call     CocActionAsync('fixAll')
+nnoremap <leader>fa :<C-u>FixAll<CR>
+
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
@@ -79,7 +83,7 @@ xmap <leader>a  <Plug>(coc-codeaction-selected)
 nmap <leader>a  <Plug>(coc-codeaction-selected)
 
 " Remap keys for applying codeAction to the current buffer.
-nmap <leader>aab  <Plug>(coc-codeaction)
+nmap <leader>ab  <Plug>(coc-codeaction)
 " Remap keys for applying codeAction at the current cursor.
 nmap <leader>ac  <Plug>(coc-codeaction-cursor)
 " Apply AutoFix to problem on the current line.
