@@ -98,12 +98,33 @@ if exists adb-peco
     alias adb adb-peco
 end
 
+set CACHE_DIR "$HOME/.cache/fish"
+
 if exists zoxide
-    zoxide init fish | source
+    if test ! -r "$CACHE_DIR/zoxide.fish"
+        mkdir -p $CACHE_DIR
+        zoxide init fish > "$CACHE_DIR/zoxide.fish"
+    end
+    source "$CACHE_DIR/zoxide.fish"
 end
 
 if exists direnv
-    eval (direnv hook fish)
+    if test ! -r "$CACHE_DIR/direnv.fish"
+        mkdir -p $CACHE_DIR
+        direnv hook fish > "$CACHE_DIR/direnv.fish"
+    end
+    source "$CACHE_DIR/direnv.fish"
+end
+
+function fish_update_caches
+    mkdir -p $CACHE_DIR
+    if exists zoxide
+        zoxide init fish > "$CACHE_DIR/zoxide.fish"
+    end
+
+    if exists direnv
+        direnv hook fish > "$CACHE_DIR/direnv.fish"
+    end
 end
 
 # thefuck

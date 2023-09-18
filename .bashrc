@@ -266,17 +266,46 @@ if exists "exa"; then
     alias e='exa --icons -lFg'
 fi
 
+CACHE_DIR=${HOME}/.cache/bash
+
 if exists "zoxide"; then
-    eval "$(zoxide init bash)"
+    if [[ ! -r "${CACHE_DIR}/zoxide.bash" ]]; then
+        mkdir -p ${CACHE_DIR}
+        zoxide init bash > ${CACHE_DIR}/zoxide.bash
+    fi
+    source ${CACHE_DIR}/zoxide.bash
 fi
 
 if exists "direnv"; then
-    eval "$(direnv hook bash)"
+    if [[ ! -r "${CACHE_DIR}/direnv.bash" ]]; then
+        mkdir -p ${CACHE_DIR}
+        direnv hook bash > ${CACHE_DIR}/direnv.bash
+    fi
+    source ${CACHE_DIR}/direnv.bash
 fi
 
 if exists "thefuck"; then
-    eval "$(thefuck --alias)"
+    if [[ ! -r "${CACHE_DIR}/thefuck.bash" ]]; then
+    mkdir -p ${CACHE_DIR}
+        thefuck --alias > ${CACHE_DIR}/thefuck.bash
+    fi
+    source ${CACHE_DIR}/thefuck.bash
 fi
+
+function bash_update_caches() {
+    mkdir -p ${CACHE_DIR}
+    if exists "zoxide"; then
+        zoxide init bash > ${CACHE_DIR}/zoxide.bash
+    fi
+
+    if exists "direnv"; then
+        direnv hook bash > ${CACHE_DIR}/direnv.bash
+    fi
+
+    if exists "thefuck"; then
+        thefuck --alias > ${CACHE_DIR}/thefuck.bash
+    fi
+}
 
 # usage: "while :;do funniki;done"
 funniki(){ echo -en "\e[1;32m";for((i=0;i<$COLUMNS/2;i++));do r=$(($RANDOM&3));test $r == 0&&echo -n "  "||echo -n $(($r&1))" ";done;echo -e "\e[m";}
