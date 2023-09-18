@@ -1,7 +1,23 @@
 # zmodload zsh/zprof && zprof
 
+ZSH_DIR=${ZDOTDIR:-${HOME}/.zsh}
+
+function source {
+    ensure_zcompiled $1
+    builtin source $1
+}
+
+function ensure_zcompiled {
+    local compiled="$1.zwc"
+    if [[ $1 == ${HOME}/* && ! -r "$compiled" || "$1" -nt "$compiled" ]]; then
+        echo "\033[1;36mCompiling\033[m $1"
+        zcompile $1
+    fi
+}
+ensure_zcompiled ${ZSH_DIR}/.zshrc
+
 if [ -f ${HOME}/.gpg_profile ]; then
-     source ${HOME}/.gpg_profile
+    source ${HOME}/.gpg_profile
 fi
 
 bindkey -e
@@ -145,6 +161,7 @@ if [ -x /usr/bin/dircolors ]; then
     export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
 fi
 
+# aliases
 alias sudo='sudo '
 alias ll='ls -alF'
 alias lh='ls -alFh'
@@ -160,20 +177,21 @@ zle -N edit-command-line
 bindkey '^[e' edit-command-line
 
 if [[ -e /etc/zsh_command_not_found ]] then
-  source /etc/zsh_command_not_found
+    source /etc/zsh_command_not_found
 fi
 
-ZSH_DIR=${ZDOTDIR:-${HOME}/.zsh}
-
-if [ -d ${ZSH_DIR}/completion ]; then
-    fpath=(${ZSH_DIR}/completion $fpath)
-fi
-
+# functions
 if [ -d ${ZSH_DIR}/functions ]; then
     fpath=(${ZSH_DIR}/functions $fpath)
 fi
 
+# completions
+if [ -d ${ZSH_DIR}/completion ]; then
+    fpath=(${ZSH_DIR}/completion $fpath)
+fi
+
 zstyle ':completion:*:processes' command "ps aux"
+compdef sshg=ssh
 
 # asdf
 if [ -d ~/.asdf ]; then
@@ -264,8 +282,6 @@ if (( ${+functions[duration-info-preexec]} && \
   add-zsh-hook precmd duration-info-precmd
 fi
 
-compdef sshg=ssh
-
 # ghq
 fzf-ghq() {                                                                                                                              25ms 02:14:24
     local repo=$(ghq list | fzf --preview "ghq list --full-path --exact {} | xargs exa -h --long --icons --classify -a -I .git --git --no-permissions --no-user --no-filesize --git-ignore --sort modified --reverse --tree --level 2")
@@ -290,17 +306,48 @@ if exists "exa"; then
     alias e='exa --icons -lFg'
 fi
 
+CACHE_DIR=${HOME}/.cache/zsh
+
 if exists "zoxide"; then
-    eval "$(zoxide init zsh)"
+    if [[ ! -r "${CACHE_DIR}/zoxide.zsh" ]]; then
+        mkdir -p ${CACHE_DIR}
+        zoxide init zsh > ${CACHE_DIR}/zoxide.zsh
+    fi
+    source ${CACHE_DIR}/zoxide.zsh
 fi
 
 if exists "direnv"; then
-    eval "$(direnv hook zsh)"
+    if [[ ! -r "${CACHE_DIR}/direnv.zsh" ]]; then
+        mkdir -p ${CACHE_DIR}
+        direnv hook zsh > ${CACHE_DIR}/direnv.zsh
+    fi
+    source ${CACHE_DIR}/direnv.zsh
 fi
 
 if exists "thefuck"; then
-    alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
+    if [[ ! -r "${CACHE_DIR}/thefuck.zsh" ]]; then
+    mkdir -p ${CACHE_DIR}
+        thefuck --alias > ${CACHE_DIR}/thefuck.zsh
+    fi
+    source ${CACHE_DIR}/thefuck.zsh
 fi
+
+function zsh_update_caches() {
+    mkdir -p ${CACHE_DIR}
+    if exists "zoxide"; then
+        zoxide init zsh > ${CACHE_DIR}/zoxide.zsh
+    fi
+
+    if exists "direnv"; then
+        direnv hook zsh > ${CACHE_DIR}/direnv.zsh
+    fi
+
+    if exists "thefuck"; then
+        thefuck --alias > ${CACHE_DIR}/thefuck.zsh
+    fi
+}
+
+unfunction source
 
 if (which zprof > /dev/null 2>&1) ;then
     zprof | cat
