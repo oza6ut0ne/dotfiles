@@ -247,23 +247,23 @@ fi
 
 # ghq
 fzf-ghq() {
-    local repo=$(ghq list | fzf --preview "ghq list --full-path --exact {} | xargs exa -h --long --icons --classify -a -I .git --git --no-permissions --no-user --no-filesize --git-ignore --sort modified --reverse --tree --level 2")
+    local repo=$(ghq list | fzf --preview "ghq list --full-path --exact {} | xargs eza -h --long --icons --classify -a -I .git --git --no-permissions --no-user --no-filesize --git-ignore --sort modified --reverse --tree --level 2")
     if [ -n "$repo" ]; then
         repo=$(ghq list --full-path --exact $repo)
         cd ${repo}
     fi
 }
 
-if exists "ghq" && exists "exa"; then
+if exists "ghq" && exists "eza"; then
     bind -x '"\C-]": fzf-ghq'
 fi
 
-if exists "exa"; then
-    alias ee='exa --icons -aalFg'
-    alias el='exa --icons -aalFg'
-    alias eb='exa --icons -aalFgB'
-    alias ea='exa --icons -alFg'
-    alias e='exa --icons -lFg'
+if exists "eza"; then
+    alias ee='eza --icons -aalFg'
+    alias el='eza --icons -aalFg'
+    alias eb='eza --icons -aalFgB'
+    alias ea='eza --icons -alFg'
+    alias e='eza --icons -lFg'
 fi
 
 CACHE_DIR=${HOME}/.cache/bash
