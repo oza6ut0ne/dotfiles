@@ -10,9 +10,8 @@
     "suggest.defaultSortMethod": "alphabetical",
     "session.directory": "~/.cache/vim-sessions",
     "tabnine.priority": 50,
-    "python.linting.flake8Enabled": true,
-    "python.linting.pylintArgs": ["--extension-pkg-whitelist=cv2"],
-    "python.formatting.autopep8Args": ["--ignore=E501,E226,W6"],
+    "python.linting.ruffEnabled": true,
+    "python.formatting.provider": "ruff",
     "pyright.organizeimports.provider": "ruff",
-    "rust-analyzer.checkOnSave.command": "clippy"
+    "rust-analyzer.check.overrideCommand": ["cargo", "clippy", "--message-format=json"]
 }
