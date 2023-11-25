@@ -2,6 +2,10 @@ function git_is_git_dir
   test (git rev-parse --is-inside-git-dir) = "true"
 end
 
+function git_is_dubious_repo
+  git rev-parse 2>&1 >/dev/null | grep -q 'fatal: detected dubious ownership'
+end
+
 function git_is_bare_repo
   test (git rev-parse --is-bare-repository) = "true"
 end
@@ -83,11 +87,16 @@ function fish_prompt
 
   echo -n -s (whoami) "@" (prompt_hostname)
 
-  if git_is_repo
+  if git_is_dubious_repo
+    echo -n -s ":" $directory_color $cwd $normal_color
+    echo -n -s $error_color "[DUBIOUS]"
+  else if git_is_repo
     if test "$theme_short_path" = 'yes' -a "$theme_git_path" = 'yes'
-      set root_folder (command git rev-parse --show-toplevel 2>/dev/null)
-      set parent_root_folder (dirname $root_folder)
-      set cwd (echo $PWD | sed -e "s|$parent_root_folder/||")
+      if not git_is_git_dir
+        set root_folder (command git rev-parse --show-toplevel 2>/dev/null)
+        set parent_root_folder (dirname $root_folder)
+        set cwd (echo $PWD | sed -e "s|$parent_root_folder/||")
+      end
     end
 
     echo -n -s ":" $directory_color $cwd $normal_color

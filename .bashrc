@@ -37,22 +37,37 @@ bind -m emacs '"\e\C-j": vi-editing-mode'
 bind -m emacs '"\e\C-m": vi-editing-mode'
 
 function exists() {
-    which "$1" >/dev/null 2>&1
+    command -v "$1" >/dev/null 2>&1
     return $?
 }
 
 function is_git_repo() {
-    [ -d .git ] && return 0
     exists "git" || return 1
-    git rev-parse --git-dir >/dev/null 2>&1
+    git rev-parse >/dev/null 2>&1
+    return $?
+}
+
+function is_git_dubious_repo() {
+    exists "git" || return 1
+    git rev-parse 2>&1 >/dev/null | grep -q 'fatal: detected dubious ownership'
     return $?
 }
 
 function git_branch_name() {
-    is_git_repo || return
     exists "git" || return
-    branch_name=$(git symbolic-ref --short HEAD 2>/dev/null) && echo "[$branch_name]" && return
-    echo "[$(git show-ref --head -s --abbrev | head -n 1 2>/dev/null)]"
+
+    local color='\033[01;91m'
+    local branch_name=DUBIOUS
+    if ! is_git_dubious_repo; then
+        is_git_repo || return
+        color='\033[01;93m'
+        branch_name=$(git symbolic-ref --short HEAD 2>/dev/null) || \
+            branch_name=$(git show-ref --head -s --abbrev | head -n 1 2>/dev/null)
+    fi
+
+    echo -en "\001${color}\002"
+    echo -en "[$branch_name]"
+    echo -e "\001\033[00m\002"
 }
 
 function git_status() {
@@ -97,8 +112,8 @@ function git_status() {
 }
 
 function colored_pipestatus() {
-    last_status=${PIPESTATUS[@]}
-    color='\033[01;93m'
+    local last_status=${PIPESTATUS[@]}
+    local color='\033[01;93m'
     [[ "${last_status[@]}" =~ ^0( 0)*$ ]] || color='\033[01;91m'
     echo -en "\001${color}\002"
     echo -en "${last_status[@]}"
@@ -135,7 +150,7 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='$(colored_pipestatus)${debian_chroot:+($debian_chroot)}\[\033[01;32m\]|\u@\h\[\033[00m\]:\[\033[01;36m\]\W\[\033[00m\]\[\033[01;93m\]$(git_branch_name)$(git_status)\[\033[00m\]\$ '
+    PS1='$(colored_pipestatus)${debian_chroot:+($debian_chroot)}\[\033[01;32m\]|\u@\h\[\033[00m\]:\[\033[01;36m\]\W\[\033[00m\]$(git_branch_name)\[\033[01;93m\]$(git_status)\[\033[00m\]\$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi

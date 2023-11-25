@@ -63,17 +63,32 @@ function exists() {
 }
 
 function is_git_repo() {
-    [ -d .git ] && return 0
     exists "git" || return 1
-    git rev-parse --git-dir >/dev/null 2>&1
+    git rev-parse >/dev/null 2>&1
+    return $?
+}
+
+function is_git_dubious_repo() {
+    exists "git" || return 1
+    git rev-parse 2>&1 >/dev/null | grep -q 'fatal: detected dubious ownership'
     return $?
 }
 
 function git_branch_name() {
-    is_git_repo || return
     exists "git" || return
-    branch_name=$(git symbolic-ref --short HEAD 2>/dev/null) && echo "[$branch_name]" && return
-    echo "[$(git show-ref --head -s --abbrev | head -n 1 2>/dev/null)]"
+
+    local color='%{\e[01;91m%}'
+    local branch_name=DUBIOUS
+    if ! is_git_dubious_repo; then
+        is_git_repo || return
+        color='%{\e[01;93m%}'
+        branch_name=$(git symbolic-ref --short HEAD 2>/dev/null) || \
+            branch_name=$(git show-ref --head -s --abbrev | head -n 1 2>/dev/null)
+    fi
+
+    echo -en "${color}"
+    echo -en "[$branch_name]"
+    echo -e "%{\e[00m%}"
 }
 
 function git_status() {
@@ -134,7 +149,7 @@ function prompt_dollar() {
     fi
 }
 
-PS1=$'$(colored_pipestatus)%B%{\e[92m%}|%n@%m%{\e[0m%}:%B%{\e[96m%}%1~%{\e[93m%}$(git_branch_name)$(git_status)%{\e[0m%}$(prompt_dollar) '
+PS1=$'$(colored_pipestatus)%B%{\e[92m%}|%n@%m%{\e[0m%}:%B%{\e[96m%}%1~$(git_branch_name)%{\e[93m%}$(git_status)%{\e[0m%}$(prompt_dollar) '
 RPS1=$'${duration_info}%F{7}%D{%H:%M:%S}%f'
 ZLE_RPROMPT_INDENT=0
 
