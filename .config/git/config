@@ -39,6 +39,7 @@
     logdfa = "!f() { git logdf $(git rev-list --reflog) $@; }; f"
     logdefa = "!f() { git logdef $(git rev-list --reflog) $@; }; f"
     showtool = "!f() { rev=$(git rev-parse \"${*:-HEAD}\"); git difftool $rev~1 $rev; }; f"
+    codate = "!f() { rev=$(git rev-list -n 1 --first-parent --before=$1 $2) && shift 2 && git checkout $rev $@; }; f"
     recommit = commit --edit --file=.git/COMMIT_EDITMSG
     root = rev-parse --show-toplevel
     undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
