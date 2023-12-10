@@ -1,3 +1,8 @@
+let s:parent = fnamemodify(resolve(expand('<sfile>:p')), ':h')
+if !filereadable(s:parent . '/plugins.enabled')
+  finish
+endif
+
 " Directory for dein.vim.
 let s:dein_dir = expand('~/.cache/dein')
 " Directory for dein.vim repository.
