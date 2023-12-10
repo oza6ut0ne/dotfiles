@@ -36,6 +36,9 @@ bind -m vi '"\C-e": emacs-editing-mode'
 bind -m emacs '"\e\C-j": vi-editing-mode'
 bind -m emacs '"\e\C-m": vi-editing-mode'
 
+stty werase undef
+bind '\C-w:unix-filename-rubout'
+
 function exists() {
     command -v "$1" >/dev/null 2>&1
     return $?
