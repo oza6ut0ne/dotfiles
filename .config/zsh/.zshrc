@@ -206,7 +206,6 @@ if [ -d ${ZSH_DIR}/completion ]; then
 fi
 
 zstyle ':completion:*:processes' command "ps aux"
-compdef sshg=ssh
 
 # asdf
 if [ -d ~/.asdf ]; then
@@ -296,6 +295,8 @@ if (( ${+functions[duration-info-preexec]} && \
   add-zsh-hook preexec duration-info-preexec
   add-zsh-hook precmd duration-info-precmd
 fi
+
+compdef sshg=ssh
 
 # ghq
 fzf-ghq() {                                                                                                                              25ms 02:14:24
