@@ -45,6 +45,7 @@ function exists() {
 }
 
 function is_git_repo() {
+    [ -n "$GIT_DISABLE_DETECTION" ] && return 1
     exists "git" || return 1
     git rev-parse >/dev/null 2>&1
     return $?
