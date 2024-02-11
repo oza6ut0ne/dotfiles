@@ -27,6 +27,7 @@ if has('nvim')
   set winblend=10
 
   autocmd ColorScheme default hi Normal ctermfg=10 guifg=#94f13a
+  autocmd ColorScheme default hi PreProc ctermfg=81 guifg=#ff80ff
   colorscheme default
 else
   if &term !~ 'xterm'
