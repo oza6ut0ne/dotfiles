@@ -34,8 +34,17 @@ function! SkkStatus() abort
   return exists('*eskk#statusline') ? eskk#statusline() : ''
 endfunction
 
+function! CodeiumStatus() abort
+  if !exists('*codeium#GetStatusString')
+    return ''
+  elseif exists('g:codeium_enabled') && !g:codeium_enabled
+    return '[---]'
+  endif
+  return '[' . codeium#GetStatusString() . ']'
+endfunction
+
 set statusline=%F%m%r%h%w%=
-  \%{SkkStatus()}[%l/%L][%2.v][%P]%y[%{&ts}]
+  \%{CodeiumStatus()}%{SkkStatus()}[%l/%L][%2.v][%P]%y[%{&ts}]
   \%{&bomb?'[bom]':''}%{&eol?'':'[noeol]'}[%{&ff}][%{&fenc}]
 
 if exists('+diffopt')

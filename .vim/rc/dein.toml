@@ -129,6 +129,63 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'Exafunction/codeium.vim'
+if = 'exists("g:codeium_enabled")'
+on_if = '!exists("g:vscode")'
+hook_add = '''
+  let g:codeium_disable_bindings = 1
+  augroup CodeiumDisabledFiles
+    autocmd!
+    autocmd! BufRead,BufNewFile .env           Codeium DisableBuffer
+    autocmd! BufRead,BufNewFile .env.*         Codeium DisableBuffer
+    autocmd! BufRead,BufNewFile .envrc         Codeium DisableBuffer
+    autocmd! BufRead,BufNewFile *.gpg          Codeium DisableBuffer
+    autocmd! BufRead,BufNewFile *.asc          Codeium DisableBuffer
+    autocmd! BufRead,BufNewFile */pass.*/*.txt Codeium DisableBuffer
+    autocmd! BufRead,BufNewFile *.yml          Codeium DisableBuffer
+    autocmd! BufRead,BufNewFile *.yaml         Codeium DisableBuffer
+    autocmd! BufRead,BufNewFile *.toml         Codeium DisableBuffer
+    autocmd! BufRead,BufNewFile *.json         Codeium DisableBuffer
+    autocmd! BufRead,BufNewFile rbw            Codeium DisableBuffer
+  augroup END
+
+  if !exists("g:codeium_enabled")
+    let g:codeium_enabled = 0
+    call dein#recache_runtimepath()
+    echo 'Restart vim to disable codeium completely!'
+    finish
+  endif
+
+  if exists("g:vscode")
+    let g:codeium_enabled = 0
+    finish
+  endif
+
+  nnoremap <silent> <Space>ai         :CodeiumToggle<CR>:redrawstatus!<CR>
+  nnoremap <silent> <Space><Space>AI  :Codeium DisableBuffer<CR>:redrawstatus<CR>
+  nnoremap <expr>   <Space><Space>ai  get(b:, 'codeium_enabled', 1) ?
+        \ "\<Cmd>Codeium DisableBuffer\<CR>\<Cmd>redrawstatus\<CR>" :
+        \ "\<Cmd>Codeium EnableBuffer\<CR>\<Cmd>redrawstatus\<CR>"
+
+  imap <script><silent><nowait><expr> <C-l> codeium#Accept()
+  imap <script><silent><nowait><expr> <C-\> codeium#Accept()
+  imap <script><silent><nowait><expr> <M-;> codeium#AcceptNextWord()
+  imap <script><silent><nowait><expr> <M-'> codeium#AcceptNextLine()
+  imap <M-]> <Cmd>call codeium#CycleOrComplete()<CR>
+  imap <M-[> <Cmd>call codeium#CycleCompletions(-1)<CR>
+  imap <C-]> <Cmd>call codeium#Clear()<CR>
+  imap <expr> <C-n>
+        \ coc#pum#visible() ? coc#pum#next(1) :
+        \ g:codeium_enabled ? "\<Cmd>call codeium#CycleOrComplete()\<CR>" :
+        \ "\<C-n>"
+  imap <expr> <C-p>
+        \ coc#pum#visible() ? coc#pum#prev(1) :
+        \ g:codeium_enabled ? "\<Cmd>call codeium#CycleCompletions(-1)\<CR>" :
+        \ "\<C-p>"
+
+'''
+
+[[plugins]]
 repo = 'cespare/vim-toml'
 on_if = '!exists("g:vscode")'
 

@@ -3,6 +3,8 @@ if !filereadable(s:parent . '/plugins.enabled')
   finish
 endif
 
+let g:dein#auto_recache = 1
+
 " Directory for dein.vim.
 let s:dein_dir = expand('~/.cache/dein')
 " Directory for dein.vim repository.
