@@ -292,7 +292,8 @@ fzf-ghq() {
 }
 
 if exists "ghq" && exists "eza"; then
-    bind -x '"\C-]": fzf-ghq'
+    bind -x '"\201": fzf-ghq'
+    bind '"\C-]": "\201\C-m"'
 fi
 
 if exists "eza"; then
