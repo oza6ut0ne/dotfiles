@@ -48,7 +48,7 @@ function fish_prompt
   set -l last_command_statuses $pipestatus
 
   set -l cwd (prompt_pwd)
-  if test "$theme_short_path" = 'yes'
+  if test "$PROMPT_SHORT_PATH" = "1"
     set cwd (basename $cwd)
   end
 
@@ -87,11 +87,11 @@ function fish_prompt
 
   echo -n -s (whoami) "@" (prompt_hostname)
 
-  if git_is_dubious_repo
+  if test "$PROMPT_GIT_STATUS" = "1"; and git_is_dubious_repo
     echo -n -s ":" $directory_color $cwd $normal_color
     echo -n -s $error_color "[DUBIOUS]"
-  else if not set -q GIT_DISABLE_DETECTION; and git_is_repo
-    if test "$theme_short_path" = 'yes' -a "$theme_git_path" = 'yes'
+  else if test "$PROMPT_GIT_STATUS" = "1"; and git_is_repo
+    if test "$PROMPT_SHORT_PATH" = "1" -a "$theme_git_path" = 'yes'
       if not git_is_git_dir
         set root_folder (command git rev-parse --show-toplevel 2>/dev/null)
         set parent_root_folder (dirname $root_folder)

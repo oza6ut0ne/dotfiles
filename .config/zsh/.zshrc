@@ -53,6 +53,9 @@ setopt CORRECT
 
 WORDCHARS=${WORDCHARS//[\/]}
 
+export PROMPT_SHORT_PATH=${PROMPT_SHORT_PATH-1}
+export PROMPT_GIT_STATUS=${PROMPT_GIT_STATUS-1}
+
 function zsh_update_completions() {
     compinit -d ${HOME}/.cache/zsh/.zcompdump
 }
@@ -63,7 +66,7 @@ function exists() {
 }
 
 function is_git_repo() {
-    [ -n "$GIT_DISABLE_DETECTION" ] && return 1
+    [ "$PROMPT_GIT_STATUS" = "1" ] || return 1
     exists "git" || return 1
     git rev-parse >/dev/null 2>&1
     return $?
@@ -76,6 +79,7 @@ function is_git_dubious_repo() {
 }
 
 function git_branch_name() {
+    [ "$PROMPT_GIT_STATUS" = "1" ] || return
     exists "git" || return
 
     local color='%{\e[01;91m%}'
@@ -142,6 +146,15 @@ function colored_pipestatus() {
     echo -e "%{\e[00m%}"
 }
 
+function prompt_pwd() {
+    local p=${${PWD:/~/\~}/#~\//\~/}
+    if [ "$PROMPT_SHORT_PATH" = "1" ]; then
+        basename $p
+    else
+        echo "${(@j[/]M)${(@s[/]M)p##*/}##(.|)?}$p:t"
+    fi
+}
+
 function prompt_dollar() {
     if [ $UID -eq 0 ]; then
         echo '#'
@@ -150,7 +163,7 @@ function prompt_dollar() {
     fi
 }
 
-PS1=$'$(colored_pipestatus)%B%{\e[92m%}|%n@%m%{\e[0m%}:%B%{\e[96m%}%1~$(git_branch_name)%{\e[93m%}$(git_status)%{\e[0m%}$(prompt_dollar) '
+PS1=$'$(colored_pipestatus)%B%{\e[92m%}|%n@%m%{\e[0m%}:%B%{\e[96m%}$(prompt_pwd)$(git_branch_name)%{\e[93m%}$(git_status)%{\e[0m%}$(prompt_dollar) '
 RPS1=$'${duration_info}%F{7}%D{%H:%M:%S}%f'
 ZLE_RPROMPT_INDENT=0
 

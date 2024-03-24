@@ -39,13 +39,16 @@ bind -m emacs '"\e\C-m": vi-editing-mode'
 stty werase undef
 bind '\C-w:unix-filename-rubout'
 
+export PROMPT_SHORT_PATH=${PROMPT_SHORT_PATH-1}
+export PROMPT_GIT_STATUS=${PROMPT_GIT_STATUS-1}
+
 function exists() {
     command -v "$1" >/dev/null 2>&1
     return $?
 }
 
 function is_git_repo() {
-    [ -n "$GIT_DISABLE_DETECTION" ] && return 1
+    [ "$PROMPT_GIT_STATUS" = "1" ] || return 1
     exists "git" || return 1
     git rev-parse >/dev/null 2>&1
     return $?
@@ -58,6 +61,7 @@ function is_git_dubious_repo() {
 }
 
 function git_branch_name() {
+    [ "$PROMPT_GIT_STATUS" = "1" ] || return
     exists "git" || return
 
     local color='\033[01;91m'
@@ -124,6 +128,20 @@ function colored_pipestatus() {
     echo -e "\001\033[00m\002"
 }
 
+function prompt_pwd() {
+    local p=$(dirs +0)
+    if [ "$PROMPT_SHORT_PATH" = "1" ]; then
+        basename $p
+    else
+        if [ "$p" = "~" -o "$p" = "/" ]; then
+            echo "$p"
+        else
+            local short_dirname=$(echo "${p%/*}" | sed -E 's@(\.?[^/]{1})[^/]*@\1@g')
+            echo "$short_dirname/$(basename $p)"
+        fi
+    fi
+}
+
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
@@ -154,7 +172,7 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='$(colored_pipestatus)${debian_chroot:+($debian_chroot)}\[\033[01;32m\]|\u@\h\[\033[00m\]:\[\033[01;36m\]\W\[\033[00m\]$(git_branch_name)\[\033[01;93m\]$(git_status)\[\033[00m\]\$ '
+    PS1='$(colored_pipestatus)${debian_chroot:+($debian_chroot)}\[\033[01;32m\]|\u@\h\[\033[00m\]:\[\033[01;36m\]$(prompt_pwd)\[\033[00m\]$(git_branch_name)\[\033[01;93m\]$(git_status)\[\033[00m\]\$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi

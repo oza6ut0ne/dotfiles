@@ -14,7 +14,8 @@ end
 
 # appearance
 set -g fish_greeting
-set -g theme_short_path yes
+set -q PROMPT_SHORT_PATH || set -x PROMPT_SHORT_PATH 1
+set -q PROMPT_GIT_STATUS || set -x PROMPT_GIT_STATUS 1
 
 set -g fish_color_autosuggestion white
 set -g fish_color_param '0FC' brcyan
