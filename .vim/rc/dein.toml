@@ -174,6 +174,7 @@ hook_add = '''
       hi Visual ctermbg=52 guibg=#344d34
       hi StatusLine ctermfg=247 ctermbg=237 guifg=#9da9a0 guibg=#3a454a cterm=bold gui=bold
       hi StatusLineNC ctermfg=245 ctermbg=236 guifg=#859289 guibg=#323c41
+      hi QuickScopePrimary cterm=underline ctermfg=159 gui=underline guifg=#b3f6c0
     endif
   endfunction
 
