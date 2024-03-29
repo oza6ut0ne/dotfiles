@@ -1,3 +1,5 @@
+[core]
+	quotepath = false
 [diff]
     tool = vimdiff
     algorithm = histogram
