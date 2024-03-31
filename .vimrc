@@ -13,6 +13,11 @@ if !has('win32')
   let g:python3_host_prog='/usr/bin/python3'
 endif
 
+let s:local_vimrc_pre = fnamemodify('~/.vimrc.pre.local', ':p')
+if filereadable(s:local_vimrc_pre)
+  execute 'source' s:local_vimrc_pre
+endif
+
 runtime! userautoload/*.vim
 
 let s:local_vimrc = fnamemodify('~/.vimrc.local', ':p')
