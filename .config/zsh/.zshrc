@@ -4,7 +4,7 @@ ZSH_DIR=${ZDOTDIR:-${HOME}/.zsh}
 
 function source {
     ensure_zcompiled $1
-    builtin source $1
+    builtin source $@
 }
 
 function ensure_zcompiled {
@@ -207,6 +207,10 @@ bindkey '^[e' edit-command-line
 
 if [[ -e /etc/zsh_command_not_found ]] then
     source /etc/zsh_command_not_found
+fi
+
+if [[ -e /usr/share/doc/find-the-command/ftc.bash ]] then
+    builtin source /usr/share/doc/find-the-command/ftc.bash variant=zsh
 fi
 
 # functions

@@ -247,6 +247,10 @@ if [ -f /usr/share/bash-completion/completions/ssh ]; then
     complete -F _ssh sshg
 fi
 
+if [ -f /usr/share/doc/find-the-command/ftc.bash ]; then
+    source /usr/share/doc/find-the-command/ftc.bash
+fi
+
 alias sudo='sudo '
 alias cp='cp -i --reflink=auto'
 alias mv='mv -i'

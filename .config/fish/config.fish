@@ -57,6 +57,10 @@ alias mv='mv -i'
 alias rm='rm -i'
 alias crontab='crontab -i'
 
+if test -r /usr/share/doc/find-the-command/ftc.fish
+    source /usr/share/doc/find-the-command/ftc.fish
+end
+
 # asdf
 if test -d ~/.asdf
     source ~/.asdf/asdf.fish
