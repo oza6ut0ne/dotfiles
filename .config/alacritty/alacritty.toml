@@ -1,0 +1,7 @@
+import = [
+  "~/.config/alacritty/env.toml",
+  "~/.config/alacritty/appearance.toml",
+  "~/.config/alacritty/bindings.toml",
+  "~/alacritty.local.toml",
+]
+live_config_reload = true
