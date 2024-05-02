@@ -92,11 +92,11 @@ end
 complete -c sshg -w ssh
 
 if exists eza
-    alias ee='eza --icons -aalFg'
-    alias el='eza --icons -aalFg'
-    alias eb='eza --icons -aalFgB'
-    alias ea='eza --icons -alFg'
-    alias e='eza --icons -lFg'
+    alias ee='eza --icons -aalgF'
+    alias el='eza --icons -aalgF'
+    alias eb='eza --icons -aalgBF'
+    alias ea='eza --icons -algF'
+    alias e='eza --icons -lgF'
 end
 
 if exists adb-peco
