@@ -42,6 +42,11 @@ function module.apply(config)
       action = act.ShowLauncherArgs { flags = 'WORKSPACES', title = 'Select workspace' },
     },
     {
+      key = 'l',
+      mods = 'ALT',
+      action = act.ShowLauncher,
+    },
+    {
       key = 'Q',
       mods = 'SHIFT|CTRL',
       action = act.QuickSelect,
