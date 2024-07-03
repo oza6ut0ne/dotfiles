@@ -12,6 +12,7 @@ VIMSPECTOR_ROOT="${CONFIG_ROOT}/vimspector"
 VIMSPECTOR_CONFIG_ROOT="${VIMSPECTOR_ROOT}/configurations"
 LIBSKK_RULES="${CONFIG_ROOT}/libskk/rules"
 ALACRITTY_CONFIG="${CONFIG_ROOT}/alacritty"
+WEZTERM_CONFIG="${CONFIG_ROOT}/wezterm"
 
 cd ${DOT_ROOT}
 
@@ -99,4 +100,12 @@ if [ ! -e ${ALACRITTY_CONFIG} ]; then
 fi
 for f in `ls ${DOT_ROOT}/.config/alacritty`; do
     ln -snfv ${DOT_ROOT}/.config/alacritty/${f} ${ALACRITTY_CONFIG}/${f}
+done
+
+# WezTerm
+if [ ! -e ${WEZTERM_CONFIG} ]; then
+    mkdir -p ${WEZTERM_CONFIG}
+fi
+for f in `ls ${DOT_ROOT}/.config/wezterm`; do
+    ln -snfv ${DOT_ROOT}/.config/wezterm/${f} ${WEZTERM_CONFIG}/${f}
 done
