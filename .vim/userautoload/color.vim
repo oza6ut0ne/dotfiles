@@ -1,5 +1,3 @@
-syntax enable
-
 function! s:override_color_settings() abort
   hi NonText ctermfg=12 guifg=#729fcf
   hi Pmenu ctermfg=0 ctermbg=13 guifg=#000000 guibg=#ad7fa8
