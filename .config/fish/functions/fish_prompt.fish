@@ -81,6 +81,10 @@ function fish_prompt
       break
     end
   end
+
+  if set -q VENV_PROMPT
+    echo -n -s "($VENV_PROMPT) "
+  end
   echo -n -s $status_color
   echo -n $last_command_statuses
   echo -n -s $normal_color "|"

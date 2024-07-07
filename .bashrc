@@ -142,6 +142,10 @@ function prompt_pwd() {
     fi
 }
 
+function prompt_venv() {
+    echo "${VENV_PROMPT:+($VENV_PROMPT) }"
+}
+
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
@@ -172,7 +176,7 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='$(colored_pipestatus)${debian_chroot:+($debian_chroot)}\[\033[01;32m\]|\u@\h\[\033[00m\]:\[\033[01;36m\]$(prompt_pwd)\[\033[00m\]$(git_branch_name)\[\033[01;93m\]$(git_status)\[\033[00m\]\$ '
+    PS1='$(prompt_venv)$(colored_pipestatus)${debian_chroot:+($debian_chroot)}\[\033[01;32m\]|\u@\h\[\033[00m\]:\[\033[01;36m\]$(prompt_pwd)\[\033[00m\]$(git_branch_name)\[\033[01;93m\]$(git_status)\[\033[00m\]\$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi

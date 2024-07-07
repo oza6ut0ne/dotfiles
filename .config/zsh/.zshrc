@@ -159,6 +159,10 @@ function prompt_pwd() {
     fi
 }
 
+function prompt_venv() {
+    echo "${VENV_PROMPT:+($VENV_PROMPT) }"
+}
+
 function prompt_dollar() {
     if [ $UID -eq 0 ]; then
         echo '#'
@@ -167,7 +171,7 @@ function prompt_dollar() {
     fi
 }
 
-PS1=$'$(colored_pipestatus)%B%{\e[92m%}|%n@%m%{\e[0m%}:%B%{\e[96m%}$(prompt_pwd)$(git_branch_name)%{\e[93m%}$(git_status)%{\e[0m%}$(prompt_dollar) '
+PS1=$'$(prompt_venv)$(colored_pipestatus)%B%{\e[92m%}|%n@%m%{\e[0m%}:%B%{\e[96m%}$(prompt_pwd)$(git_branch_name)%{\e[93m%}$(git_status)%{\e[0m%}$(prompt_dollar) '
 RPS1=$'${duration_info}%F{7}%D{%H:%M:%S}%f'
 ZLE_RPROMPT_INDENT=0
 
