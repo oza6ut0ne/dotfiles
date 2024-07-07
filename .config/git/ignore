@@ -2,4 +2,5 @@
 .env.gpg
 .env.asc
 .env.sig
+.env.keys
 .envrc
