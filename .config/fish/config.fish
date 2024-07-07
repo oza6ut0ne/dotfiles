@@ -1,5 +1,5 @@
 # profile
-if test -f $HOME/.profile
+if test -f $HOME/.profile; and not set -q __PROFILE_SOURCED
     bass source $HOME/.profile
 end
 
@@ -61,15 +61,24 @@ if test -r /usr/share/doc/find-the-command/ftc.fish
     source /usr/share/doc/find-the-command/ftc.fish
 end
 
-# asdf
-if test -d ~/.asdf
-    source ~/.asdf/asdf.fish
-else if test -d ~/.anyenv
-    set -x PATH  "$HOME/.anyenv/bin" $PATH
-    anyenv init - fish | grep -v '..env rehash' | source
+# Nix
+if exists nix
+    set -x __ETC_PROFILE_NIX_SOURCE 1
 end
 
-if test -d "$HOME/.rye/shims"
+# asdf
+if test -d ~/.asdf;
+    if not exists asdf
+        source ~/.asdf/asdf.fish
+    end
+else if test -d ~/.anyenv
+    if not exists anyenv
+        set -x PATH "$HOME/.anyenv/bin" $PATH
+        anyenv init - fish | grep -v '..env rehash' | source
+    end
+end
+
+if test -d "$HOME/.rye/shims"; and not exists rye
     set -x PATH "$HOME/.rye/shims" $PATH
 end
 

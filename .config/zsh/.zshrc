@@ -1,5 +1,9 @@
 # zmodload zsh/zprof && zprof
 
+if [[ "${ZDOTDIR#*'devbox'}" != "$ZDOTDIR" ]]; then
+    source ${HOME}/.zshenv
+fi
+
 ZSH_DIR=${ZDOTDIR:-${HOME}/.zsh}
 
 function source {
@@ -225,16 +229,25 @@ fi
 
 zstyle ':completion:*:processes' command "ps aux"
 
-# asdf
-if [ -d ~/.asdf ]; then
-    . ~/.asdf/asdf.sh
-    fpath=(${ASDF_DIR}/completions $fpath)
-elif [ -d ~/.anyenv ]; then
-    export PATH="$HOME/.anyenv/bin:$PATH"
-    eval "$(anyenv init - zsh | grep -v '..env rehash')"
+# Nix
+if exists nix; then
+    export __ETC_PROFILE_NIX_SOURCED=1
 fi
 
-if [ -d "$HOME/.rye/shims" ]; then
+# asdf
+if [ -d ~/.asdf ]; then
+    if ! exists asdf; then
+        . ~/.asdf/asdf.sh
+        fpath=(${ASDF_DIR}/completions $fpath)
+    fi
+elif [ -d ~/.anyenv ]; then
+    if ! exists anyenv; then
+        export PATH="$HOME/.anyenv/bin:$PATH"
+        eval "$(anyenv init - zsh | grep -v '..env rehash')"
+    fi
+fi
+
+if [ -d "$HOME/.rye/shims" ] && ! exists rye; then
     export PATH="$HOME/.rye/shims:$PATH"
 fi
 

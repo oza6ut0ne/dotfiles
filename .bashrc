@@ -257,16 +257,25 @@ alias mv='mv -i'
 alias rm='rm -i'
 alias crontab='crontab -i'
 
-# asdf
-if [ -d ~/.asdf ]; then
-    . ~/.asdf/asdf.sh
-    . ~/.asdf/completions/asdf.bash
-elif [ -d ~/.anyenv ]; then
-    export PATH="$HOME/.anyenv/bin:$PATH"
-    eval "$(anyenv init - bash | grep -v '..env rehash')"
+# Nix
+if exists nix; then
+    export __ETC_PROFILE_NIX_SOURCED=1
 fi
 
-if [ -d "$HOME/.rye/shims" ]; then
+# asdf
+if [ -d ~/.asdf ]; then
+    if ! exists asdf; then
+        . ~/.asdf/asdf.sh
+        . ~/.asdf/completions/asdf.bash
+    fi
+elif [ -d ~/.anyenv ]; then
+    if ! exists anyenv; then
+        export PATH="$HOME/.anyenv/bin:$PATH"
+        eval "$(anyenv init - bash | grep -v '..env rehash')"
+    fi
+fi
+
+if [ -d "$HOME/.rye/shims" ] && ! exists rye; then
     export PATH="$HOME/.rye/shims:$PATH"
 fi
 
