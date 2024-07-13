@@ -101,6 +101,7 @@ end
 complete -c sshg -w ssh
 
 if exists eza
+    alias es='eza --icons'
     alias ee='eza --icons -aalgF'
     alias el='eza --icons -aalgF'
     alias eb='eza --icons -aalgBF'
