@@ -24,15 +24,16 @@
     show = which diff-highlight >/dev/null && diff-highlight | less || less
     diff = which diff-highlight >/dev/null && diff-highlight | less || less
 [alias]
-    logg = log --graph --all --pretty=format:'%C(yellow)%h %G?%C(auto)%d %s %C(magenta)(%cd) %C(bold blue)<%an>' --date=relative
-    loge = log --graph --all --pretty=format:'%C(yellow)%h %G?%C(auto)%d %s %C(magenta)(%cd) %C(bold blue)<%an> %C(cyan)[%ae]' --date=relative
-    logf = log --graph --all --pretty=format:'%C(yellow)%h %G?%C(auto)%d %s %C(magenta)(%ad) (%cd) %C(bold blue)<%an> <%cn>' --date=relative
-    logef = log --graph --all --pretty=format:'%C(yellow)%h %G?%C(auto)%d %s %C(magenta)(%ad) (%cd) %C(bold blue)<%an> <%cn> %C(cyan)[%ae] [%ce]' --date=relative
+    logg = log --graph --exclude='refs/jj/*' --all --pretty=format:'%C(yellow)%h %G?%C(auto)%d %s %C(magenta)(%cd) %C(bold blue)<%an>' --date=relative
+    loge = log --graph --exclude='refs/jj/*' --all --pretty=format:'%C(yellow)%h %G?%C(auto)%d %s %C(magenta)(%cd) %C(bold blue)<%an> %C(cyan)[%ae]' --date=relative
+    logf = log --graph --exclude='refs/jj/*' --all --pretty=format:'%C(yellow)%h %G?%C(auto)%d %s %C(magenta)(%ad) (%cd) %C(bold blue)<%an> <%cn>' --date=relative
+    logef = log --graph --exclude='refs/jj/*' --all --pretty=format:'%C(yellow)%h %G?%C(auto)%d %s %C(magenta)(%ad) (%cd) %C(bold blue)<%an> <%cn> %C(cyan)[%ae] [%ce]' --date=relative
     logd = logg --date=format-local:'%F %T'
     logde = loge --date=format-local:'%F %T'
     logdf = logf --date=format-local:'%F %T'
     logdef = logef --date=format-local:'%F %T'
     loga = "!f() { git logg $(git rev-list --reflog) $@; }; f"
+    logaa = "!f() { git loga --all $@; }; f"
     logea = "!f() { git loge $(git rev-list --reflog) $@; }; f"
     logfa = "!f() { git logf $(git rev-list --reflog) $@; }; f"
     logefa = "!f() { git logef $(git rev-list --reflog) $@; }; f"
