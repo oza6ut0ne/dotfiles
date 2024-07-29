@@ -232,6 +232,8 @@ if [ -d ${ZSH_DIR}/completion ]; then
 fi
 
 zstyle ':completion:*:processes' command "ps aux"
+zstyle ':completion:*:*:docker:*' option-stacking yes
+zstyle ':completion:*:*:docker-*:*' option-stacking yes
 
 # Nix
 if exists nix; then
