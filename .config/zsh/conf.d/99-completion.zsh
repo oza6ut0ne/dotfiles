@@ -24,6 +24,9 @@
   # Don't beep on ambiguous completions.
   setopt NO_LIST_BEEP
 
+  # Include hidden files.
+  _comp_options+=(globdots)
+
   #
   # Completion module options
   #
