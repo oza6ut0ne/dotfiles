@@ -95,4 +95,33 @@
   # Man
   zstyle ':completion:*:manuals' separate-sections true
   zstyle ':completion:*:manuals.(^1*)' insert-sections true
+
+  # Romaji expansion
+  if exists "kakasi" && exists "iconv"; then
+    _expand_romaji()
+    {
+      setopt rematchpcre
+
+      local IFS=$'\0' suffix result file
+      if [ "$words[1]" = cd ] ; then
+        suffix=/
+      else
+        suffix=''
+      fi
+
+      for file in $(print -nN ${1:h}/*"$suffix"); do
+        file="${file#./}"
+        if [[ $file =~ [^[:ascii:]] ]]; then
+          result=(${(f)$(iconv -c -f utf8 -t euc-jp <<< "$file" | kakasi -Ja -Ha -Ka -Ea)})
+          if [[ $result == $1* ]]; then
+            reply+=(${(q)${file}})
+          fi
+        fi
+      done
+    }
+
+    zstyle ':completion:*' user-expand _expand_romaji
+    zstyle ':completion:*:user-expand:*' tag-order expansions
+    zstyle ':completion:*' completer _complete _ignored _user_expand
+  fi
 }
