@@ -97,7 +97,7 @@
   zstyle ':completion:*:manuals.(^1*)' insert-sections true
 
   # Romaji expansion
-  if exists "kakasi" && exists "iconv"; then
+  if exists "kakasi"; then
     _expand_romaji()
     {
       setopt rematchpcre
@@ -112,7 +112,7 @@
       for file in $(print -nN ${1:h}/*"$suffix"); do
         file="${file#./}"
         if [[ $file =~ [^[:ascii:]] ]]; then
-          result=(${(f)$(iconv -c -f utf8 -t euc-jp <<< "$file" | kakasi -Ja -Ha -Ka -Ea)})
+          result=(${(f)$(kakasi -iutf8 -Ja -Ha -Ka -Ea <<< "$file")})
           if [[ $result == $1* ]]; then
             reply+=(${(q)${file}})
           fi
