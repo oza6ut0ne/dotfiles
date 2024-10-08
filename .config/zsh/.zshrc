@@ -244,6 +244,8 @@ fi
 if [ -d ~/.asdf ]; then
     if ! exists asdf; then
         . ~/.asdf/asdf.sh
+    fi
+    if ! exists _asdf; then
         fpath=(${ASDF_DIR}/completions $fpath)
     fi
 elif [ -d ~/.anyenv ]; then

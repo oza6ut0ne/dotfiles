@@ -270,6 +270,8 @@ fi
 if [ -d ~/.asdf ]; then
     if ! exists asdf; then
         . ~/.asdf/asdf.sh
+    fi
+    if ! exists _asdf; then
         . ~/.asdf/completions/asdf.bash
     fi
 elif [ -d ~/.anyenv ]; then
