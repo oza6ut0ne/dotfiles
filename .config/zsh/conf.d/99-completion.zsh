@@ -103,18 +103,19 @@
       setopt rematchpcre
 
       local IFS=$'\0' suffix result file
-      if [ "$words[1]" = cd ] ; then
+      if [ "$words[1]" = cd ] || [ "$words[1]" = pushd ] ; then
         suffix=/
       else
         suffix=''
       fi
 
-      for file in $(print -nN ${1:h}/*"$suffix"); do
-        file="${file#./}"
-        if [[ $file =~ [^[:ascii:]] ]]; then
-          result=(${(f)$(kakasi -iutf8 -Ja -Ha -Ka -Ea <<< "$file")})
-          if [[ $result == $1* ]]; then
-            reply+=(${(q)${file}})
+      input_basename="${1:t}"
+      for file in $(print -nN "${1:h}"/*"$suffix"); do
+        file_basename="${file:t}"
+        if [[ $file_basename =~ [^[:ascii:]] ]]; then
+          result=(${(f)$(kakasi -iutf8 -Ja -Ha -Ka -Ea <<< "$file_basename")})
+          if [[ $result == "$input_basename"* ]]; then
+            reply+=(${(q)"${file#./}"})
           fi
         fi
       done
