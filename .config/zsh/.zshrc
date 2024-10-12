@@ -239,6 +239,11 @@ zstyle ':completion:*:*:docker-*:*' option-stacking yes
 if exists nix; then
     export __ETC_PROFILE_NIX_SOURCED=1
 fi
+if exists nix-portable; then
+    if [ -r /usr/lib/locale/locale-archive ]; then
+        export LOCALE_ARCHIVE=/usr/lib/locale/locale-archive
+    fi
+fi
 
 # asdf
 if [ -d ~/.asdf ]; then

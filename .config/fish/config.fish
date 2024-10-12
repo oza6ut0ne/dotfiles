@@ -65,6 +65,11 @@ end
 if exists nix
     set -x __ETC_PROFILE_NIX_SOURCE 1
 end
+if exists nix; or exists nix-portable
+    if test -r /usr/lib/locale/locale-archive
+        set -x LOCALE_ARCHIVE /usr/lib/locale/locale-archive
+    end
+end
 
 # asdf
 if test -d ~/.asdf;
