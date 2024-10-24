@@ -26,12 +26,13 @@ endfunction
 
 function! s:eskk_initial_post() abort
   EskkUnmap -type=mode:hira:toggle-kata
+  EskkUnmap -type=mode:hira:toggle-hankata
   EskkUnmap -type=mode:hira:q-key
   EskkUnmap -type=mode:kata:toggle-kata
   EskkUnmap -type=mode:kata:q-key
   EskkUnmap -type=mode:hankata:toggle-kata
   EskkUnmap -type=mode:hankata:q-key
-  EskkMap -type=mode:hira:toggle-kata -unique Q
+  EskkMap -type=mode:hira:toggle-kata -unique <C-q>
   EskkMap -type=mode:hira:q-key -unique [
   EskkMap -type=mode:kata:toggle-kata -unique Q
   EskkMap -type=mode:kata:q-key -unique [
