@@ -102,7 +102,7 @@
     {
       setopt rematchpcre
 
-      local IFS=$'\0' suffix result file
+      local IFS=$'\0' suffix input_basename file_basename result file
       if [ "$words[1]" = cd ] || [ "$words[1]" = pushd ] ; then
         suffix=/
       else
