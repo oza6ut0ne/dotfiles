@@ -11,6 +11,7 @@ GIT_CONFIG="${CONFIG_ROOT}/git"
 VIMSPECTOR_ROOT="${CONFIG_ROOT}/vimspector"
 VIMSPECTOR_CONFIG_ROOT="${VIMSPECTOR_ROOT}/configurations"
 LIBSKK_RULES="${CONFIG_ROOT}/libskk/rules"
+MPV_CONFIG="${CONFIG_ROOT}/mpv"
 ALACRITTY_CONFIG="${CONFIG_ROOT}/alacritty"
 WEZTERM_CONFIG="${CONFIG_ROOT}/wezterm"
 
@@ -92,6 +93,14 @@ if [ ! -e ${LIBSKK_RULES} ]; then
 fi
 for f in `ls ${DOT_ROOT}/.config/libskk/rules`; do
     ln -snfv ${DOT_ROOT}/.config/libskk/rules/${f} ${LIBSKK_RULES}/${f}
+done
+
+# mpv
+if [ ! -e ${MPV_CONFIG} ]; then
+    mkdir -p ${MPV_CONFIG}
+fi
+for f in `ls ${DOT_ROOT}/.config/mpv`; do
+    ln -snfv ${DOT_ROOT}/.config/mpv/${f} ${MPV_CONFIG}/${f}
 done
 
 # alacritty
