@@ -89,6 +89,16 @@ function fish_prompt
   echo -n $last_command_statuses
   echo -n -s $normal_color "|"
 
+  if not set -q TMUX
+    if test $SHLVL -ge 2
+      echo -n -s $directory_color $SHLVL $normal_color "|"
+    end
+  else
+    if test $SHLVL -ge 3
+      echo -n -s $directory_color $SHLVL $normal_color "|"
+    end
+  end
+
   echo -n -s (whoami) "@" (prompt_hostname)
 
   if test "$PROMPT_GIT_STATUS" = "1"; and git_is_dubious_repo

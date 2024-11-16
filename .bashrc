@@ -142,6 +142,16 @@ function prompt_pwd() {
     fi
 }
 
+function prompt_shell_level() {
+    echo -en "\001\033[96m\002"
+    if [ -z "$TMUX" ]; then
+        [ "$SHLVL" -ge 2 ] && echo -en "${SHLVL}\001\033[92m\002|"
+    else
+        [ "$SHLVL" -ge 3 ] && echo -en "${SHLVL}\001\033[92m\002|"
+    fi
+    echo -e "\001\033[00m\002"
+}
+
 function prompt_venv() {
     echo "${VENV_PROMPT:+($VENV_PROMPT) }"
 }
@@ -176,7 +186,7 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='$(prompt_venv)$(colored_pipestatus)${debian_chroot:+($debian_chroot)}\[\033[01;32m\]|\u@\h\[\033[00m\]:\[\033[01;36m\]$(prompt_pwd)\[\033[00m\]$(git_branch_name)\[\033[01;93m\]$(git_status)\[\033[00m\]\$ '
+    PS1='$(prompt_venv)$(colored_pipestatus)${debian_chroot:+($debian_chroot)}\[\033[01;32m\]|$(prompt_shell_level)\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;36m\]$(prompt_pwd)\[\033[00m\]$(git_branch_name)\[\033[01;93m\]$(git_status)\[\033[00m\]\$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi

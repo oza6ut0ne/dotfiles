@@ -159,11 +159,19 @@ function prompt_pwd() {
     fi
 }
 
+function prompt_shell_level() {
+    if [ -z "$TMUX" ]; then
+        [ "$SHLVL" -ge 2 ] && echo "%{\e[96m%}${SHLVL}%{\e[92m%}|%{\e[00m%}"
+    else
+        [ "$SHLVL" -ge 3 ] && echo "%{\e[96m%}${SHLVL}%{\e[92m%}|%{\e[00m%}"
+    fi
+}
+
 function prompt_venv() {
     echo "${VENV_PROMPT:+($VENV_PROMPT) }"
 }
 
-PS1=$'$(prompt_venv)$(colored_pipestatus)%B%{\e[92m%}|%n@%m%{\e[0m%}:%B%{\e[96m%}$(prompt_pwd)$(git_branch_name)%{\e[93m%}$(git_status)%{\e[0m%}%(!.#.$) '
+PS1=$'$(prompt_venv)$(colored_pipestatus)%B%{\e[92m%}|$(prompt_shell_level)%B%{\e[92m%}%n@%m%{\e[0m%}:%B%{\e[96m%}$(prompt_pwd)$(git_branch_name)%{\e[93m%}$(git_status)%{\e[0m%}%(!.#.$) '
 RPS1=$'${duration_info}%F{7}%D{%H:%M:%S}%f'
 ZLE_RPROMPT_INDENT=0
 
