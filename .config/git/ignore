@@ -4,3 +4,4 @@
 .env.sig
 .env.keys
 .envrc
+.direnv
