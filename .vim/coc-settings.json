@@ -1,17 +1,47 @@
 {
-    "diagnostic.displayByAle": true,
-    "diagnostic.virtualText": true,
-    "diagnostic.virtualTextCurrentLineOnly": false,
-    "notification.statusLineProgress": false,
-    "signature.preferShownAbove": true,
-    "suggest.noselect": true,
-    "suggest.enablePreselect": false,
-    "suggest.maxCompleteItemCount": 5000,
-    "suggest.defaultSortMethod": "alphabetical",
-    "session.directory": "~/.cache/vim-sessions",
-    "tabnine.priority": 50,
-    "python.linting.ruffEnabled": true,
-    "python.formatting.provider": "ruff",
-    "pyright.organizeimports.provider": "ruff",
-    "rust-analyzer.check.overrideCommand": ["cargo", "clippy", "--message-format=json"]
+  "diagnostic.displayByAle": true,
+  "diagnostic.virtualText": true,
+  "diagnostic.virtualTextCurrentLineOnly": false,
+  "notification.statusLineProgress": false,
+  "signature.preferShownAbove": true,
+  "suggest.noselect": true,
+  "suggest.enablePreselect": false,
+  "suggest.maxCompleteItemCount": 5000,
+  "suggest.defaultSortMethod": "alphabetical",
+  "session.directory": "~/.cache/vim-sessions",
+  "tabnine.priority": 50,
+  "python.linting.ruffEnabled": true,
+  "python.formatting.provider": "ruff",
+  "pyright.organizeimports.provider": "ruff",
+  "rust-analyzer.check.overrideCommand": [
+    "cargo",
+    "clippy",
+    "--message-format=json"
+  ],
+  "languageserver": {
+    "nim": {
+      "command": "nimlsp",
+      "filetypes": [
+        "nim"
+      ]
+    },
+    "nix": {
+      "command": "nil",
+      "filetypes": [
+        "nix"
+      ],
+      "rootPatterns": [
+        "flake.nix"
+      ],
+      "settings": {
+        "nil": {
+          "formatting": {
+            "command": [
+              "nixfmt"
+            ]
+          }
+        }
+      }
+    }
+  }
 }
