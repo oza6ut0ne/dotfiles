@@ -1,0 +1,4 @@
+#!/bin/bash
+
+input="$(base64 | tr -d '\n')"
+echo -e "\e]52;c;${input}\e\\"
