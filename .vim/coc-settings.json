@@ -19,6 +19,12 @@
     "--message-format=json"
   ],
   "languageserver": {
+    "hy": {
+      "command": "hyuga",
+      "filetypes": [
+        "hy"
+      ]
+    },
     "nim": {
       "command": "nimlsp",
       "filetypes": [
