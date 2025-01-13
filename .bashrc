@@ -339,6 +339,16 @@ if exists "eza"; then
     alias e='eza --icons -lgF'
 fi
 
+if exists "aichat"; then
+    _aichat_bash() {
+        if [[ -n "$READLINE_LINE" ]]; then
+            READLINE_LINE=$(aichat -e "$READLINE_LINE")
+            READLINE_POINT=${#READLINE_LINE}
+        fi
+    }
+    bind -x '"\er": _aichat_bash'
+fi
+
 CACHE_DIR=${HOME}/.cache/bash
 
 if exists "zoxide"; then

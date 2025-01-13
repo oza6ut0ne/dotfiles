@@ -4,6 +4,7 @@ set -u
 DOT_ROOT="${HOME}/dotfiles"
 BIN="${HOME}/bin"
 CONFIG_ROOT="${HOME}/.config"
+FISH_CONFD="${CONFIG_ROOT}/fish/conf.d"
 FISH_FUNCTIONS="${CONFIG_ROOT}/fish/functions"
 ZSH_CONFD="${CONFIG_ROOT}/zsh/conf.d"
 ZSH_FUNCTIONS="${CONFIG_ROOT}/zsh/functions"
@@ -43,10 +44,16 @@ fi
 ln -snfv ${DOT_ROOT}/.vim ${HOME}/.config/nvim
 
 # fish
+if [ ! -e ${FISH_CONFD} ]; then
+    mkdir -p ${FISH_CONFD}
+fi
 if [ ! -e ${FISH_FUNCTIONS} ]; then
     mkdir -p ${FISH_FUNCTIONS}
 fi
 ln -snfv ${DOT_ROOT}/.config/fish/config.fish ${HOME}/.config/fish/config.fish
+for f in `ls ${DOT_ROOT}/.config/fish/conf.d`; do
+    ln -snfv ${DOT_ROOT}/.config/fish/conf.d/${f} ${FISH_CONFD}/${f}
+done
 for f in `ls ${DOT_ROOT}/.config/fish/functions`; do
     ln -snfv ${DOT_ROOT}/.config/fish/functions/${f} ${FISH_FUNCTIONS}/${f}
 done
