@@ -129,7 +129,7 @@ hook_add = '''
 '''
 
 [[plugins]]
-repo = 'Exafunction/codeium.vim'
+repo = 'Exafunction/windsurf.vim'
 if = 'exists("g:codeium_enabled")'
 on_if = '!exists("g:vscode")'
 hook_add = '''
