@@ -82,6 +82,8 @@ function module.apply(config)
   if exec_domains_ok then
     config.exec_domains = exec_domains
   end
+
+  config.mux_enable_ssh_agent = false;
 end
 
 return module
