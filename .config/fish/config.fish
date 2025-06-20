@@ -69,6 +69,9 @@ if exists nix; or exists nix-portable
     if test -r /usr/lib/locale/locale-archive
         set -x LOCALE_ARCHIVE /usr/lib/locale/locale-archive
     end
+    if test -f ~/.nix-profile/etc/profile.d/hm-session-vars.sh
+        bass source ~/.nix-profile/etc/profile.d/hm-session-vars.sh
+    end
 end
 
 # asdf

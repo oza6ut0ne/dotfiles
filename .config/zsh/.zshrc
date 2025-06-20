@@ -243,6 +243,9 @@ if exists nix-portable; then
     if [ -r /usr/lib/locale/locale-archive ]; then
         export LOCALE_ARCHIVE=/usr/lib/locale/locale-archive
     fi
+    if [ -f ~/.nix-profile/etc/profile.d/hm-session-vars.sh ]; then
+        builtin source ~/.nix-profile/etc/profile.d/hm-session-vars.sh
+    fi
 fi
 
 # asdf
