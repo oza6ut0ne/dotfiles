@@ -20,9 +20,9 @@
 [push]
     useForceIfIncludes = true
 [pager]
-    log = which diff-highlight >/dev/null && diff-highlight | less || less
-    show = which diff-highlight >/dev/null && diff-highlight | less || less
-    diff = which diff-highlight >/dev/null && diff-highlight | less || less
+    log = command -v diff-highlight >/dev/null && diff-highlight | less || less
+    show = command -v diff-highlight >/dev/null && diff-highlight | less || less
+    diff = command -v diff-highlight >/dev/null && diff-highlight | less || less
 [alias]
     logg = log --graph --exclude='refs/jj/*' --all --pretty=format:'%C(yellow)%h %G?%C(auto)%d %s %C(magenta)(%cd) %C(bold blue)<%an>' --date=relative
     loge = log --graph --exclude='refs/jj/*' --all --pretty=format:'%C(yellow)%h %G?%C(auto)%d %s %C(magenta)(%cd) %C(bold blue)<%an> %C(cyan)[%ae]' --date=relative
