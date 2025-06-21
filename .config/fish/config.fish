@@ -48,6 +48,7 @@ function exists
 end
 
 # aliases
+alias sudop='sudo --preserve-env=PATH'
 alias ll='ls -alF'
 alias lh='ls -alFh'
 alias la='ls -A'
@@ -59,6 +60,10 @@ alias crontab='crontab -i'
 
 if test -r /usr/share/doc/find-the-command/ftc.fish
     source /usr/share/doc/find-the-command/ftc.fish
+end
+
+if test -r ~/.config/fish/functions/sudo_preserve_alias.fish
+    source ~/.config/fish/functions/sudo_preserve_alias.fish
 end
 
 # Nix

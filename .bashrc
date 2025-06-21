@@ -266,6 +266,7 @@ if [ -f /usr/share/doc/find-the-command/ftc.bash ]; then
 fi
 
 alias sudo='sudo '
+alias sudop='sudo --preserve-env=PATH '
 alias cp='cp -i --reflink=auto'
 alias mv='mv -i'
 alias rm='rm -i'

@@ -200,6 +200,7 @@ fi
 
 # aliases
 alias sudo='sudo '
+alias sudop='sudo --preserve-env=PATH '
 alias ll='ls -alF'
 alias lh='ls -alFh'
 alias la='ls -A'
