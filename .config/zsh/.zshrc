@@ -239,12 +239,18 @@ zstyle ':completion:*:*:docker-*:*' option-stacking yes
 if exists nix; then
     export __ETC_PROFILE_NIX_SOURCED=1
 fi
-if exists nix-portable; then
+if exists nix || exists nix-portable; then
     if [ -r /usr/lib/locale/locale-archive ]; then
         export LOCALE_ARCHIVE=/usr/lib/locale/locale-archive
     fi
     if [ -f ~/.nix-profile/etc/profile.d/hm-session-vars.sh ]; then
         builtin source ~/.nix-profile/etc/profile.d/hm-session-vars.sh
+    fi
+    if [ -d /nix/var/nix/profiles/default/share/zsh/site-functions ]; then
+        fpath=(/nix/var/nix/profiles/default/share/zsh/site-functions $fpath)
+    fi
+    if [ -d ~/.nix-profile/share/zsh/site-functions ]; then
+        fpath=( ~/.nix-profile/share/zsh/site-functions $fpath)
     fi
 fi
 
