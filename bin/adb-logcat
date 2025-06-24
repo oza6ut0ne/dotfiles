@@ -1,0 +1,6 @@
+#!/bin/bash
+
+package=$(adb "$@" shell pm list packages | fzf | tail -c +9 | tr -d '\r')
+
+adb "$@" logcat --pid $(adb "$@" shell pidof ${package})
+

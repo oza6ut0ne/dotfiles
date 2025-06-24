@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# adb pull $(adb shell pm path $(adb shell pm list packages | fzf | tail -c +9 | sed 's/\r//g') | tail -c +9)
+
+package=$(adb "$@" shell pm list packages | fzf | tail -c +9 | tr -d '\r')
+echo $package
+
+path=$(adb "$@" shell pm path $package | tail -c +9 | tr -d '\r')
+echo $path
+
+tmppath=/data/local/tmp/${package}.apk
+adb "$@" shell cp $path $tmppath
+adb "$@" pull $tmppath
+adb "$@" shell rm $tmppath
+
