@@ -34,7 +34,8 @@ hook_add = '''
 '''
 
 [[plugins]]
-repo = 'jamessan/vim-gnupg'
+repo = 'oza6ut0ne/vim-gnupg'
+rev = 'develop'
 on_if = '!exists("g:vscode")'
 
 [[plugins]]
