@@ -10,6 +10,7 @@ endfunction
 augroup filetypes
   autocmd! BufRead,BufNewFile .gitconfig.local  setfiletype gitconfig
   autocmd! BufRead,BufNewFile .tmux.conf.local  setfiletype tmux
+  autocmd! BufRead,BufNewFile direnvrc  setfiletype bash
   autocmd! BufRead,BufNewFile *.ers  call s:ft_rust_script()
 augroup END
 

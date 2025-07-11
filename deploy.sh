@@ -9,6 +9,7 @@ FISH_FUNCTIONS="${CONFIG_ROOT}/fish/functions"
 ZSH_CONFD="${CONFIG_ROOT}/zsh/conf.d"
 ZSH_FUNCTIONS="${CONFIG_ROOT}/zsh/functions"
 GIT_CONFIG="${CONFIG_ROOT}/git"
+DIRENV_CONFIG="${CONFIG_ROOT}/direnv"
 VIMSPECTOR_ROOT="${CONFIG_ROOT}/vimspector"
 VIMSPECTOR_CONFIG_ROOT="${VIMSPECTOR_ROOT}/configurations"
 LIBSKK_RULES="${CONFIG_ROOT}/libskk/rules"
@@ -84,6 +85,12 @@ fi
 for f in `ls ${DOT_ROOT}/.config/git`; do
     ln -snfv ${DOT_ROOT}/.config/git/${f} ${GIT_CONFIG}/${f}
 done
+
+# Direnv
+if [ ! -e ${DIRENV_CONFIG} ]; then
+    mkdir -p ${DIRENV_CONFIG}
+fi
+ln -snfv ${DOT_ROOT}/.config/direnv/direnvrc ${DIRENV_CONFIG}/direnvrc
 
 # vimspector
 if [ ! -e ${VIMSPECTOR_ROOT} ]; then

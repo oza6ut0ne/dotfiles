@@ -1,0 +1,66 @@
+if [[ -v VENV_DIRENV_PROMPT ]]; then
+  if [[ -n $VENV_DIRENV_PROMPT ]]; then
+    export VENV_PROMPT=$VENV_DIRENV_PROMPT
+  fi
+else
+  export VENV_PROMPT=denv
+fi
+
+if [[ -z $DOTENV_GPG_SIGNATURE_FINGERPRINT ]]; then
+  DOTENV_GPG_SIGNATURE_FINGERPRINT=
+fi
+
+
+set_prompt() {
+  export VENV_PROMPT="$1"
+}
+
+unset_prompt() {
+  unset VENV_PROMPT
+}
+
+dotenv_gpg() {
+  local path=${1:-}
+  local fingerprint=${2:-$DOTENV_GPG_SIGNATURE_FINGERPRINT}
+
+  if [[ -n $path ]] && ! [[ -e $path ]]; then
+    watch_file "$path"
+    log_error "$path not found"
+    return
+  fi
+
+  local dir=$PWD
+  if [[ -d $path ]]; then
+    dir=$path
+  fi
+
+  if ! [[ -f $path ]]; then
+    if [[ -f $dir/.env.gpg ]]; then
+      path=$dir/.env.gpg
+    elif [[ -f $dir/.env.asc ]]; then
+      path=$dir/.env.asc
+    fi
+  fi
+
+  if [[ -z $path ]] || [[ -d $path ]]; then
+    watch_file .env.gpg .env.asc
+    log_error ".env.gpg or .env.asc not found"
+    return
+  fi
+
+  watch_file "$path"
+  log_status "dotenv_gpg: Loading $path"
+
+  . <({ status=$({ decrypted=$(gpg -d --status-fd 3 "$path" 2>/dev/null); } 3>&1; declare -p decrypted >&3); declare -p status; } 3>&1)
+  grep -q "^\[GNUPG:\] DECRYPTION_OKAY" <<< "$status" || { log_error "dotenv_gpg: Decryption failed" >&2; return; }
+
+  if [[ -n $fingerprint ]]; then
+    grep -q "^\[GNUPG:\] NEWSIG"                         <<< "$status" || { log_error "dotenv_gpg: No signature" >&2;                  return; }
+    grep -q "^\[GNUPG:\] VALIDSIG [A-Z0-9]*$fingerprint" <<< "$status" || { log_error "dotenv_gpg: Invalid signature fingerprint" >&2; return; }
+    log_status "dotenv_gpg: Signature verified"
+  fi
+
+  set -a
+  eval "$decrypted"
+  set +a
+}
