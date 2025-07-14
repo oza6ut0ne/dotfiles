@@ -1,6 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 
-set -u
+set -euo pipefail
+REPO_URL_DOTFILES=https://github.com/oza6ut0ne/dotfiles.git
 DOT_ROOT="${HOME}/dotfiles"
 BIN="${HOME}/bin"
 CONFIG_ROOT="${HOME}/.config"
@@ -16,6 +17,13 @@ LIBSKK_RULES="${CONFIG_ROOT}/libskk/rules"
 MPV_CONFIG="${CONFIG_ROOT}/mpv"
 ALACRITTY_CONFIG="${CONFIG_ROOT}/alacritty"
 WEZTERM_CONFIG="${CONFIG_ROOT}/wezterm"
+
+if [[ ! -e $DOT_ROOT ]]; then
+  git clone $REPO_URL_DOTFILES "$DOT_ROOT"
+  if [[ -e ${HOME}/.bashrc ]] && [[ ! -e ${HOME}/.bashrc.org ]]; then
+    cp "${HOME}/.bashrc" "${HOME}/.bashrc.org"
+  fi
+fi
 
 cd ${DOT_ROOT}
 
