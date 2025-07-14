@@ -101,17 +101,17 @@ end
 # editor
 if exists nvim
     balias vi nvim
-    set -x EDITOR nvim
-    set -x SUDO_EDITOR 'nvim -R'
+    set -q EDITOR || set -x EDITOR nvim
+    set -q SUDO_EDITOR || set -x SUDO_EDITOR 'nvim -R'
 else if exists vim
     balias vi vim
-    set -x EDITOR vim
-    set -x SUDO_EDITOR 'vim -R'
+    set -q EDITOR || set -x EDITOR vim
+    set -q SUDO_EDITOR || set -x SUDO_EDITOR 'vim -R'
 end
 
 # Git templates
 if test -d ~/.config/git/templates
-    set -x GIT_TEMPLATE_DIR "$HOME/.config/git/templates"
+    set -q GIT_TEMPLATE_DIR || set -x GIT_TEMPLATE_DIR "$HOME/.config/git/templates"
 end
 
 complete -c sshg -w ssh

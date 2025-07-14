@@ -310,17 +310,17 @@ fi
 # editor
 if exists "nvim"; then
     alias vi='nvim'
-    export EDITOR=nvim
-    export SUDO_EDITOR='nvim -R'
+    export EDITOR="${EDITOR-nvim}"
+    export SUDO_EDITOR="${SUDO_EDITOR-nvim -R}"
 elif exists "vim"; then
     alias vi='vim'
-    export EDITOR=vim
-    export SUDO_EDITOR='vim -R'
+    export EDITOR="${EDITOR-vim}"
+    export SUDO_EDITOR="${SUDO_EDITOR-vim -R}"
 fi
 
 # Git templates
 if [ -d ~/.config/git/templates ]; then
-    export GIT_TEMPLATE_DIR="$HOME/.config/git/templates"
+    export GIT_TEMPLATE_DIR="${GIT_TEMPLATE_DIR-$HOME/.config/git/templates}"
 fi
 
 # ghq
