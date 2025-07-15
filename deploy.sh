@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -euo pipefail
 REPO_URL_DOTFILES=https://github.com/oza6ut0ne/dotfiles.git
