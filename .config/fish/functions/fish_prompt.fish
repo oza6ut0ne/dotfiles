@@ -101,6 +101,10 @@ function fish_prompt
 
   echo -n -s (whoami) "@" (prompt_hostname)
 
+  if string length -q $PROMPT_HOST_LABEL
+    echo -n -s $error_color "<$PROMPT_HOST_LABEL>" $normal_color
+  end
+
   if test "$PROMPT_GIT_STATUS" = "1"; and git_is_dubious_repo
     echo -n -s ":" $directory_color $cwd $normal_color
     echo -n -s $error_color "[DUBIOUS]"

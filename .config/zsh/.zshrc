@@ -59,6 +59,7 @@ WORDCHARS=${WORDCHARS//[\/#]}
 
 export PROMPT_SHORT_PATH=${PROMPT_SHORT_PATH-1}
 export PROMPT_GIT_STATUS=${PROMPT_GIT_STATUS-1}
+export PROMPT_HOST_LABEL=${PROMPT_HOST_LABEL-}
 
 function zsh_update_completions() {
     compinit -d ${HOME}/.cache/zsh/.zcompdump
@@ -167,11 +168,17 @@ function prompt_shell_level() {
     fi
 }
 
+function prompt_host_label() {
+    echo -en "%{\e[01;91m%}"
+    echo -n "${PROMPT_HOST_LABEL:+<$PROMPT_HOST_LABEL>}"
+    echo -e "%{\e[00m%}"
+}
+
 function prompt_venv() {
     echo "${VENV_PROMPT:+($VENV_PROMPT) }"
 }
 
-PS1=$'$(prompt_venv)$(colored_pipestatus)%B%{\e[92m%}|$(prompt_shell_level)%B%{\e[92m%}%n@%m%{\e[0m%}:%B%{\e[96m%}$(prompt_pwd)$(git_branch_name)%{\e[93m%}$(git_status)%{\e[0m%}%(!.#.$) '
+PS1=$'$(prompt_venv)$(colored_pipestatus)%B%{\e[92m%}|$(prompt_shell_level)%B%{\e[92m%}%n@%m$(prompt_host_label)%{\e[0m%}:%B%{\e[96m%}$(prompt_pwd)$(git_branch_name)%{\e[93m%}$(git_status)%{\e[0m%}%(!.#.$) '
 RPS1=$'${duration_info}%F{7}%D{%H:%M:%S}%f'
 ZLE_RPROMPT_INDENT=0
 
