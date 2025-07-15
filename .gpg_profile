@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ -x "$(which gpg-agent)" ]; then
+if [ -x "$(command -v gpg-agent)" ]; then
     # Make sure pinentry works properly
     export GPG_TTY=$(tty)
     gpg-connect-agent UPDATESTARTUPTTY /bye >/dev/null 2>&1
