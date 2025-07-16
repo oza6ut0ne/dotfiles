@@ -124,6 +124,20 @@ if test -d ~/.config/git/templates
     set -q GIT_TEMPLATE_DIR || set -x GIT_TEMPLATE_DIR "$HOME/.config/git/templates"
 end
 
+# Plugins
+function fish_install_plugins
+    if not command -q curl; or not command -q git
+        return
+    end
+    if not test -d ~/.local/share/omf/
+        curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
+    end
+    if not test -f ~/.config/fish/functions/fisher.fish
+        curl -Lo ~/.config/fish/functions/fisher.fish --create-dirs https://git.io/fisher
+        fish -c 'fisher install jethrokuan/fzf jorgebucaran/fish-spin edc/bass oh-my-fish/plugin-balias oh-my-fish/plugin-extract'
+    end
+end
+
 complete -c sshg -w ssh
 
 if exists eza

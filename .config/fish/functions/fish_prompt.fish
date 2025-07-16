@@ -1,8 +1,14 @@
+function git_is_git_repo
+  command -q git || return 1
+  git rev-parse >/dev/null 2>&1
+end
+
 function git_is_git_dir
   test (git rev-parse --is-inside-git-dir) = "true"
 end
 
 function git_is_dubious_repo
+  command -q git || return 1
   git rev-parse 2>&1 >/dev/null | grep -q 'fatal: detected dubious ownership'
 end
 
@@ -108,7 +114,7 @@ function fish_prompt
   if test "$PROMPT_GIT_STATUS" = "1"; and git_is_dubious_repo
     echo -n -s ":" $directory_color $cwd $normal_color
     echo -n -s $error_color "[DUBIOUS]"
-  else if test "$PROMPT_GIT_STATUS" = "1"; and git_is_repo
+  else if test "$PROMPT_GIT_STATUS" = "1"; and git_is_git_repo; and type -q omf
     if test "$PROMPT_SHORT_PATH" = "1" -a "$theme_git_path" = 'yes'
       if not git_is_git_dir
         set root_folder (command git rev-parse --show-toplevel 2>/dev/null)

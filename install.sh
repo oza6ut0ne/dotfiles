@@ -113,7 +113,7 @@ if ! exists "fish"; then
     if exists "apt"; then
         ${SUDO} apt install -y fish
     fi
-    curl -L http://get.oh-my.fish | fish
+    curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
     curl -Lo ~/.config/fish/functions/fisher.fish --create-dirs https://git.io/fisher
     fish -c 'fisher install jethrokuan/fzf jorgebucaran/fish-spin edc/bass oh-my-fish/plugin-balias oh-my-fish/plugin-extract'
 fi
