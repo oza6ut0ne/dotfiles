@@ -16,7 +16,16 @@ end
 set -g fish_greeting
 set -q PROMPT_SHORT_PATH || set -x PROMPT_SHORT_PATH 1
 set -q PROMPT_GIT_STATUS || set -x PROMPT_GIT_STATUS 1
-set -q PROMPT_HOST_LABEL || set -x PROMPT_HOST_LABEL ""
+
+if test -S /dev/incus/sock; or test -S /dev/lxd/sock
+    if test -f /dev/.lxc-boot-id
+        set -q PROMPT_HOST_LABEL || set -x PROMPT_HOST_LABEL "C"
+    else
+        set -q PROMPT_HOST_LABEL || set -x PROMPT_HOST_LABEL "VM"
+    end
+else
+    set -q PROMPT_HOST_LABEL || set -x PROMPT_HOST_LABEL ""
+end
 
 set -g fish_color_autosuggestion white
 set -g fish_color_param '0FC' brcyan

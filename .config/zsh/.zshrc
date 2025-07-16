@@ -59,7 +59,16 @@ WORDCHARS=${WORDCHARS//[\/#]}
 
 export PROMPT_SHORT_PATH=${PROMPT_SHORT_PATH-1}
 export PROMPT_GIT_STATUS=${PROMPT_GIT_STATUS-1}
-export PROMPT_HOST_LABEL=${PROMPT_HOST_LABEL-}
+
+if [[ -S /dev/incus/sock ]] || [[ -S /dev/lxd/sock ]]; then
+    if [[ -f /dev/.lxc-boot-id ]]; then
+        export PROMPT_HOST_LABEL=${PROMPT_HOST_LABEL-C}
+    else
+        export PROMPT_HOST_LABEL=${PROMPT_HOST_LABEL-VM}
+    fi
+else
+    export PROMPT_HOST_LABEL=${PROMPT_HOST_LABEL-}
+fi
 
 function zsh_update_completions() {
     compinit -d ${HOME}/.cache/zsh/.zcompdump
