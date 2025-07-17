@@ -1,0 +1,23 @@
+#compdef prompt
+# vim: ft=zsh: ts=2
+
+_prompt() {
+  local -a sub_commands
+  sub_commands=(oneline short git label venv starship)
+
+  local -a values
+  values=(0 1)
+
+  _arguments '1: :->config' '2: :->value'
+
+  case $state in
+    config) _values $state $sub_commands;;
+    value)
+      case $line[1] in
+        oneline|short|git) _values $state $values;;
+      esac
+      ;;
+  esac
+}
+
+compdef _prompt prompt

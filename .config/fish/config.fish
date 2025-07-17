@@ -14,6 +14,7 @@ end
 
 # appearance
 set -g fish_greeting
+set -q VENV_PROMPT || set VENV_PROMPT ""
 set -q PROMPT_ONELINE || set -x PROMPT_ONELINE 1
 set -q PROMPT_SHORT_PATH || set -x PROMPT_SHORT_PATH 1
 set -q PROMPT_GIT_STATUS || set -x PROMPT_GIT_STATUS 1
@@ -26,6 +27,20 @@ if test -S /dev/incus/sock; or test -S /dev/lxd/sock
     end
 else
     set -q PROMPT_HOST_LABEL || set -x PROMPT_HOST_LABEL ""
+end
+
+function prompt
+  set argc (count $argv)
+  switch $argv[1]
+    case oneline; test $argc -ge 2 && set PROMPT_ONELINE $argv[2] || echo $PROMPT_ONELINE
+    case short;   test $argc -ge 2 && set PROMPT_SHORT_PATH $argv[2] || echo $PROMPT_SHORT_PATH
+    case git;     test $argc -ge 2 && set PROMPT_GIT_STATUS $argv[2] || echo $PROMPT_GIT_STATUS
+    case label;   test $argc -ge 2 && set PROMPT_HOST_LABEL $argv[2] || echo $PROMPT_HOST_LABEL
+    case venv;    test $argc -ge 2 && set VENV_PROMPT $argv[2] || echo $VENV_PROMPT
+    case starship; eval "$(starship init fish)"
+    case '*'; echo "Usage: prompt { oneline | short | git | label | venv } [value]"
+              echo "       prompt starship"
+  end
 end
 
 set -g fish_color_autosuggestion white

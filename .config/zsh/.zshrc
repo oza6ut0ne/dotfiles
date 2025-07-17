@@ -190,11 +190,25 @@ function prompt_venv() {
 
 function prompt_newline_hook() {
     if [ "$PROMPT_ONELINE" = "1" ]; then
-      prompt_newline=""
+        prompt_newline=""
     else
-      prompt_newline=$'\n'
-      echo
+        prompt_newline=$'\n'
+        echo
     fi
+}
+
+function prompt() {
+  case "$1" in
+    oneline) [[ -v 2 ]] && PROMPT_ONELINE="$2"    || echo $PROMPT_ONELINE;;
+    short)   [[ -v 2 ]] && PROMPT_SHORT_PATH="$2" || echo $PROMPT_SHORT_PATH;;
+    git)     [[ -v 2 ]] && PROMPT_GIT_STATUS="$2" || echo $PROMPT_GIT_STATUS;;
+    label)   [[ -v 2 ]] && PROMPT_HOST_LABEL="$2" || echo $PROMPT_HOST_LABEL;;
+    venv)    [[ -v 2 ]] && VENV_PROMPT="$2"       || echo $VENV_PROMPT;;
+    starship) eval "$(starship init zsh)";;
+    *) echo "Usage: prompt { oneline | short | git | label | venv } [value]"
+       echo "       prompt starship"
+       ;;
+  esac
 }
 
 precmd_functions+=(prompt_newline_hook)

@@ -91,7 +91,7 @@ function fish_prompt
   if not test "$PROMPT_ONELINE" = "1"
     echo
   end
-  if set -q VENV_PROMPT
+  if string length -q $VENV_PROMPT
     echo -n -s "($VENV_PROMPT) "
   end
   echo -n -s $status_color

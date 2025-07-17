@@ -1,0 +1,23 @@
+# vim: ft=bash: ts=2
+
+_prompt() {
+  local cur prev opts
+  COMPREPLY=()
+  cur="${COMP_WORDS[COMP_CWORD]}"
+  prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+  local sub_commands="oneline short git label venv starship"
+  local values="0 1"
+
+  if [[ $COMP_CWORD -eq 1 ]]; then
+    COMPREPLY=( $(compgen -W "$sub_commands" -- "$cur") )
+  elif [[ $COMP_CWORD -eq 2 ]]; then
+    case "${COMP_WORDS[1]}" in
+      oneline|short|git)
+        COMPREPLY=( $(compgen -W "$values" -- "$cur") )
+        ;;
+    esac
+  fi
+}
+
+complete -F _prompt prompt

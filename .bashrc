@@ -182,6 +182,20 @@ function prompt_newline_hook() {
     fi
 }
 
+function prompt() {
+  case "$1" in
+    oneline) [[ -v 2 ]] && PROMPT_ONELINE="$2"    || echo $PROMPT_ONELINE;;
+    short)   [[ -v 2 ]] && PROMPT_SHORT_PATH="$2" || echo $PROMPT_SHORT_PATH;;
+    git)     [[ -v 2 ]] && PROMPT_GIT_STATUS="$2" || echo $PROMPT_GIT_STATUS;;
+    label)   [[ -v 2 ]] && PROMPT_HOST_LABEL="$2" || echo $PROMPT_HOST_LABEL;;
+    venv)    [[ -v 2 ]] && VENV_PROMPT="$2"       || echo $VENV_PROMPT;;
+    starship) eval "$(starship init bash)";;
+    *) echo "Usage: prompt { oneline | short | git | label | venv } [value]"
+       echo "       prompt starship"
+       ;;
+  esac
+}
+
 PROMPT_COMMAND="prompt_newline_hook;${PROMPT_COMMAND}"
 
 # make less more friendly for non-text input files, see lesspipe(1)
