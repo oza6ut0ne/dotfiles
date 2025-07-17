@@ -88,6 +88,9 @@ function fish_prompt
     end
   end
 
+  if not test "$PROMPT_ONELINE" = "1"
+    echo
+  end
   if set -q VENV_PROMPT
     echo -n -s "($VENV_PROMPT) "
   end
@@ -160,5 +163,8 @@ function fish_prompt
   end
 
   echo -n -s $normal_color
+  if not test "$PROMPT_ONELINE" = "1"
+    echo
+  end
   echo -n -s $prompt_character " "
 end

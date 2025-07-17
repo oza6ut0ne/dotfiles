@@ -14,6 +14,7 @@ end
 
 # appearance
 set -g fish_greeting
+set -q PROMPT_ONELINE || set -x PROMPT_ONELINE 1
 set -q PROMPT_SHORT_PATH || set -x PROMPT_SHORT_PATH 1
 set -q PROMPT_GIT_STATUS || set -x PROMPT_GIT_STATUS 1
 

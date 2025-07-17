@@ -57,6 +57,7 @@ setopt CORRECT
 
 WORDCHARS=${WORDCHARS//[\/#]}
 
+export PROMPT_ONELINE=${PROMPT_ONELINE-1}
 export PROMPT_SHORT_PATH=${PROMPT_SHORT_PATH-1}
 export PROMPT_GIT_STATUS=${PROMPT_GIT_STATUS-1}
 
@@ -187,7 +188,18 @@ function prompt_venv() {
     echo "${VENV_PROMPT:+($VENV_PROMPT) }"
 }
 
-PS1=$'$(prompt_venv)$(colored_pipestatus)%B%{\e[92m%}|$(prompt_shell_level)%B%{\e[92m%}%n@%m$(prompt_host_label)%{\e[0m%}:%B%{\e[96m%}$(prompt_pwd)$(git_branch_name)%{\e[93m%}$(git_status)%{\e[0m%}%(!.#.$) '
+function prompt_newline_hook() {
+    if [ "$PROMPT_ONELINE" = "1" ]; then
+      prompt_newline=""
+    else
+      prompt_newline=$'\n'
+      echo
+    fi
+}
+
+precmd_functions+=(prompt_newline_hook)
+
+PS1=$'$(prompt_venv)$(colored_pipestatus)%B%{\e[92m%}|$(prompt_shell_level)%B%{\e[92m%}%n@%m$(prompt_host_label)%{\e[0m%}:%B%{\e[96m%}$(prompt_pwd)$(git_branch_name)%{\e[93m%}$(git_status)%{\e[0m%}$prompt_newline%(!.#.$) '
 RPS1=$'${duration_info}%F{7}%D{%H:%M:%S}%f'
 ZLE_RPROMPT_INDENT=0
 

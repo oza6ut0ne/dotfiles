@@ -39,6 +39,7 @@ bind -m emacs '"\e\C-m": vi-editing-mode'
 stty werase undef
 bind '\C-w:unix-filename-rubout'
 
+export PROMPT_ONELINE=${PROMPT_ONELINE-1}
 export PROMPT_SHORT_PATH=${PROMPT_SHORT_PATH-1}
 export PROMPT_GIT_STATUS=${PROMPT_GIT_STATUS-1}
 
@@ -172,6 +173,17 @@ function prompt_venv() {
     echo "${VENV_PROMPT:+($VENV_PROMPT) }"
 }
 
+function prompt_newline_hook() {
+    if [ "$PROMPT_ONELINE" = "1" ]; then
+      prompt_newline=""
+    else
+      prompt_newline=$'\n'
+      echo
+    fi
+}
+
+PROMPT_COMMAND="prompt_newline_hook;${PROMPT_COMMAND}"
+
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
@@ -202,7 +214,7 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='$(prompt_venv)$(colored_pipestatus)${debian_chroot:+($debian_chroot)}\[\033[01;32m\]|$(prompt_shell_level)\[\033[01;32m\]\u@\h$(prompt_host_label)\[\033[00m\]:\[\033[01;36m\]$(prompt_pwd)\[\033[00m\]$(git_branch_name)\[\033[01;93m\]$(git_status)\[\033[00m\]\$ '
+    PS1='$(prompt_venv)$(colored_pipestatus)${debian_chroot:+($debian_chroot)}\[\033[01;32m\]|$(prompt_shell_level)\[\033[01;32m\]\u@\h$(prompt_host_label)\[\033[00m\]:\[\033[01;36m\]$(prompt_pwd)\[\033[00m\]$(git_branch_name)\[\033[01;93m\]$(git_status)\[\033[00m\]$prompt_newline\$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
