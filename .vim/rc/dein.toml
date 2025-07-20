@@ -131,7 +131,7 @@ hook_add = '''
 
 [[plugins]]
 repo = 'Exafunction/windsurf.vim'
-if = 'exists("g:codeium_enabled")'
+if = 'exists("g:codeium_enabled") && !exists("g:ollama_enabled")'
 on_if = '!exists("g:vscode")'
 hook_add = '''
   let g:codeium_disable_bindings = 1
@@ -150,7 +150,7 @@ hook_add = '''
     autocmd! BufRead,BufNewFile rbw            Codeium DisableBuffer
   augroup END
 
-  if !exists("g:codeium_enabled")
+  if !exists("g:codeium_enabled") || exists("g:ollama_enabled")
     let g:codeium_enabled = 0
     call dein#recache_runtimepath()
     echo 'Restart vim to disable codeium completely!'
@@ -170,8 +170,10 @@ hook_add = '''
 
   imap <script><silent><nowait><expr> <C-l> codeium#Accept()
   imap <script><silent><nowait><expr> <C-\> codeium#Accept()
-  imap <script><silent><nowait><expr> <M-;> codeium#AcceptNextWord()
-  imap <script><silent><nowait><expr> <M-'> codeium#AcceptNextLine()
+  imap <script><silent><nowait><expr> <M-;> codeium#AcceptNextLine()
+  imap <script><silent><nowait><expr> <M-'> codeium#AcceptNextWord()
+  imap <script><silent><nowait><expr> <C-;> codeium#AcceptNextLine()
+  imap <script><silent><nowait><expr> <C-'> codeium#AcceptNextWord()
   imap <M-]> <Cmd>call codeium#CycleOrComplete()<CR>
   imap <M-[> <Cmd>call codeium#CycleCompletions(-1)<CR>
   imap <C-]> <Cmd>call codeium#Clear()<CR>
@@ -184,6 +186,82 @@ hook_add = '''
         \ g:codeium_enabled ? "\<Cmd>call codeium#CycleCompletions(-1)\<CR>" :
         \ "\<C-p>"
 
+'''
+
+[[plugins]]
+repo = 'oza6ut0ne/ollama.vim'
+if = 'exists("g:ollama_enabled")'
+on_if = '!exists("g:vscode")'
+hook_add = '''
+  if !exists("g:ollama_enabled")
+    let g:ollama_enabled = 0
+    call dein#recache_runtimepath()
+    echo 'Restart vim to disable ollama completely!'
+    finish
+  endif
+
+  if !exists("g:ollama_config")
+    let g:ollama_config = {}
+  endif
+
+  if !exists("g:ollama_config.base_url")
+    let g:ollama_config.base_url = "http://127.0.0.1:11434"
+  endif
+
+  if !exists("g:ollama_config.model")
+    let g:ollama_config.model = "qwen2.5-coder:1.5b"
+    "let g:ollama_config.model = "qwen2.5-coder:3b"
+    "let g:ollama_config.model = "deepseek-coder-v2:16b"
+  endif
+
+  let g:ollama_config.show_info = 2
+  let g:ollama_config.auto_fim = 1
+  let g:ollama_config.keymap_trigger = "<C-S-o>"
+  let g:ollama_config.keymap_accept_full = "<C-l>"
+  let g:ollama_config.keymap_accept_line = "<C-;>"
+  let g:ollama_config.keymap_accept_word = "<C-'>"
+
+  function! OllamaToggleWithAdditionalMap() abort
+    if g:ollama_enabled
+      let g:ollama_enabled = 0
+      call ollama#disable()
+      iunmap <M-;>
+      iunmap <M-'>
+    else
+      let g:ollama_enabled = 1
+      call ollama#init()
+      inoremap <M-;> <C-o>:call ollama#fim_accept('line')<CR>
+      inoremap <M-'> <C-o>:call ollama#fim_accept('word')<CR>
+    endif
+  endfunction
+
+  if g:ollama_enabled
+    inoremap <M-;> <C-o>:call ollama#fim_accept('line')<CR>
+    inoremap <M-'> <C-o>:call ollama#fim_accept('word')<CR>
+  endif
+
+  nnoremap <silent> <Space>ai <Cmd>call OllamaToggleWithAdditionalMap()<CR>
+                                  \:redrawstatus!<CR>
+  imap <expr> <C-n>
+        \ coc#pum#visible() ? coc#pum#next(1) :
+        \ g:ollama_enabled ? "\<Cmd>call ollama#fim_inline(v:false, v:false)\<CR>" :
+        \ "\<C-n>"
+
+  function! s:ollama_apply_colors() abort
+    hi ollama_hl_hint guifg=#ff772f ctermfg=202
+    hi ollama_hl_info guifg=#77ff2f ctermfg=119
+  endfunction
+
+  augroup ollama_colors
+    autocmd!
+    autocmd ColorScheme * call s:ollama_apply_colors()
+  augroup END
+
+'''
+hook_post_source = '''
+  if g:ollama_enabled
+    call ollama#disable()
+  endif
 '''
 
 [[plugins]]

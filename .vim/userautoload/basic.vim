@@ -43,8 +43,19 @@ function! CodeiumStatus() abort
   return '[' . codeium#GetStatusString() . ']'
 endfunction
 
+function! OllamaStatus() abort
+  if !exists('g:ollama_enabled')
+    return ''
+  endif
+  if g:ollama_enabled
+    return '[ON]'
+  endif
+  return '[--]'
+endfunction
+
 set statusline=%F%m%r%h%w%=
-  \%{CodeiumStatus()}%{SkkStatus()}[%l/%L][%2.v][%P]%y[%{&ts}]
+  \%{CodeiumStatus()}%{OllamaStatus()}%{SkkStatus()}
+  \[%l/%L][%2.v][%P]%y[%{&ts}]
   \%{&bomb?'[bom]':''}%{&eol?'':'[noeol]'}[%{&ff}][%{&fenc}]
 
 if exists('+diffopt')

@@ -1,0 +1,19 @@
+"if !&diff
+"  silent! colo everforest
+"endif
+
+"let g:GPGDefaultOptions = ['symmetric']
+"let g:GPGPreferSymmetric = 1
+"let g:GPGDebugLevel = 4
+
+call plug#begin('~/.cache/vim-plugged')
+  " Plug 'vim-denops/denops.vim'
+  " Plug 'vim-denops/denops-helloworld.vim'
+call plug#end()
+
+"let g:ollama_config.base_url = "http://localhost:11434"
+"let g:ollama_config.model = "qwen2.5-coder:1.5b"
+"let g:ollama_config.model = "qwen2.5-coder:3b"
+"let g:ollama_config.model = "deepseek-coder-v2"
+"let g:ollama_config.show_info = 0
+"let g:ollama_config.auto_fim = 0

@@ -1,0 +1,2 @@
+"let g:codeium_enabled = 0
+"let g:ollama_enabled = 0
