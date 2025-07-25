@@ -6,7 +6,11 @@ endif
 let g:dein#auto_recache = 1
 
 " Directory for dein.vim.
-let s:dein_dir = expand('~/.cache/dein')
+if has('nvim')
+  let s:dein_dir = expand('~/.cache/dein/nvim')
+else
+  let s:dein_dir = expand('~/.cache/dein/vim')
+endif
 " Directory for dein.vim repository.
 let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 
