@@ -224,11 +224,13 @@ hook_add = '''
   function! OllamaToggleWithAdditionalMap() abort
     if g:ollama_enabled
       let g:ollama_enabled = 0
+      redrawstatus
       call ollama#disable()
       iunmap <M-;>
       iunmap <M-'>
     else
       let g:ollama_enabled = 1
+      redrawstatus
       call ollama#init()
       inoremap <M-;> <C-o>:call ollama#fim_accept('line')<CR>
       inoremap <M-'> <C-o>:call ollama#fim_accept('word')<CR>
@@ -241,7 +243,6 @@ hook_add = '''
   endif
 
   nnoremap <silent> <Space>ai <Cmd>call OllamaToggleWithAdditionalMap()<CR>
-                                  \:redrawstatus!<CR>
   imap <expr> <C-n>
         \ coc#pum#visible() ? coc#pum#next(1) :
         \ g:ollama_enabled ? "\<Cmd>call ollama#fim_inline(v:false, v:false)\<CR>" :
