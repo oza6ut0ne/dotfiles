@@ -41,7 +41,7 @@ on_if = '!exists("g:vscode")'
 [[plugins]]
 repo = 'neoclide/coc.nvim'
 on_if = '!exists("g:vscode")'
-build = 'yarn install --frozen-lockfile'
+build = 'npm ci'
 
 [[plugins]]
 repo = 'w0rp/ale'
