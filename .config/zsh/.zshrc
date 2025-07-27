@@ -55,6 +55,8 @@ setopt NO_BG_NICE
 setopt INTERACTIVE_COMMENTS
 setopt CORRECT
 
+zmodload zsh/parameter
+
 WORDCHARS=${WORDCHARS//[\/#]}
 
 export PROMPT_ONELINE=${PROMPT_ONELINE-1}
@@ -170,11 +172,18 @@ function prompt_pwd() {
     fi
 }
 
+function prompt_jobs() {
+    local num_jobs="${#jobstates[@]}"
+    if [ "$num_jobs" -gt 0 ]; then
+        echo "%{\e[38;2;214;172;255m%}${num_jobs}%{\e[92m%}|%{\e[00m%}"
+    fi
+}
+
 function prompt_shell_level() {
     if [ -z "$TMUX" ]; then
-        [ "$SHLVL" -ge 2 ] && echo "%{\e[96m%}${SHLVL}%{\e[92m%}|%{\e[00m%}"
+        [ "$SHLVL" -ge 2 ] && echo "%{\e[38;2;164;255;255m%}${SHLVL}%{\e[92m%}|%{\e[00m%}"
     else
-        [ "$SHLVL" -ge 3 ] && echo "%{\e[96m%}${SHLVL}%{\e[92m%}|%{\e[00m%}"
+        [ "$SHLVL" -ge 3 ] && echo "%{\e[38;2;164;255;255m%}${SHLVL}%{\e[92m%}|%{\e[00m%}"
     fi
 }
 
@@ -213,7 +222,7 @@ function prompt() {
 
 precmd_functions+=(prompt_newline_hook)
 
-PS1=$'$(prompt_venv)$(colored_pipestatus)%B%{\e[92m%}|$(prompt_shell_level)%B%{\e[92m%}%n@%m$(prompt_host_label)%{\e[0m%}:%B%{\e[96m%}$(prompt_pwd)$(git_branch_name)%{\e[93m%}$(git_status)%{\e[0m%}$prompt_newline%(!.#.$) '
+PS1=$'$(prompt_venv)$(colored_pipestatus)%B%{\e[92m%}|$(prompt_jobs)%B$(prompt_shell_level)%B%{\e[92m%}%n@%m$(prompt_host_label)%{\e[0m%}:%B%{\e[96m%}$(prompt_pwd)$(git_branch_name)%{\e[93m%}$(git_status)%{\e[0m%}$prompt_newline%(!.#.$) '
 RPS1=$'${duration_info}%F{7}%D{%H:%M:%S}%f'
 ZLE_RPROMPT_INDENT=0
 

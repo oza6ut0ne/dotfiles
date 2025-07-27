@@ -74,11 +74,13 @@ function fish_prompt
   set -l diverged  "><"
   set -l none      ""
 
-  set -l normal_color     (set_color normal)
-  set -l success_color    (set_color bryellow)
-  set -l error_color      (set_color $fish_color_error 2>/dev/null; or set_color red --bold)
-  set -l directory_color  (set_color brcyan)
-  set -l repository_color (set_color bryellow)
+  set -l normal_color       (set_color normal)
+  set -l success_color      (set_color bryellow)
+  set -l error_color        (set_color $fish_color_error 2>/dev/null; or set_color red --bold)
+  set -l jobs_color         (set_color D6ACFF brmagenta)
+  set -l shell_level_color  (set_color A4FFFF brcyan)
+  set -l directory_color    (set_color brcyan)
+  set -l repository_color   (set_color bryellow)
 
   set -l status_color $success_color
   for command_status in $last_command_statuses
@@ -98,13 +100,18 @@ function fish_prompt
   echo -n $last_command_statuses
   echo -n -s $normal_color "|"
 
+  set num_jobs (count (jobs -p))
+  if test $num_jobs -gt 0
+      echo -n -s $jobs_color $num_jobs $normal_color "|"
+  end
+
   if not set -q TMUX
     if test $SHLVL -ge 2
-      echo -n -s $directory_color $SHLVL $normal_color "|"
+      echo -n -s $shell_level_color $SHLVL $normal_color "|"
     end
   else
     if test $SHLVL -ge 3
-      echo -n -s $directory_color $SHLVL $normal_color "|"
+      echo -n -s $shell_level_color $SHLVL $normal_color "|"
     end
   end
 
