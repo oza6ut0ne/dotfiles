@@ -6,14 +6,18 @@ xnoremap : ;
 inoremap jj <Esc>
 nnoremap x  "_x
 xnoremap x  "_x
-nnoremap /  /\v
-xnoremap /  /\v
-nnoremap ?  ?\v
-xnoremap ?  ?\v
 nnoremap s  :%s//g<Left><Left>
 nnoremap S  :%s///g<Left><Left>
 xnoremap s  :s//g<Left><Left>
 xnoremap S  :s///g<Left><Left>
+nnoremap /  /\v
+xnoremap /  /\v
+nnoremap ?  ?\v
+xnoremap ?  ?\v
+nnoremap <C-/> /\V
+xnoremap <C-/> /\V
+nnoremap <C-?> ?\V
+xnoremap <C-?> ?\V
 nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 
 nnoremap ZZ <Nop>
