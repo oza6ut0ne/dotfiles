@@ -433,6 +433,14 @@ fi
 
 CACHE_DIR=${HOME}/.cache/zsh
 
+if exists "fzf"; then
+    if [[ ! -r "${CACHE_DIR}/fzf.zsh" ]]; then
+        mkdir -p ${CACHE_DIR}
+        fzf --zsh > ${CACHE_DIR}/fzf.zsh
+    fi
+    source ${CACHE_DIR}/fzf.zsh
+fi
+
 if exists "zoxide"; then
     if [[ ! -r "${CACHE_DIR}/zoxide.zsh" ]]; then
         mkdir -p ${CACHE_DIR}
