@@ -241,6 +241,8 @@ fi
 
 if [ "$color_prompt" = yes ]; then
     PS1='$(prompt_venv)$(colored_pipestatus)${debian_chroot:+($debian_chroot)}\[\033[01;32m\]|$(prompt_jobs)\[\033[01;32m\]$(prompt_shell_level)\[\033[01;32m\]\u@\h$(prompt_host_label)\[\033[00m\]:\[\033[01;36m\]$(prompt_pwd)\[\033[00m\]$(git_branch_name)\[\033[01;93m\]$(git_status)\[\033[00m\]$prompt_newline\$ '
+    PS1='\[\e]133;P;k=i\a\]'$PS1'\[\e]133;B\a\e]122;> \a\]'
+    PS2='\[\e]133;P;k=s\a\]'$PS2'\[\e]133;B\a\]'
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi

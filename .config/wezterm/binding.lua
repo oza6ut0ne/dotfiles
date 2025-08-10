@@ -102,6 +102,16 @@ function module.apply(config)
       },
     },
     {
+      key = 'UpArrow',
+      mods = 'SHIFT',
+      action = act.ScrollToPrompt(-1),
+    },
+    {
+      key = 'DownArrow',
+      mods = 'SHIFT',
+      action = act.ScrollToPrompt(1),
+    },
+    {
       key = 'l',
       mods = 'ALT',
       action = act.ShowLauncher,
