@@ -21,8 +21,8 @@ function module.apply(config)
   -- config.color_scheme = 'Everforest Dark Hard (Gogh)'
   -- config.color_scheme = 'Ubuntu'
   config.colors = {
-      foreground = '#c6d3aa',
-      -- foreground = '#94f13a',
+    foreground = '#c6d3aa',
+    -- foreground = '#94f13a',
   }
 
   config.font_size = 14
@@ -35,6 +35,10 @@ function module.apply(config)
       harfbuzz_features = { 'calt=0', 'clig=0', 'liga=0' },
     },
   })
+
+  wezterm.on('update-right-status', function(window, pane)
+    window:set_right_status(window:active_workspace())
+  end)
 end
 
 return module

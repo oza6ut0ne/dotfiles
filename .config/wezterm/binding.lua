@@ -42,6 +42,66 @@ function module.apply(config)
       action = act.ShowLauncherArgs { flags = 'WORKSPACES', title = 'Select workspace' },
     },
     {
+      key = 'C',
+      mods = 'LEADER|SHIFT',
+      action = act.SwitchToWorkspace { name = tostring(#wezterm.mux.get_workspace_names()) },
+    },
+    {
+      key = 'C',
+      mods = 'LEADER|SHIFT|CTRL',
+      action = act.SwitchToWorkspace { name = tostring(#wezterm.mux.get_workspace_names()) },
+    },
+    {
+      key = 'N',
+      mods = 'LEADER|SHIFT',
+      action = act.SwitchWorkspaceRelative(1),
+    },
+    {
+      key = 'N',
+      mods = 'LEADER|SHIFT|CTRL',
+      action = act.SwitchWorkspaceRelative(1),
+    },
+    {
+      key = 'P',
+      mods = 'LEADER|SHIFT',
+      action = act.SwitchWorkspaceRelative(-1),
+    },
+    {
+      key = 'P',
+      mods = 'LEADER|SHIFT|CTRL',
+      action = act.SwitchWorkspaceRelative(-1),
+    },
+    {
+      mods = 'LEADER|SHIFT',
+      key = '$',
+      action = act.PromptInputLine {
+        description = '(wezterm) Set workspace title:',
+        action = wezterm.action_callback(function(win, pane, line)
+          if line then
+            wezterm.mux.rename_workspace(
+              wezterm.mux.get_active_workspace(),
+              line
+            )
+          end
+        end),
+      },
+    },
+    {
+      mods = 'LEADER|SHIFT|CTRL',
+      key = '$',
+      action = act.PromptInputLine {
+        description = '(wezterm) Set workspace title:',
+        action = wezterm.action_callback(function(win, pane, line)
+          if line then
+            wezterm.mux.rename_workspace(
+              wezterm.mux.get_active_workspace(),
+              line
+            )
+          end
+        end),
+      },
+    },
+    {
       key = 'l',
       mods = 'ALT',
       action = act.ShowLauncher,
