@@ -26,7 +26,10 @@ if has('nvim')
 
   autocmd ColorScheme default hi Normal ctermfg=10 guifg=#94f13a
   autocmd ColorScheme default hi PreProc ctermfg=81 guifg=#ff80ff
-  colorscheme default
+  autocmd ColorScheme vim hi Normal ctermfg=10 guifg=#94f13a
+  autocmd ColorScheme vim hi PreProc ctermfg=81 guifg=#ff80ff
+  autocmd ColorScheme vim hi Constant ctermfg=208 guifg=#ff8700
+  colorscheme vim
 else
   if &term !~ 'xterm'
     let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"

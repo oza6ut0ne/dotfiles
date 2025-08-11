@@ -6,10 +6,10 @@
 "let g:GPGPreferSymmetric = 1
 "let g:GPGDebugLevel = 4
 
-call plug#begin('~/.cache/vim-plugged')
+"call plug#begin('~/.cache/vim-plugged')
   " Plug 'vim-denops/denops.vim'
   " Plug 'vim-denops/denops-helloworld.vim'
-call plug#end()
+"call plug#end()
 
 "let g:ollama_config.base_url = "http://localhost:11434"
 "let g:ollama_config.model = "qwen2.5-coder:1.5b"

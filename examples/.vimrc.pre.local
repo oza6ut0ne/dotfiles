@@ -1,2 +1,10 @@
+"if has('nvim')
+"  let g:plugins_enabled = 1
+"else
+"  let g:plugins_enabled = 0
+"endif
+
+"let g:plugins_enabled = 1
+
 "let g:codeium_enabled = 0
 "let g:ollama_enabled = 0

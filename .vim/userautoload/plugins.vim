@@ -1,6 +1,12 @@
+if exists('g:plugins_enabled') && g:plugins_enabled == 0
+  finish
+endif
+
 let s:parent = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 if !filereadable(s:parent . '/plugins.enabled')
-  finish
+  if !exists('g:plugins_enabled') || g:plugins_enabled == 0
+    finish
+  endif
 endif
 
 let g:dein#auto_recache = 1

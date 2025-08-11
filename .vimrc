@@ -20,6 +20,12 @@ endif
 
 runtime! userautoload/*.vim
 
+if has('nvim')
+  if !&diff
+    silent! colo everforest
+  endif
+endif
+
 let s:local_vimrc = fnamemodify('~/.vimrc.local', ':p')
 if filereadable(s:local_vimrc)
   execute 'source' s:local_vimrc
