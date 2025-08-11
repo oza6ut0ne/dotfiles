@@ -82,6 +82,24 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'easymotion/vim-easymotion'
+hook_add = '''
+  let g:EasyMotion_do_mapping = 0
+  let g:EasyMotion_smartcase = 1
+  let g:EasyMotion_use_migemo = 1
+
+  let s:nix_migemo_dict_dir = expand('~/.nix-profile/share/migemo')
+  if isdirectory(s:nix_migemo_dict_dir)
+    exec 'set runtimepath+=' . s:nix_migemo_dict_dir
+  endif
+
+  map  <Space>f <Plug>(easymotion-bd-f2)
+  nmap <Space>f <Plug>(easymotion-overwin-f2)
+  map  <Space>w <Plug>(easymotion-bd-w)
+  nmap <Space>w <Plug>(easymotion-overwin-w)
+'''
+
+[[plugins]]
 repo = 'unblevable/quick-scope'
 hook_add = '''
   function! s:qs_add_underline() abort
@@ -313,6 +331,9 @@ hook_add = '''
       hi StatusLineNC ctermfg=245 ctermbg=236 guifg=#859289 guibg=#323c41
       hi QuickScopePrimary cterm=underline ctermfg=159 gui=underline guifg=#b3f6c0
     endif
+
+    hi clear EasyMotionTarget
+    hi clear EasyMotionShade
   endfunction
 
   augroup EverforestCustom
