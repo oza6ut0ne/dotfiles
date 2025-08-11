@@ -9,7 +9,7 @@ endif
 filetype off
 
 let g:loaded_python_provider = 0
-if !has('win32')
+if !has('win32') && !exists('g:python3_host_prog')
   let g:python3_host_prog='/usr/bin/python3'
 endif
 

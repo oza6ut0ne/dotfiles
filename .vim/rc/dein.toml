@@ -40,6 +40,7 @@ on_if = '!exists("g:vscode")'
 
 [[plugins]]
 repo = 'neoclide/coc.nvim'
+if = 'executable("node")'
 on_if = '!exists("g:vscode")'
 build = 'npm ci'
 
