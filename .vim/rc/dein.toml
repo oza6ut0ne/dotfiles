@@ -45,6 +45,27 @@ on_if = '!exists("g:vscode")'
 build = 'npm ci'
 
 [[plugins]]
+repo = 'nvim-treesitter/nvim-treesitter'
+rev = 'main'
+if = 'has("nvim")'
+hook_post_update = 'TSUpdate'
+hook_add_lua = '''
+require'nvim-treesitter.configs'.setup {
+  highlight = {
+    enable = true,
+  }
+}
+'''
+hook_add = '''
+  augroup nvim-treesitter
+    autocmd!
+    autocmd FileType * lua pcall(vim.treesitter.start)
+    autocmd BufEnter * hi clear TSPunctBracket " for luochen1990/rainbow
+
+  augroup END
+'''
+
+[[plugins]]
 repo = 'w0rp/ale'
 on_if = '!exists("g:vscode")'
 hook_add = '''
@@ -204,7 +225,6 @@ hook_add = '''
         \ coc#pum#visible() ? coc#pum#prev(1) :
         \ g:codeium_enabled ? "\<Cmd>call codeium#CycleCompletions(-1)\<CR>" :
         \ "\<C-p>"
-
 '''
 
 [[plugins]]
@@ -276,7 +296,6 @@ hook_add = '''
     autocmd!
     autocmd ColorScheme * call s:ollama_apply_colors()
   augroup END
-
 '''
 hook_post_source = '''
   if g:ollama_enabled
