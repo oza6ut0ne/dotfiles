@@ -13,6 +13,8 @@
   "python.linting.ruffEnabled": true,
   "python.formatting.provider": "ruff",
   "pyright.organizeimports.provider": "ruff",
+  "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
   "rust-analyzer.check.overrideCommand": [
     "cargo",
     "clippy",

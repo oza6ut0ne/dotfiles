@@ -32,4 +32,8 @@ augroup misc
   autocmd FileType yaml setl tabstop=2
   autocmd FileType html setl tabstop=2
   autocmd FileType css  setl tabstop=2
+  autocmd FileType javascript      setl tabstop=2
+  autocmd FileType typescript      setl tabstop=2
+  autocmd FileType javascriptreact setl tabstop=2
+  autocmd FileType typescriptreact setl tabstop=2
 augroup END
