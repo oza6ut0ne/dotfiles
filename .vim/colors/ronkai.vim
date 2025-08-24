@@ -29,3 +29,9 @@ hi DiffText   	cterm=bold ctermbg=red
 
 hi Constant ctermfg=208 guifg=#ff8700
 hi Pmenu		ctermfg=159 ctermbg=60 guifg=#00ffff guibg=#5e5aa0
+
+hi ALEVirtualTextError        ctermfg=1 guifg=Red
+hi ALEVirtualTextWarning      ctermfg=3 guifg=Orange
+hi ALEVirtualTextInfo         ctermfg=4 guifg=LightBlue
+hi ALEVirtualTextStyleError   ctermfg=7 guifg=LightGrey
+hi ALEVirtualTextStyleWarning ctermfg=7 guifg=LightGrey

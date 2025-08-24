@@ -9,6 +9,7 @@ endfunction
 
 augroup filetypes
   autocmd! BufRead,BufNewFile .gitconfig.local  setfiletype gitconfig
+  autocmd! BufRead,BufNewFile .textlintrc.json  setfiletype jsonc
   autocmd! BufRead,BufNewFile *.ers  call s:ft_rust_script()
 augroup END
 
@@ -24,6 +25,7 @@ augroup END
 augroup misc
   autocmd!
   autocmd QuickFixCmdPost *grep* cwindow
+  autocmd WinEnter * if (winnr('$') == 1) && (getbufvar(winbufnr(0), '&buftype')) == 'quickfix' | quit | endif
   autocmd FileType vim  setl tabstop=2
   autocmd FileType lua  setl tabstop=2
   autocmd FileType nix  setl tabstop=2

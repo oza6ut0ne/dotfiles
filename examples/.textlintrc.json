@@ -1,0 +1,9 @@
+// npm i -g textlint textlint-rule-preset-japanese textlint-rule-preset-ja-technical-writing @textlint-ja/textlint-rule-preset-ai-writing @textlint-ja/textlint-rule-no-synonyms sudachi-synonyms-dictionary
+{
+  "rules": {
+    "preset-japanese": true,
+    // "preset-ja-technical-writing": true,
+    "@textlint-ja/no-synonyms": true,
+    "@textlint-ja/preset-ai-writing": true
+  }
+}

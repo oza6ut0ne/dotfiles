@@ -61,7 +61,6 @@ hook_add = '''
     autocmd!
     autocmd FileType * lua pcall(vim.treesitter.start)
     autocmd BufEnter * hi clear TSPunctBracket  " for luochen1990/rainbow
-
   augroup END
 '''
 
@@ -74,6 +73,11 @@ hook_add = '''
   let g:ale_disable_lsp = 1
   let g:ale_sign_column_always = 1
   let g:ale_virtualtext_cursor = 2
+  let g:ale_linters = {}
+  let g:ale_linters.text = ['textlint']
+
+  nmap <silent> [g <Plug>(ale_previous_wrap)
+  nmap <silent> ]g <Plug>(ale_next_wrap)
 
   augroup ale
     autocmd!
@@ -414,4 +418,16 @@ name = 'dracula'
 on_if = '!exists("g:vscode")'
 hook_add = '''
   let g:dracula_colorterm = 0
+  function! s:dracula_custom() abort
+    if !has('nvim')
+      hi! link ALEVirtualTextWarning DraculaOrange
+      hi! link ALEVirtualTextError   DraculaRed
+    endif
+
+  endfunction
+
+  augroup DraculaCustom
+    autocmd!
+    autocmd ColorScheme dracula call s:dracula_custom()
+  augroup END
 '''

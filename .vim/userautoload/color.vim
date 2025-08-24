@@ -6,12 +6,6 @@ function! s:override_color_settings() abort
   hi CocMenuSel ctermfg=159 ctermbg=0 guifg=#00ffff guibg=#2e3436
 
   hi! link CocFloating NormalFloat
-
-  hi! link ALEVirtualTextError DiagnosticVirtualTextError
-  hi! link ALEVirtualTextWarning DiagnosticVirtualTextWarn
-  hi! link ALEVirtualTextInfo DiagnosticVirtualTextInfo
-  hi! link ALEVirtualTextStyleError DiagnosticVirtualTextHint
-  hi! link ALEVirtualTextStyleWarning DiagnosticVirtualTextHint
 endfunction
 
 if has('termguicolors')
