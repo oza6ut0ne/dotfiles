@@ -48,6 +48,14 @@ tnoremap jj    <C-\><C-n>
 let mapleader = "\<Space>\<Space>"
 let maplocalleader = ","
 
+augroup mappings
+  autocmd!
+  autocmd FileType qf nnoremap <buffer> j  j
+  autocmd FileType qf nnoremap <buffer> k  k
+  autocmd FileType qf nnoremap <buffer> gj gj
+  autocmd FileType qf nnoremap <buffer> gk gk
+augroup END
+
 "--------------------------------
 " QuickRun
 "--------------------------------

@@ -60,7 +60,7 @@ hook_add = '''
   augroup nvim-treesitter
     autocmd!
     autocmd FileType * lua pcall(vim.treesitter.start)
-    autocmd BufEnter * hi clear TSPunctBracket " for luochen1990/rainbow
+    autocmd BufEnter * hi clear TSPunctBracket  " for luochen1990/rainbow
 
   augroup END
 '''
@@ -79,6 +79,15 @@ hook_add = '''
     autocmd!
     autocmd BufEnter * let b:ale_enabled = &modifiable
   augroup END
+'''
+
+[[plugins]]
+repo = 'milkypostman/vim-togglelist'
+on_if = '!exists("g:vscode")'
+hook_add = '''
+  let g:toggle_list_no_mappings = 0
+  nmap <script> <silent> <Space><Space>l  :call ToggleLocationList()<CR>
+  nmap <script> <silent> <Space><Space>ql :call ToggleQuickfixList()<CR>
 '''
 
 [[plugins]]
