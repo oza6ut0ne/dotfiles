@@ -39,6 +39,18 @@ bind -m emacs '"\e\C-m": vi-editing-mode'
 stty werase undef
 bind '\C-w:unix-filename-rubout'
 
+_edit_without_executing() {
+    local editor="${EDITOR:-vi}"
+    local tmpf
+    tmpf="$(mktemp).bash"
+    printf '%s\n' "$READLINE_LINE" > "$tmpf"
+    $editor "$tmpf"
+    READLINE_LINE="$(<"$tmpf")"
+    READLINE_POINT="${#READLINE_LINE}"
+    rm "$tmpf"
+}
+bind -x '"\ee":_edit_without_executing'
+
 export PROMPT_ONELINE=${PROMPT_ONELINE-1}
 export PROMPT_SHORT_PATH=${PROMPT_SHORT_PATH-1}
 export PROMPT_GIT_STATUS=${PROMPT_GIT_STATUS-1}

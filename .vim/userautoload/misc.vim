@@ -8,6 +8,8 @@ function! s:ft_rust_script() abort
 endfunction
 
 augroup filetypes
+  autocmd! BufRead,BufNewFile .bashrc  setfiletype bash
+  autocmd! BufRead,BufNewFile *.bash   setfiletype bash
   autocmd! BufRead,BufNewFile .gitconfig.local  setfiletype gitconfig
   autocmd! BufRead,BufNewFile .textlintrc.json  setfiletype jsonc
   autocmd! BufRead,BufNewFile *.ers  call s:ft_rust_script()
