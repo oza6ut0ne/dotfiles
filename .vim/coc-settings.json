@@ -9,6 +9,7 @@
   "suggest.maxCompleteItemCount": 5000,
   "suggest.defaultSortMethod": "alphabetical",
   "session.directory": "~/.cache/vim-sessions",
+  "colors.enable": true,
   "tabnine.priority": 50,
   "python.linting.ruffEnabled": true,
   "python.formatting.provider": "ruff",
