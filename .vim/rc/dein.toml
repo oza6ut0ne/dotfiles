@@ -348,6 +348,15 @@ repo = 'hylang/vim-hy'
 on_if = '!exists("g:vscode")'
 
 [[plugins]]
+repo = 'mattn/vim-goimports'
+on_if = '!exists("g:vscode")'
+hook_add = '''
+  let g:goimports = 1
+  let g:goimports_simplify = 1
+  let g:goimports_show_loclist = 0
+'''
+
+[[plugins]]
 repo = 'sainnhe/everforest'
 on_if = '!exists("g:vscode")'
 hook_add = '''
