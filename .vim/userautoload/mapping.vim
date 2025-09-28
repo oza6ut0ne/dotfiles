@@ -6,6 +6,10 @@ xnoremap : ;
 inoremap jj <Esc>
 nnoremap x  "_x
 xnoremap x  "_x
+nnoremap c  "_c
+xnoremap c  "_c
+xnoremap p  P
+xnoremap P  p
 nnoremap s  :%s//g<Left><Left>
 nnoremap S  :%s///g<Left><Left>
 xnoremap s  :s//g<Left><Left>
@@ -22,7 +26,7 @@ nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 
 nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
-nnoremap Q  <Nop>
+nnoremap <script><expr> Q empty(reg_recording()) ? '@q' : 'q@q'
 
 nnoremap <expr> j v:count == 0 ? 'gj' : 'j'
 xnoremap <expr> j (v:count == 0 && mode() ==# 'v') ? 'gj' : 'j'
@@ -38,12 +42,18 @@ cnoremap <C-b> <Left>
 cnoremap <C-d> <Del>
 cnoremap <C-e> <End>
 cnoremap <C-f> <Right>
-cnoremap <C-y> <C-r>*
+cnoremap <C-y> <C-r>"
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
 
 tnoremap <Esc> <C-\><C-n>
 tnoremap jj    <C-\><C-n>
+
+if !has('nvim')
+  nnoremap Y  y$
+  xnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
+  xnoremap <silent> # "vy?\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
+endif
 
 let mapleader = "\<Space>\<Space>"
 let maplocalleader = ","
