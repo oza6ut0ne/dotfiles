@@ -37,6 +37,43 @@ xnoremap gj j
 nnoremap gk k
 xnoremap gk k
 
+nnoremap <Plug>(H) <Nop>
+nnoremap <Plug>(L) <Nop>
+nnoremap H H<Plug>(H)
+nnoremap L L<Plug>(L)
+nnoremap <Plug>(H)H <PageUp>H<Plug>(H)
+nnoremap <Plug>(L)L <PageDown>Lzb<Plug>(L)
+
+nnoremap <Plug>(tabmode) <Nop>
+nnoremap <silent> <Plug>(tabmode)<C-n> <Cmd>tabnext<CR><Plug>(tabmode)
+nnoremap <silent> <Plug>(tabmode)<C-p> <Cmd>tabprevious<CR><Plug>(tabmode)
+nnoremap <silent> <C-w>t <Cmd>tabnew<CR>
+nnoremap <silent> <C-w>d <Cmd>tabclose<CR>
+nnoremap <silent> <C-w><C-t> <Cmd>tabnew<CR>
+nnoremap <silent> <C-w><C-d> <Cmd>tabclose<CR>
+nnoremap <silent> <C-w><C-n> <Cmd>tabnext<CR><Plug>(tabmode)
+nnoremap <silent> <C-w><C-p> <Cmd>tabprevious<CR><Plug>(tabmode)
+nnoremap <silent> <C-w>1 <Cmd>silent! tabnext 1<CR>
+nnoremap <silent> <C-w>2 <Cmd>silent! tabnext 2<CR>
+nnoremap <silent> <C-w>3 <Cmd>silent! tabnext 3<CR>
+nnoremap <silent> <C-w>4 <Cmd>silent! tabnext 4<CR>
+nnoremap <silent> <C-w>5 <Cmd>silent! tabnext 5<CR>
+nnoremap <silent> <C-w>6 <Cmd>silent! tabnext 6<CR>
+nnoremap <silent> <C-w>7 <Cmd>silent! tabnext 7<CR>
+nnoremap <silent> <C-w>8 <Cmd>silent! tabnext 8<CR>
+nnoremap <silent> <C-w>9 <Cmd>silent! tabnext 9<CR>
+nnoremap <silent> <C-w>0 <C-w>g<TAB>
+nnoremap <silent> <C-w><C-1> <Cmd>silent! tabnext 1<CR>
+nnoremap <silent> <C-w><C-2> <Cmd>silent! tabnext 2<CR>
+nnoremap <silent> <C-w><C-3> <Cmd>silent! tabnext 3<CR>
+nnoremap <silent> <C-w><C-4> <Cmd>silent! tabnext 4<CR>
+nnoremap <silent> <C-w><C-5> <Cmd>silent! tabnext 5<CR>
+nnoremap <silent> <C-w><C-6> <Cmd>silent! tabnext 6<CR>
+nnoremap <silent> <C-w><C-7> <Cmd>silent! tabnext 7<CR>
+nnoremap <silent> <C-w><C-8> <Cmd>silent! tabnext 8<CR>
+nnoremap <silent> <C-w><C-9> <Cmd>silent! tabnext 9<CR>
+nnoremap <silent> <C-w><C-0> <C-w>g<TAB>
+
 cnoremap <C-a> <Home>
 cnoremap <C-b> <Left>
 cnoremap <C-d> <Del>
