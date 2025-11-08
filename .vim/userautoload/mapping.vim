@@ -6,8 +6,8 @@ xnoremap : ;
 inoremap jj <Esc>
 nnoremap x  "_x
 xnoremap x  "_x
-nnoremap c  "_c
-xnoremap c  "_c
+" nnoremap c  "_c
+" xnoremap c  "_c
 xnoremap p  P
 xnoremap P  p
 nnoremap s  :%s//g<Left><Left>
@@ -23,6 +23,22 @@ xnoremap <C-/> /\V
 nnoremap <C-?> ?\V
 xnoremap <C-?> ?\V
 nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
+
+nnoremap <space>y "+y
+xnoremap <space>y "+y
+nnoremap <space>Y "+y$
+nnoremap <space>p "+p
+nnoremap <space>P "+P
+xnoremap <space>p "+P
+xnoremap <space>P "+p
+nnoremap <space><space>p "0p
+nnoremap <space><space>P "0P
+xnoremap <space><space>p "0P
+xnoremap <space><space>P "0p
+nnoremap <space><space>]p "0]p
+nnoremap <space><space>]P "0]P
+xnoremap <space><space>]p "0]P
+xnoremap <space><space>]P "0]p
 
 nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
