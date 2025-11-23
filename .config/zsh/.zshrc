@@ -330,7 +330,7 @@ if exists nix || exists nix-portable; then
         fpath=(/nix/var/nix/profiles/default/share/zsh/site-functions $fpath)
     fi
     if [ -d ~/.nix-profile/share/zsh/site-functions ]; then
-        fpath=( ~/.nix-profile/share/zsh/site-functions $fpath)
+        fpath=(~/.nix-profile/share/zsh/site-functions $fpath)
     fi
 fi
 
@@ -504,6 +504,9 @@ function zsh_update_caches() {
         thefuck --alias > ${CACHE_DIR}/thefuck.zsh
     fi
 }
+
+# Remove duplicated PATH
+typeset -U path PATH
 
 unfunction source
 
