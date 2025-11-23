@@ -96,6 +96,13 @@
   zstyle ':completion:*:manuals' separate-sections true
   zstyle ':completion:*:manuals.(^1*)' insert-sections true
 
+  # kill
+  zstyle ':completion:*:processes' command "ps aux"
+
+  # Docker
+  zstyle ':completion:*:*:docker:*' option-stacking yes
+  zstyle ':completion:*:*:docker-*:*' option-stacking yes
+
   # Romaji expansion
   if exists "kakasi"; then
     _expand_romaji()

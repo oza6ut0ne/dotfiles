@@ -308,10 +308,6 @@ if [ -d ${ZSH_DIR}/completion ]; then
     fpath=(${ZSH_DIR}/completion $fpath)
 fi
 
-zstyle ':completion:*:processes' command "ps aux"
-zstyle ':completion:*:*:docker:*' option-stacking yes
-zstyle ':completion:*:*:docker-*:*' option-stacking yes
-
 # Nix
 if exists nix; then
     export __ETC_PROFILE_NIX_SOURCED=1
