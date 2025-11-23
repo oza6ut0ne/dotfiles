@@ -430,6 +430,7 @@ if (( ${+functions[duration-info-preexec]} && \
 fi
 
 compdef sshg=ssh
+compdef by=exec
 
 # ghq
 fzf-ghq() {
