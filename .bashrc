@@ -220,6 +220,33 @@ function prompt() {
   esac
 }
 
+_prompt_executing=""
+__prompt_osc133_precmd() {
+    local ret=$?
+    if [[ "$_prompt_executing" != "0" ]]; then
+        _PROMPT_SAVE_PS1="$PS1"
+        _PROMPT_SAVE_PS2="$PS2"
+        PS1=$'\e]133;P;k=i\a'"$PS1"$'\e]133;B\a\e]122;> \a'
+        PS2=$'\e]133;P;k=s\a'"$PS2"$'\e]133;B\a'
+    fi
+    if [[ "$_prompt_executing" != "" ]]; then
+        printf "\033]133;D;%s;aid=%s\007" "$ret" "$$"
+    fi
+    printf "\033]133;A;cl=m;aid=%s\007" "$$"
+    _prompt_executing=0
+}
+__prompt_osc133_preexec() {
+    if [[ -n "$_PROMPT_SAVE_PS1" ]]; then
+        PS1="$_PROMPT_SAVE_PS1"
+    fi
+    if [[ -n "$_PROMPT_SAVE_PS2" ]]; then
+        PS2="$_PROMPT_SAVE_PS2"
+    fi
+    printf "\033]133;C;\007"   # OSC133;C
+    _prompt_executing=1
+}
+trap '__prompt_osc133_preexec' DEBUG
+PROMPT_COMMAND="__prompt_osc133_precmd;${PROMPT_COMMAND}"
 PROMPT_COMMAND="prompt_newline_hook;${PROMPT_COMMAND}"
 
 # make less more friendly for non-text input files, see lesspipe(1)
@@ -253,8 +280,6 @@ fi
 
 if [ "$color_prompt" = yes ]; then
     PS1='$(prompt_venv)$(colored_pipestatus)${debian_chroot:+($debian_chroot)}\[\033[01;32m\]|$(prompt_jobs)\[\033[01;32m\]$(prompt_shell_level)\[\033[01;32m\]\u@\h$(prompt_host_label)\[\033[00m\]:\[\033[01;36m\]$(prompt_pwd)\[\033[00m\]$(git_branch_name)\[\033[01;93m\]$(git_status)\[\033[00m\]$prompt_newline\$ '
-    PS1='\[\e]133;P;k=i\a\]'$PS1'\[\e]133;B\a\e]122;> \a\]'
-    PS2='\[\e]133;P;k=s\a\]'$PS2'\[\e]133;B\a\]'
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
