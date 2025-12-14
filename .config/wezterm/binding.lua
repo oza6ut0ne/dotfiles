@@ -37,6 +37,21 @@ function module.apply(config)
       action = wezterm.action.SplitVertical { domain = 'CurrentPaneDomain' },
     },
     {
+      mods = 'LEADER',
+      key = 't',
+      action = wezterm.action { EmitEvent = "increase-opacity" },
+    },
+    {
+      mods = 'LEADER',
+      key = 'T',
+      action = wezterm.action { EmitEvent = "decrease-opacity" },
+    },
+    {
+      mods = 'LEADER|CTRL',
+      key = 'T',
+      action = wezterm.action { EmitEvent = "decrease-opacity" },
+    },
+    {
       key = 's',
       mods = 'LEADER',
       action = act.ShowLauncherArgs { flags = 'WORKSPACES', title = 'Select workspace' },
@@ -123,5 +138,29 @@ function module.apply(config)
     },
   })
 end
+
+wezterm.on("decrease-opacity", function(window)
+  local overrides = window:get_config_overrides() or {}
+  if not overrides.window_background_opacity then
+    overrides.window_background_opacity = 0.9
+  end
+  overrides.window_background_opacity = overrides.window_background_opacity - 0.1
+  if overrides.window_background_opacity < 0.1 then
+    overrides.window_background_opacity = 0.1
+  end
+  window:set_config_overrides(overrides)
+end)
+
+wezterm.on("increase-opacity", function(window)
+  local overrides = window:get_config_overrides() or {}
+  if not overrides.window_background_opacity then
+    overrides.window_background_opacity = 1.0
+  end
+  overrides.window_background_opacity = overrides.window_background_opacity + 0.1
+  if overrides.window_background_opacity > 1.0 then
+    overrides.window_background_opacity = 1.0
+  end
+  window:set_config_overrides(overrides)
+end)
 
 return module
