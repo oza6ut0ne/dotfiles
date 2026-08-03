@@ -5,7 +5,7 @@ if [[ -v VENV_DIRENV_PROMPT ]]; then
     export VENV_PROMPT=$VENV_DIRENV_PROMPT
   fi
 else
-  export VENV_PROMPT=denv
+  export VENV_PROMPT=direnv
 fi
 
 if [[ -z $DOTENV_GPG_SIGNATURE_FINGERPRINT ]]; then
