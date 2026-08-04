@@ -31,7 +31,7 @@ nnoremap <space>p "+p
 nnoremap <space>P "+P
 xnoremap <space>p "+P
 xnoremap <space>P "+p
-nnoremap <space><space>p "0p
+nnoremap <space><space><space>p "0p
 nnoremap <space><space>P "0P
 xnoremap <space><space>p "0P
 xnoremap <space><space>P "0p
