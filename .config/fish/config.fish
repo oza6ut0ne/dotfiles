@@ -120,10 +120,6 @@ else if test -d ~/.anyenv
     end
 end
 
-if test -d "$HOME/.rye/shims"; and not exists rye
-    set -x PATH "$HOME/.rye/shims" $PATH
-end
-
 # editor
 if exists nvim
     balias vi nvim

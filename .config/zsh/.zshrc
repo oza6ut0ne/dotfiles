@@ -345,10 +345,6 @@ elif [ -d ~/.anyenv ]; then
     fi
 fi
 
-if [ -d "$HOME/.rye/shims" ] && ! exists rye; then
-    export PATH="$HOME/.rye/shims:$PATH"
-fi
-
 # editor
 if exists "nvim"; then
     alias vi='nvim'
