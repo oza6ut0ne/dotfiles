@@ -1,4 +1,4 @@
-#!/usr/bin/env uv_or_python
+#!/usr/bin/env -S uv run --script
 # /// script
 # dependencies = [
 #     "pycryptodomex>=3.23.0",
