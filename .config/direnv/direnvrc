@@ -67,6 +67,42 @@ dotenv_gpg() {
   set +a
 }
 
+dotenv_openssl() {
+  local path=${1:-}
+  shift
+
+  if [[ -n $path ]] && ! [[ -e $path ]]; then
+    watch_file "$path"
+    log_error "$path not found"
+    return
+  fi
+
+  local dir=$PWD
+  if [[ -d $path ]]; then
+    dir=$path
+  fi
+
+  if ! [[ -f $path ]]; then
+    if [[ -f $dir/.env.bin ]]; then
+      path=$dir/.env.bin
+    fi
+  fi
+
+  if [[ -z $path ]] || [[ -d $path ]]; then
+    watch_file .env.bin
+    log_error ".env.bin not found"
+    return
+  fi
+
+  watch_file "$path"
+  log_status "dotenv_openssl: Loading $path"
+
+  decrypted="$(openssl enc -d -aes-256-cbc -pbkdf2 -in "$path" -out - "$@")"
+
+  set -a
+  eval "$decrypted"
+  set +a
+}
 dotenv_age() {
   local path=${1:-}
   local identity=${2:-}
