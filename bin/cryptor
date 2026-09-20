@@ -46,6 +46,10 @@ def parse_args():
         action='store_true',
     )
     parser.add_argument(
+        '-p',
+        '--passphrase',
+    )
+    parser.add_argument(
         '-b',
         '--binary',
         action='store_true',
@@ -116,6 +120,7 @@ def generate_keypair(
 def get_rsa_cipher(
     key_path: str | Path | None = None,
     key: str | bytes | None = None,
+    passphrase: str | None = None,
 ):
     if key_path is None and key is None:
         raise ValueError('Either key_path or key must be provided')
@@ -126,7 +131,7 @@ def get_rsa_cipher(
     try:
         rsakey = RSA.importKey(key)
     except ValueError:
-        passphrase = PASSPHRASE if PASSPHRASE else getpass('Passphrase: ')
+        passphrase = passphrase or PASSPHRASE or getpass('Passphrase: ')
         rsakey = RSA.importKey(key, passphrase=passphrase)
     return (PKCS1_OAEP.new(rsakey), rsakey.size_in_bytes())
 
@@ -156,12 +161,13 @@ def decrypt(
     encrypted: bytes,
     key_path: str | Path = DEFAULT_PRIVATE_KEY,
     key: bytes | None = None,
+    passphrase: str | None = None,
     binary: bool = False,
 ):
     if not binary:
         encrypted = base64.decodebytes(encrypted)
     encrypted_bytes = BytesIO(encrypted)
-    cipher_rsa, keysize_in_bytes = get_rsa_cipher(key_path, key)
+    cipher_rsa, keysize_in_bytes = get_rsa_cipher(key_path, key, passphrase)
 
     encrypted_session_key = encrypted_bytes.read(keysize_in_bytes)
     nonce = encrypted_bytes.read(NONCE_BYTES)
@@ -224,6 +230,7 @@ def main():
                 decrypt(
                     input_bytes,
                     key_path=key_path,
+                    passphrase=args.passphrase,
                     binary=args.binary,
                 )
             )
@@ -232,6 +239,7 @@ def main():
             decrypt(
                 input_bytes,
                 key_path=key_path,
+                passphrase=args.passphrase,
                 binary=args.binary,
             )
         )
@@ -241,3 +249,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+# vim: ft=python
