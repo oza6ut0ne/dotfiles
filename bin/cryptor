@@ -1,0 +1,243 @@
+#!/usr/bin/env python3
+# /// script
+# dependencies = [
+#     "pycryptodomex>=3.23.0",
+# ]
+# ///
+
+import argparse
+import base64
+import os
+import sys
+import zlib
+from getpass import getpass
+from io import BytesIO
+from pathlib import Path
+
+from Cryptodome.Cipher import AES, PKCS1_OAEP
+from Cryptodome.PublicKey import RSA
+from Cryptodome.Random import get_random_bytes
+
+RSA_KEY_BITS = 4096
+PKCS = 8
+PROTECTION = 'PBKDF2WithHMAC-SHA512AndAES256-CBC'
+ITERATION_COUNT = 131072
+KEY_PERMISSION = 0o600
+
+AES_KEY_BYTES = 32
+NONCE_BYTES = 16
+TAG_BYTES = 16
+
+DEFAULT_PRIVATE_KEY = Path('~/.ssh/cryptor').expanduser().resolve()
+DEFAULT_PUBLIC_KEY = DEFAULT_PRIVATE_KEY.with_suffix('.pub')
+PASSPHRASE = os.environ.get('CRYPTOR_PASSPHRASE')
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '-e',
+        '--encrypt',
+        action='store_true',
+    )
+    parser.add_argument(
+        '-d',
+        '--decrypt',
+        action='store_true',
+    )
+    parser.add_argument(
+        '-b',
+        '--binary',
+        action='store_true',
+    )
+    parser.add_argument(
+        '-g',
+        '--generate-keys',
+        action='store_true',
+    )
+    parser.add_argument(
+        '--rsa-bits',
+        type=int,
+        default=RSA_KEY_BITS,
+    )
+    parser.add_argument(
+        '-k',
+        '--key',
+    )
+    parser.add_argument(
+        'input',
+        type=Path,
+        nargs='?',
+    )
+    parser.add_argument(
+        '-o',
+        '--output',
+        type=Path,
+        nargs='?',
+    )
+    return parser.parse_args()
+
+
+def generate_keypair(
+    path: str | Path = DEFAULT_PRIVATE_KEY,
+    bits: int = RSA_KEY_BITS,
+):
+    private_key_path = Path(path).expanduser().resolve()
+    public_key_path = private_key_path.with_suffix('.pub')
+    if private_key_path.exists() or public_key_path.exists():
+        ans = input('The keys exist. Overwrite? (y/N)')
+        if ans.casefold() != 'y':
+            return
+
+    passphrase = PASSPHRASE if PASSPHRASE else getpass('Passphrase: ')
+
+    new_key = RSA.generate(bits)
+    if passphrase:
+        private_key = new_key.exportKey(
+            passphrase=passphrase,
+            pkcs=PKCS,
+            protection=PROTECTION,
+            prot_params={'iteration_count': ITERATION_COUNT},
+        )
+    else:
+        private_key = new_key.exportKey()
+
+    public_key = new_key.publickey().exportKey()
+
+    private_key_path.touch(KEY_PERMISSION)
+    with private_key_path.open('wb') as f:
+        f.write(private_key)
+
+    public_key_path.touch(KEY_PERMISSION)
+    with public_key_path.open('wb') as f:
+        f.write(public_key)
+
+
+def get_rsa_cipher(
+    key_path: str | Path | None = None,
+    key: str | bytes | None = None,
+):
+    if key_path is None and key is None:
+        raise ValueError('Either key_path or key must be provided')
+
+    if key is None:
+        with Path(key_path).expanduser().resolve().open('r') as f:
+            key = f.read()
+    try:
+        rsakey = RSA.importKey(key)
+    except ValueError:
+        passphrase = PASSPHRASE if PASSPHRASE else getpass('Passphrase: ')
+        rsakey = RSA.importKey(key, passphrase=passphrase)
+    return (PKCS1_OAEP.new(rsakey), rsakey.size_in_bytes())
+
+
+def encrypt(
+    plaintext: bytes,
+    key_path: str | Path = DEFAULT_PUBLIC_KEY,
+    key: bytes | None = None,
+    binary: bool = False,
+):
+    compressed_text = zlib.compress(plaintext)
+
+    session_key = get_random_bytes(AES_KEY_BYTES)
+    cipher_aes = AES.new(session_key, AES.MODE_EAX)
+    ciphertext, tag = cipher_aes.encrypt_and_digest(compressed_text)
+
+    cipher_rsa, _ = get_rsa_cipher(key_path, key)
+    encrypted_session_key = cipher_rsa.encrypt(session_key)
+
+    msg_payload = encrypted_session_key + cipher_aes.nonce + tag + ciphertext
+    if binary:
+        return msg_payload
+    return base64.encodebytes(msg_payload)
+
+
+def decrypt(
+    encrypted: bytes,
+    key_path: str | Path = DEFAULT_PRIVATE_KEY,
+    key: bytes | None = None,
+    binary: bool = False,
+):
+    if not binary:
+        encrypted = base64.decodebytes(encrypted)
+    encrypted_bytes = BytesIO(encrypted)
+    cipher_rsa, keysize_in_bytes = get_rsa_cipher(key_path, key)
+
+    encrypted_session_key = encrypted_bytes.read(keysize_in_bytes)
+    nonce = encrypted_bytes.read(NONCE_BYTES)
+    tag = encrypted_bytes.read(TAG_BYTES)
+    ciphertext = encrypted_bytes.read()
+
+    session_key = cipher_rsa.decrypt(encrypted_session_key)
+    cipher_aes = AES.new(session_key, AES.MODE_EAX, nonce)
+    decrypted = cipher_aes.decrypt_and_verify(ciphertext, tag)
+
+    plaintext = zlib.decompress(decrypted)
+    return plaintext
+
+
+def main():
+    args = parse_args()
+    if args.generate_keys:
+        path = args.key or args.output or DEFAULT_PRIVATE_KEY
+        generate_keypair(path, args.rsa_bits)
+        return
+
+    if not args.encrypt and not args.decrypt:
+        raise ValueError('Either --generate-keys or --encrypt or --decrypt must be set')
+
+    if args.input is None:
+        input_bytes = sys.stdin.buffer.read()
+    else:
+        input_bytes = Path(args.input).read_bytes()
+
+    key_path = args.key
+    if key_path is None:
+        if args.encrypt:
+            key_path = DEFAULT_PUBLIC_KEY
+        else:
+            key_path = DEFAULT_PRIVATE_KEY
+
+    if args.encrypt:
+        if args.output:
+            Path(args.output).write_bytes(
+                encrypt(
+                    input_bytes,
+                    key_path=key_path,
+                    binary=args.binary,
+                )
+            )
+            return
+        sys.stdout.buffer.write(
+            encrypt(
+                input_bytes,
+                key_path=key_path,
+                binary=args.binary,
+            )
+        )
+        sys.stdout.flush()
+        return
+
+    if args.decrypt:
+        if args.output:
+            Path(args.output).write_bytes(
+                decrypt(
+                    input_bytes,
+                    key_path=key_path,
+                    binary=args.binary,
+                )
+            )
+            return
+        sys.stdout.buffer.write(
+            decrypt(
+                input_bytes,
+                key_path=key_path,
+                binary=args.binary,
+            )
+        )
+        sys.stdout.flush()
+        return
+
+
+if __name__ == '__main__':
+    main()
