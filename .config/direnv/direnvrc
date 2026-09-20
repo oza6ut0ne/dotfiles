@@ -67,6 +67,84 @@ dotenv_gpg() {
   set +a
 }
 
+dotenv_age() {
+  local path=${1:-}
+  local identity=${2:-}
+
+  if [[ -n $path ]] && ! [[ -e $path ]]; then
+    watch_file "$path"
+    log_error "$path not found"
+    return
+  fi
+
+  local dir=$PWD
+  if [[ -d $path ]]; then
+    dir=$path
+  fi
+
+  if ! [[ -f $path ]]; then
+    if [[ -f $dir/.env.age ]]; then
+      path=$dir/.env.age
+    fi
+  fi
+
+  if [[ -z $path ]] || [[ -d $path ]]; then
+    watch_file .env.age
+    log_error ".env.age not found"
+    return
+  fi
+
+  watch_file "$path"
+  log_status "dotenv_age: Loading $path"
+
+  if [[ -z $identity ]]; then
+    decrypted="$(age -d "$path")"
+  else
+    decrypted="$(age -d -i "$identity" "$path")"
+  fi
+
+  set -a
+  eval "$decrypted"
+  set +a
+}
+
+dotenv_cryptor() {
+  local path=${1:-}
+  shift
+
+  if [[ -n $path ]] && ! [[ -e $path ]]; then
+    watch_file "$path"
+    log_error "$path not found"
+    return
+  fi
+
+  local dir=$PWD
+  if [[ -d $path ]]; then
+    dir=$path
+  fi
+
+  if ! [[ -f $path ]]; then
+    if [[ -f $dir/.env.enc ]]; then
+      path=$dir/.env.enc
+    fi
+  fi
+
+  if [[ -z $path ]] || [[ -d $path ]]; then
+    watch_file .env.enc
+    log_error ".env.enc not found"
+    return
+  fi
+
+  watch_file "$path"
+  log_status "dotenv_cryptor: Loading $path"
+
+  decrypted="$(cryptor -d "$@" "$path")"
+
+  set -a
+  eval "$decrypted"
+  set +a
+}
+
 use_proxy() {
   local proxy_url=$1
   local no_proxy_addresses=${2-localhost,127.0.0.0/8}
