@@ -9,14 +9,20 @@ import argparse
 import base64
 import os
 import sys
+from typing import Literal
 import zlib
 from getpass import getpass
 from io import BytesIO
 from pathlib import Path
 
 from Cryptodome.Cipher import AES, PKCS1_OAEP
-from Cryptodome.PublicKey import RSA
+from Cryptodome.Protocol import HPKE
+from Cryptodome.PublicKey import ECC, RSA
 from Cryptodome.Random import get_random_bytes
+
+X25519_KEY_BYTES = 32
+X25519_ENC_BYTES = 32
+INFO = b'cryptor'
 
 RSA_KEY_BITS = 4096
 PKCS = 8
@@ -60,6 +66,11 @@ def parse_args():
         action='store_true',
     )
     parser.add_argument(
+        '-r',
+        '--rsa',
+        action='store_true',
+    )
+    parser.add_argument(
         '--rsa-bits',
         type=int,
         default=RSA_KEY_BITS,
@@ -83,6 +94,79 @@ def parse_args():
 
 
 def generate_keypair(
+    algorithm: Literal['Curve25519', 'RSA'] = 'Curve25519',
+    path: str | Path = DEFAULT_PRIVATE_KEY,
+    bits: int = RSA_KEY_BITS,
+):
+    if algorithm == 'Curve25519':
+        return generate_keypair_x25519(path)
+
+    return generate_keypair_rsa(path, bits)
+
+
+def encrypt(
+    plaintext: bytes,
+    algorithm: Literal['Curve25519', 'RSA'] = 'Curve25519',
+    key_path: str | Path = DEFAULT_PUBLIC_KEY,
+    key: bytes | None = None,
+    binary: bool = False,
+):
+    if algorithm == 'Curve25519':
+        return encrypt_x25519(plaintext, key_path, key, binary)
+
+    return encrypt_rsa(plaintext, key_path, key, binary)
+
+
+def decrypt(
+    encrypted: bytes,
+    algorithm: Literal['Curve25519', 'RSA'] = 'Curve25519',
+    key_path: str | Path = DEFAULT_PRIVATE_KEY,
+    key: bytes | None = None,
+    passphrase: str | None = None,
+    binary: bool = False,
+):
+    if algorithm == 'Curve25519':
+        return decrypt_x25519(encrypted, key_path, key, passphrase, binary)
+
+    return decrypt_rsa(encrypted, key_path, key, passphrase, binary)
+
+
+def generate_keypair_x25519(
+    path: str | Path = DEFAULT_PRIVATE_KEY,
+):
+    private_key_path = Path(path).expanduser().resolve()
+    public_key_path = private_key_path.with_suffix('.pub')
+    if private_key_path.exists() or public_key_path.exists():
+        ans = input('The keys exist. Overwrite? (y/N)')
+        if ans.casefold() != 'y':
+            return
+
+    passphrase = PASSPHRASE if PASSPHRASE else getpass('Passphrase: ')
+
+    new_key = ECC.generate(curve='Curve25519')
+    if passphrase:
+        private_key = new_key.export_key(
+            format='PEM',
+            passphrase=passphrase,
+            use_pkcs8=True,
+            protection=PROTECTION,
+            prot_params={'iteration_count': ITERATION_COUNT},
+        )
+    else:
+        private_key = new_key.export_key(format='PEM')
+
+    public_key = new_key.public_key().export_key(format='PEM')
+
+    private_key_path.touch(KEY_PERMISSION)
+    with private_key_path.open('wb') as f:
+        f.write(private_key.encode())
+
+    public_key_path.touch(KEY_PERMISSION)
+    with public_key_path.open('wb') as f:
+        f.write(public_key.encode())
+
+
+def generate_keypair_rsa(
     path: str | Path = DEFAULT_PRIVATE_KEY,
     bits: int = RSA_KEY_BITS,
 ):
@@ -117,6 +201,65 @@ def generate_keypair(
         f.write(public_key)
 
 
+def get_x25519_cipher(
+    key_path: str | Path | None = None,
+    key: str | bytes | None = None,
+    enc: bytes | None = None,
+    passphrase: str | None = None,
+):
+    if key_path is None and key is None:
+        raise ValueError('Either key_path or key must be provided')
+
+    if key is None:
+        with Path(key_path).expanduser().resolve().open('r') as f:
+            key = f.read()
+    try:
+        ecckey = ECC.import_key(key)
+    except ValueError:
+        passphrase = passphrase or PASSPHRASE or getpass('Passphrase: ')
+        ecckey = ECC.import_key(key, passphrase=passphrase)
+    return HPKE.new(
+        receiver_key=ecckey,
+        aead_id=HPKE.AEAD.AES256_GCM,
+        enc=enc,
+        info=INFO,
+    )
+
+
+def encrypt_x25519(
+    plaintext: bytes,
+    key_path: str | Path = DEFAULT_PUBLIC_KEY,
+    key: bytes | None = None,
+    binary: bool = False,
+):
+    compressed_text = zlib.compress(plaintext)
+    encryptor = get_x25519_cipher(key_path, key)
+    ciphertext = encryptor.seal(compressed_text)
+
+    msg_payload = encryptor.enc + ciphertext
+    if binary:
+        return msg_payload
+    return base64.encodebytes(msg_payload)
+
+
+def decrypt_x25519(
+    encrypted: bytes,
+    key_path: str | Path = DEFAULT_PRIVATE_KEY,
+    key: bytes | None = None,
+    passphrase: str | None = None,
+    binary: bool = False,
+):
+    if not binary:
+        encrypted = base64.decodebytes(encrypted)
+    enc = encrypted[:X25519_ENC_BYTES]
+    ciphertext = encrypted[X25519_ENC_BYTES:]
+    encryptor = get_x25519_cipher(key_path, key, enc, passphrase)
+
+    decrypted = encryptor.unseal(ciphertext)
+    plaintext = zlib.decompress(decrypted)
+    return plaintext
+
+
 def get_rsa_cipher(
     key_path: str | Path | None = None,
     key: str | bytes | None = None,
@@ -136,7 +279,7 @@ def get_rsa_cipher(
     return (PKCS1_OAEP.new(rsakey), rsakey.size_in_bytes())
 
 
-def encrypt(
+def encrypt_rsa(
     plaintext: bytes,
     key_path: str | Path = DEFAULT_PUBLIC_KEY,
     key: bytes | None = None,
@@ -157,7 +300,7 @@ def encrypt(
     return base64.encodebytes(msg_payload)
 
 
-def decrypt(
+def decrypt_rsa(
     encrypted: bytes,
     key_path: str | Path = DEFAULT_PRIVATE_KEY,
     key: bytes | None = None,
@@ -184,9 +327,11 @@ def decrypt(
 
 def main():
     args = parse_args()
+    algorithm = 'RSA' if args.rsa else 'Curve25519'
+
     if args.generate_keys:
         path = args.key or args.output or DEFAULT_PRIVATE_KEY
-        generate_keypair(path, args.rsa_bits)
+        generate_keypair(algorithm, path, args.rsa_bits)
         return
 
     if not args.encrypt and not args.decrypt:
@@ -209,6 +354,7 @@ def main():
             Path(args.output).write_bytes(
                 encrypt(
                     input_bytes,
+                    algorithm=algorithm,
                     key_path=key_path,
                     binary=args.binary,
                 )
@@ -217,6 +363,7 @@ def main():
         sys.stdout.buffer.write(
             encrypt(
                 input_bytes,
+                algorithm=algorithm,
                 key_path=key_path,
                 binary=args.binary,
             )
@@ -229,6 +376,7 @@ def main():
             Path(args.output).write_bytes(
                 decrypt(
                     input_bytes,
+                    algorithm=algorithm,
                     key_path=key_path,
                     passphrase=args.passphrase,
                     binary=args.binary,
@@ -238,6 +386,7 @@ def main():
         sys.stdout.buffer.write(
             decrypt(
                 input_bytes,
+                algorithm=algorithm,
                 key_path=key_path,
                 passphrase=args.passphrase,
                 binary=args.binary,
