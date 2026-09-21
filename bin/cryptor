@@ -37,6 +37,11 @@ TAG_BYTES = 16
 DEFAULT_PRIVATE_KEY = Path('~/.ssh/cryptor').expanduser().resolve()
 DEFAULT_PUBLIC_KEY = DEFAULT_PRIVATE_KEY.with_suffix('.pub')
 PASSPHRASE = os.environ.get('CRYPTOR_PASSPHRASE')
+USE_RSA = os.environ.get('CRYPTOR_RSA', False)
+try:
+    USE_RSA = int(USE_RSA)
+except:
+    pass
 
 
 def parse_args():
@@ -69,6 +74,7 @@ def parse_args():
         '-r',
         '--rsa',
         action='store_true',
+        default=USE_RSA,
     )
     parser.add_argument(
         '--rsa-bits',
