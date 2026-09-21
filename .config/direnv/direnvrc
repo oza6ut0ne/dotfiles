@@ -103,6 +103,7 @@ dotenv_openssl() {
   eval "$decrypted"
   set +a
 }
+
 dotenv_age() {
   local path=${1:-}
   local identity=${2:-}
@@ -175,6 +176,43 @@ dotenv_cryptor() {
   log_status "dotenv_cryptor: Loading $path"
 
   decrypted="$(cryptor -d "$@" "$path")"
+
+  set -a
+  eval "$decrypted"
+  set +a
+}
+
+dotenv_ncryptor() {
+  local path=${1:-}
+  shift
+
+  if [[ -n $path ]] && ! [[ -e $path ]]; then
+    watch_file "$path"
+    log_error "$path not found"
+    return
+  fi
+
+  local dir=$PWD
+  if [[ -d $path ]]; then
+    dir=$path
+  fi
+
+  if ! [[ -f $path ]]; then
+    if [[ -f $dir/.env.enc ]]; then
+      path=$dir/.env.enc
+    fi
+  fi
+
+  if [[ -z $path ]] || [[ -d $path ]]; then
+    watch_file .env.enc
+    log_error ".env.enc not found"
+    return
+  fi
+
+  watch_file "$path"
+  log_status "dotenv_ncryptor: Loading $path"
+
+  decrypted="$(ncryptor -d "$@" "$path")"
 
   set -a
   eval "$decrypted"
