@@ -96,12 +96,13 @@ def parse_args():
 def generate_keypair(
     algorithm: Literal['Curve25519', 'RSA'] = 'Curve25519',
     path: str | Path = DEFAULT_PRIVATE_KEY,
+    passphrase: str | None = None,
     bits: int = RSA_KEY_BITS,
 ):
     if algorithm == 'Curve25519':
-        return generate_keypair_x25519(path)
+        return generate_keypair_x25519(path, passphrase)
 
-    return generate_keypair_rsa(path, bits)
+    return generate_keypair_rsa(path, passphrase, bits)
 
 
 def encrypt(
@@ -133,6 +134,7 @@ def decrypt(
 
 def generate_keypair_x25519(
     path: str | Path = DEFAULT_PRIVATE_KEY,
+    passphrase: str | None = None,
 ):
     private_key_path = Path(path).expanduser().resolve()
     public_key_path = private_key_path.with_suffix('.pub')
@@ -141,7 +143,7 @@ def generate_keypair_x25519(
         if ans.casefold() != 'y':
             return
 
-    passphrase = PASSPHRASE if PASSPHRASE else getpass('Passphrase: ')
+    passphrase = passphrase or PASSPHRASE or getpass('Passphrase: ')
 
     new_key = ECC.generate(curve='Curve25519')
     if passphrase:
@@ -168,6 +170,7 @@ def generate_keypair_x25519(
 
 def generate_keypair_rsa(
     path: str | Path = DEFAULT_PRIVATE_KEY,
+    passphrase: str | None = None,
     bits: int = RSA_KEY_BITS,
 ):
     private_key_path = Path(path).expanduser().resolve()
@@ -177,7 +180,7 @@ def generate_keypair_rsa(
         if ans.casefold() != 'y':
             return
 
-    passphrase = PASSPHRASE if PASSPHRASE else getpass('Passphrase: ')
+    passphrase = passphrase or PASSPHRASE or getpass('Passphrase: ')
 
     new_key = RSA.generate(bits)
     if passphrase:
@@ -331,7 +334,7 @@ def main():
 
     if args.generate_keys:
         path = args.key or args.output or DEFAULT_PRIVATE_KEY
-        generate_keypair(algorithm, path, args.rsa_bits)
+        generate_keypair(algorithm, path, args.passphrase, args.rsa_bits)
         return
 
     if not args.encrypt and not args.decrypt:
