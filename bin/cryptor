@@ -9,14 +9,16 @@ import argparse
 import base64
 import os
 import sys
-from typing import Literal
 import zlib
 from getpass import getpass
 from io import BytesIO
 from pathlib import Path
+from typing import Literal
 
 from Cryptodome.Cipher import AES, PKCS1_OAEP
+from Cryptodome.Hash import SHA512
 from Cryptodome.Protocol import HPKE
+from Cryptodome.Protocol.KDF import PBKDF2
 from Cryptodome.PublicKey import ECC, RSA
 from Cryptodome.Random import get_random_bytes
 
@@ -33,14 +35,30 @@ KEY_PERMISSION = 0o600
 AES_KEY_BYTES = 32
 NONCE_BYTES = 16
 TAG_BYTES = 16
+PBKDF2_SALT_BYTES = 16
+PBKDF2_ITERATION_COUNT = 1000000
+SYMMETRIC_MARKER = b'SYM-'
 
 DEFAULT_PRIVATE_KEY = Path('~/.ssh/cryptor').expanduser().resolve()
 DEFAULT_PUBLIC_KEY = DEFAULT_PRIVATE_KEY.with_suffix('.pub')
 PASSPHRASE = os.environ.get('CRYPTOR_PASSPHRASE')
+
+USE_SYMMETRIC = os.environ.get('CRYPTOR_SYMMETRIC', False)
+try:
+    USE_SYMMETRIC = int(USE_SYMMETRIC)
+except ValueError:
+    pass
+
+USE_X25519 = os.environ.get('CRYPTOR_X25519', False)
+try:
+    USE_X25519 = int(USE_X25519)
+except ValueError:
+    pass
+
 USE_RSA = os.environ.get('CRYPTOR_RSA', False)
 try:
     USE_RSA = int(USE_RSA)
-except:
+except ValueError:
     pass
 
 
@@ -57,6 +75,12 @@ def parse_args():
         action='store_true',
     )
     parser.add_argument(
+        '-c',
+        '--symmetric',
+        action='store_true',
+        default=USE_SYMMETRIC,
+    )
+    parser.add_argument(
         '-p',
         '--passphrase',
     )
@@ -69,6 +93,12 @@ def parse_args():
         '-g',
         '--generate-keys',
         action='store_true',
+    )
+    parser.add_argument(
+        '-x',
+        '--x25519',
+        action='store_true',
+        default=USE_X25519,
     )
     parser.add_argument(
         '-r',
@@ -113,20 +143,23 @@ def generate_keypair(
 
 def encrypt(
     plaintext: bytes,
-    algorithm: Literal['Curve25519', 'RSA'] = 'Curve25519',
+    algorithm: Literal['Curve25519', 'RSA', 'Symmetric'] = 'Curve25519',
     key_path: str | Path = DEFAULT_PUBLIC_KEY,
     key: bytes | None = None,
+    passphrase: str | None = None,
     binary: bool = False,
 ):
     if algorithm == 'Curve25519':
         return encrypt_x25519(plaintext, key_path, key, binary)
+    elif algorithm == 'RSA':
+        return encrypt_rsa(plaintext, key_path, key, binary)
 
-    return encrypt_rsa(plaintext, key_path, key, binary)
+    return encrypt_symmetric(plaintext, passphrase, binary)
 
 
 def decrypt(
     encrypted: bytes,
-    algorithm: Literal['Curve25519', 'RSA'] = 'Curve25519',
+    algorithm: Literal['Curve25519', 'RSA', 'Symmetric'] = 'Curve25519',
     key_path: str | Path = DEFAULT_PRIVATE_KEY,
     key: bytes | None = None,
     passphrase: str | None = None,
@@ -134,8 +167,10 @@ def decrypt(
 ):
     if algorithm == 'Curve25519':
         return decrypt_x25519(encrypted, key_path, key, passphrase, binary)
+    elif algorithm == 'RSA':
+        return decrypt_rsa(encrypted, key_path, key, passphrase, binary)
 
-    return decrypt_rsa(encrypted, key_path, key, passphrase, binary)
+    return decrypt_symmetric(encrypted, passphrase, binary)
 
 
 def generate_keypair_x25519(
@@ -334,17 +369,81 @@ def decrypt_rsa(
     return plaintext
 
 
+def encrypt_symmetric(
+    plaintext: bytes,
+    passphrase: str | None = None,
+    binary: bool = False,
+):
+    compressed_text = zlib.compress(plaintext)
+    passphrase = passphrase or PASSPHRASE or getpass('Passphrase: ')
+    salt = get_random_bytes(PBKDF2_SALT_BYTES)
+    key = PBKDF2(
+        passphrase,
+        salt,
+        AES_KEY_BYTES,
+        count=PBKDF2_ITERATION_COUNT,
+        hmac_hash_module=SHA512,
+    )
+
+    cipher_aes = AES.new(key, AES.MODE_EAX)
+    ciphertext, tag = cipher_aes.encrypt_and_digest(compressed_text)
+
+    msg_payload = SYMMETRIC_MARKER + salt + cipher_aes.nonce + tag + ciphertext
+    if binary:
+        return msg_payload
+    return base64.encodebytes(msg_payload)
+
+
+def decrypt_symmetric(
+    encrypted: bytes,
+    passphrase: str | None = None,
+    binary: bool = False,
+):
+    if not binary:
+        encrypted = base64.decodebytes(encrypted)
+    encrypted = encrypted[len(SYMMETRIC_MARKER) :]
+    passphrase = passphrase or PASSPHRASE or getpass('Passphrase: ')
+    encrypted_bytes = BytesIO(encrypted)
+    salt = encrypted_bytes.read(PBKDF2_SALT_BYTES)
+    key = PBKDF2(
+        passphrase,
+        salt,
+        AES_KEY_BYTES,
+        count=PBKDF2_ITERATION_COUNT,
+        hmac_hash_module=SHA512,
+    )
+
+    nonce = encrypted_bytes.read(NONCE_BYTES)
+    tag = encrypted_bytes.read(TAG_BYTES)
+    ciphertext = encrypted_bytes.read()
+
+    cipher_aes = AES.new(key, AES.MODE_EAX, nonce)
+    decrypted = cipher_aes.decrypt_and_verify(ciphertext, tag)
+
+    plaintext = zlib.decompress(decrypted)
+    return plaintext
+
+
 def main():
     args = parse_args()
-    algorithm = 'RSA' if args.rsa else 'Curve25519'
+    algorithm = 'Curve25519'
+    if not args.generate_keys and args.symmetric:
+        algorithm = 'Symmetric'
+    elif args.rsa:
+        algorithm = 'RSA'
 
     if args.generate_keys:
         path = args.key or args.output or DEFAULT_PRIVATE_KEY
         generate_keypair(algorithm, path, args.passphrase, args.rsa_bits)
         return
 
-    if not args.encrypt and not args.decrypt:
-        raise ValueError('Either --generate-keys or --encrypt or --decrypt must be set')
+    if not args.encrypt and not args.decrypt and not args.symmetric:
+        raise ValueError(
+            'Either --generate-keys or --encrypt or --decrypt or --symmetric must be set'
+        )
+    if args.encrypt and args.decrypt:
+        raise ValueError('--encrypt and --decrypt cannot be used together')
+    should_encrypt = args.encrypt or (args.symmetric and not args.decrypt)
 
     if args.input is None:
         input_bytes = sys.stdin.buffer.read()
@@ -358,7 +457,7 @@ def main():
         else:
             key_path = DEFAULT_PRIVATE_KEY
 
-    if args.encrypt:
+    if should_encrypt:
         if args.output:
             Path(args.output).write_bytes(
                 encrypt(
@@ -381,6 +480,13 @@ def main():
         return
 
     if args.decrypt:
+        if not args.x25519 and not args.rsa and not args.symmetric:
+            in_bytes = input_bytes
+            if not args.binary:
+                in_bytes = base64.decodebytes(input_bytes)
+            if in_bytes.startswith(SYMMETRIC_MARKER):
+                algorithm = 'Symmetric'
+
         if args.output:
             Path(args.output).write_bytes(
                 decrypt(
