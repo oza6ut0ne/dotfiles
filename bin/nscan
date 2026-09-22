@@ -1,0 +1,53 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# dependencies = [
+#     "elevate>=0.1.3",
+#     "manuf>=1.1.5",
+#     "scapy>=2.7.0",
+# ]
+# ///
+
+import argparse
+
+import elevate
+from manuf import manuf
+from scapy.all import ARP, Ether, srp
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('cidr')
+    parser.add_argument('-i', '--interface')
+    parser.add_argument('-t', '--timeout', type=int, default=3)
+    parser.add_argument('-v', '--vorbose', action='store_true')
+    return parser.parse_args()
+
+
+def main():
+    args = parse_args()
+    mac_parser = manuf.MacParser()
+
+    arp = ARP(pdst=args.cidr)
+    ether = Ether(dst='ff:ff:ff:ff:ff:ff')
+    packet = ether / arp
+
+    elevate.elevate(graphical=False)
+    ans, _ = srp(
+        packet,
+        iface=args.interface,
+        timeout=args.timeout,
+        verbose=args.vorbose,
+    )
+    sorted(ans, key=lambda x: str(x[1].psrc))
+
+    for _, resp in ans:
+        mac = resp.hwsrc
+        ip = resp.psrc
+        vendor = mac_parser.get_manuf(mac)
+        print(f'IP: {ip},\tMAC: {mac},\tVendor: {vendor}')
+
+
+if __name__ == '__main__':
+    main()
+
+# vim: ft=python

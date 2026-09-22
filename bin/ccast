@@ -1,0 +1,203 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# dependencies = [
+#   "pychromecast==13.1.0",
+# ]
+# ///
+
+import http.client
+import socket
+import threading
+import time
+from http.server import HTTPServer, SimpleHTTPRequestHandler
+from itertools import chain, cycle
+from pathlib import Path
+
+import pychromecast
+from pychromecast.controllers.media import METADATA_TYPE_MUSICTRACK, METADATA_TYPE_MOVIE
+
+CAST_HOST = 'home'
+MUSIC_EXTENSIONS = ('.wav', '.mp3', '.flac', '.ogg')
+
+
+class CastHandler(SimpleHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(http.client.OK)
+        with self.server.filepath.open('rb') as f:
+            data = f.read()
+        self.send_header('Content-length', len(data))
+        self.end_headers()
+        print(f'Content-length: {len(data)}\n')
+        self.wfile.write(data)
+        print('sent\n')
+
+
+class CastServer(HTTPServer):
+    def set_filepath(self, path):
+        self.filepath = path
+
+
+class Player(object):
+    def __init__(self, cast, filepaths, port, url):
+        self.cast = cast
+        self.filepaths = filepaths
+        self.port = port
+        self.url = url
+        self.playing = False
+        self.finished = False
+
+        listener = MediaListener(self)
+        cast.media_controller.register_status_listener(listener)
+
+    def play_next(self):
+        try:
+            self.playing = False
+            cast_file(self.cast, next(self.filepaths), self.port, self.url)
+        except StopIteration:
+            self._shutdown()
+
+    def pause(self):
+        self.cast.wait()
+        self.cast.media_controller.block_until_active()
+        self.cast.media_controller.pause()
+        if self.finished:
+            self._shutdown()
+
+    def finish(self):
+        self.finished = True
+        if self.playing:
+            self.pause()
+
+    def _shutdown(self):
+        self.cast.quit_app()
+        self.cast.__del__()
+
+
+class MediaListener(object):
+    def __init__(self, player):
+        self.player = player
+
+    def new_media_status(self, status):
+        self.print_status(status)
+        if status.player_state == 'PLAYING':
+            if self.player.finished:
+                self.player.pause()
+            else:
+                self.player.playing = True
+        elif status.player_state == 'IDLE':
+            time.sleep(3)
+            if status.idle_reason == 'ERROR':
+                self.player.play_next()
+            elif status.idle_reason == 'FINISHED' and self.player.playing is True:
+                self.player.play_next()
+
+    def print_status(self, status):
+        if status.last_updated is None:
+            last_updated = None
+        else:
+            last_updated = status.last_updated.strftime("%F %X")
+
+        print(f'state: {status.player_state}')
+        print(f'idle_reason: {status.idle_reason}')
+        print(f'title: {status.title}')
+        print(f'current_time: {status.current_time} / {status.duration}')
+        print(f'last_updated: {last_updated}')
+        print()
+
+
+def serve_once(path, port):
+    server = CastServer(('', port), CastHandler)
+    server.set_filepath(path)
+    server.handle_request()
+    server.server_close()
+
+
+def cast_file(cast, path, port, url):
+    thread = threading.Thread(target=serve_once, args=(path, port))
+    thread.daemon = True
+    thread.start()
+    if path.suffix.casefold() in MUSIC_EXTENSIONS:
+        metadata_type = METADATA_TYPE_MUSICTRACK
+    else:
+        metadata_type = METADATA_TYPE_MOVIE
+    metadata = {'metadataType': metadata_type, 'title': path.name}
+    cast.wait()
+    cast.play_media(url, '', metadata=metadata)
+    cast.media_controller.block_until_active()
+    thread.join()
+
+
+def get_local_ip():
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+        s.connect(('10.255.255.255', 1))
+        ip = s.getsockname()[0]
+        return ip
+
+
+def get_free_port():
+    with socket.socket() as s:
+        s.bind(('', 0))
+        return s.getsockname()[1]
+
+
+def get_chromecast(host):
+    return pychromecast.get_chromecast_from_host((host, 8009, None, '', None))
+
+
+def scan_chromecasts():
+    casts = pychromecast.discover_chromecasts()
+    for cast in casts[0]:
+        print(f'{cast[4]}:{cast[5]} ({socket.getfqdn(cast[4])}): '
+              f'{cast[3]}({cast[2]})')
+
+
+def play_files(host, path_strs, recursive=False, repeat=False):
+    cast = get_chromecast(host)
+    cast.wait()
+
+    pattern = '**/*' if recursive else '*'
+    paths = [Path(p) for p in path_strs]
+    paths = chain.from_iterable(sorted(p.glob(pattern)) if p.is_dir() else [p] for p in paths)
+    paths = [p for p in paths if p.exists() and not p.is_dir()]
+    print('\n'.join(p.name for p in paths))
+    print(f'-- Total: {len(paths)} files\n')
+
+    paths_iter = cycle(paths) if repeat else iter(paths)
+    port = get_free_port()
+    url = f'http://{get_local_ip()}:{port}/'
+    player = Player(cast, paths_iter, port, url)
+    try:
+        player.play_next()
+        cast.join()
+    except KeyboardInterrupt:
+        response = input('\rStop playing? (Y/n): ').casefold()
+        if response in ['y', 'yes']:
+            player.finish()
+            cast.join()
+
+
+def main():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('paths', nargs='*')
+    parser.add_argument('-c', '--cast-host', default=CAST_HOST)
+    parser.add_argument('-l', '--loop', action='store_true')
+    parser.add_argument('-r', '--recursive', action='store_true')
+    parser.add_argument('-s', '--scan-casts', action='store_true')
+    parser.add_argument('-p', '--pause', action='store_true')
+    args = parser.parse_args()
+
+    if args.scan_casts:
+        scan_chromecasts()
+    elif args.pause:
+        cast = get_chromecast(args.cast_host)
+        cast.wait()
+        cast.media_controller.pause()
+    else:
+        play_files(args.cast_host, args.paths, args.recursive, args.loop)
+
+
+if __name__ == '__main__':
+    main()
+
+# vim: ft=python
